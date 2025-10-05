@@ -5,10 +5,37 @@ import { motion } from 'framer-motion'
 import { MapPin, Star, TrendingUp, Shield, Clock } from 'lucide-react'
 import SearchFilter from '@/components/mobile-first/SearchFilter'
 import SalonCard from '@/components/mobile-first/SalonCard'
-import { SalonService } from '@/lib/api/salons'
-import { Salon, SalonSearchFilters } from '@/lib/supabase'
+// import { SalonService } from '@/lib/api/salons'
+// import { Salon, SalonSearchFilters } from '@/lib/supabase'
 
-interface SalonWithDetails extends Salon {
+interface SalonSearchFilters {
+  city?: string
+  services?: string[]
+  priceRange?: string[]
+  specialties?: string[]
+  languages?: string[]
+  isVerified?: boolean
+  acceptsWalkIns?: boolean
+  hasParking?: boolean
+  location?: {
+    lat: number
+    lng: number
+    radius: number
+  }
+}
+
+interface SalonWithDetails {
+  id: string
+  name: string
+  slug: string
+  address: string
+  city: string
+  state: string
+  phone?: string
+  price_from?: number
+  currency?: string
+  specialties?: string[]
+  is_verified?: boolean
   average_rating?: number
   review_count?: number
   distance_meters?: number
@@ -28,49 +55,89 @@ export default function HomePage() {
   }, [])
 
   const loadFeaturedSalons = async () => {
-    try {
-      const salons = await SalonService.getFeatured(6)
-      setFeaturedSalons(salons as SalonWithDetails[])
-    } catch (error) {
-      console.error('Failed to load featured salons:', error)
-    }
+    // Mock data for demo
+    const mockSalons: SalonWithDetails[] = [
+      {
+        id: '1',
+        name: 'Elegant Nails Spa',
+        slug: 'elegant-nails-spa',
+        address: '123 Main Street',
+        city: 'Los Angeles',
+        state: 'CA',
+        phone: '(555) 123-4567',
+        price_from: 35,
+        currency: 'USD',
+        specialties: ['Gel Manicures', 'Nail Art', 'Spa Pedicures'],
+        is_verified: true,
+        average_rating: 4.8,
+        review_count: 127
+      }
+    ]
+    setFeaturedSalons(mockSalons)
   }
 
   const loadPopularSalons = async () => {
-    try {
-      const salons = await SalonService.getPopular(8)
-      setPopularSalons(salons)
-    } catch (error) {
-      console.error('Failed to load popular salons:', error)
-    }
+    // Mock data for demo
+    const mockSalons: SalonWithDetails[] = [
+      {
+        id: '2',
+        name: 'Luxe Nail Lounge',
+        slug: 'luxe-nail-lounge',
+        address: '456 Beverly Drive',
+        city: 'Beverly Hills',
+        state: 'CA',
+        phone: '(555) 987-6543',
+        price_from: 65,
+        currency: 'USD',
+        specialties: ['Premium Gel Services', 'Luxury Treatments'],
+        is_verified: true,
+        average_rating: 4.9,
+        review_count: 89
+      }
+    ]
+    setPopularSalons(mockSalons)
   }
 
   const handleSearch = async (filters: SalonSearchFilters) => {
     setLoading(true)
     setSearchPerformed(true)
     
-    try {
-      const results = await SalonService.search(filters, 1, 20)
-      setSearchResults(results.data)
-    } catch (error) {
-      console.error('Search failed:', error)
-      setSearchResults([])
-    } finally {
+    // Mock search results
+    setTimeout(() => {
+      const mockResults: SalonWithDetails[] = [
+        {
+          id: '3',
+          name: 'Quick Nails Express',
+          slug: 'quick-nails-express',
+          address: '789 Downtown Blvd',
+          city: 'Miami',
+          state: 'FL',
+          phone: '(555) 456-7890',
+          price_from: 20,
+          currency: 'USD',
+          specialties: ['Quick Service', 'Walk-ins Welcome'],
+          is_verified: false,
+          average_rating: 4.2,
+          review_count: 45,
+          distance_meters: 1200
+        }
+      ]
+      setSearchResults(mockResults)
       setLoading(false)
-    }
+    }, 1000)
   }
 
   const handleSalonClick = (salon: SalonWithDetails) => {
-    // Track view event
-    SalonService.trackEvent(salon.id, 'view')
-    SalonService.incrementViewCount(salon.id)
+    // Mock tracking
+    console.log('Salon clicked:', salon.name)
     
     // Navigate to salon detail page
     window.location.href = `/salon/${salon.slug}`
   }
 
   const handleDirections = (salon: SalonWithDetails) => {
-    SalonService.trackEvent(salon.id, 'directions')
+    // Mock tracking
+    console.log('Directions requested for:', salon.name)
     
     // Open directions in Google Maps
     const address = encodeURIComponent(`${salon.address}, ${salon.city}, ${salon.state}`)
@@ -78,13 +145,13 @@ export default function HomePage() {
   }
 
   const handleContact = (salon: SalonWithDetails) => {
-    SalonService.trackEvent(salon.id, 'contact')
+    // Mock tracking
+    console.log('Contact requested for:', salon.name)
     
     if (salon.phone) {
       window.location.href = `tel:${salon.phone}`
     } else {
-      // Navigate to contact page
-      window.location.href = `/salon/${salon.slug}#contact`
+      alert(`Contact ${salon.name} - This would show contact options`)
     }
   }
 

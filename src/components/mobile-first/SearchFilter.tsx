@@ -3,7 +3,21 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Filter, X, MapPin, Check } from 'lucide-react'
-import { SalonSearchFilters } from '@/lib/supabase'
+interface SalonSearchFilters {
+  city?: string
+  services?: string[]
+  priceRange?: string[]
+  specialties?: string[]
+  languages?: string[]
+  isVerified?: boolean
+  acceptsWalkIns?: boolean
+  hasParking?: boolean
+  location?: {
+    lat: number
+    lng: number
+    radius: number
+  }
+}
 
 interface SearchFilterProps {
   onSearch: (filters: SalonSearchFilters) => void

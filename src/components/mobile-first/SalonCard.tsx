@@ -3,7 +3,22 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Star, Clock, CheckCircle } from 'lucide-react'
-import { Salon } from '@/lib/supabase'
+interface Salon {
+  id: string
+  name: string
+  slug: string
+  address: string
+  city: string
+  state: string
+  phone?: string
+  price_from?: number
+  currency?: string
+  specialties?: string[]
+  is_verified?: boolean
+  logo_url?: string
+  accepts_walk_ins?: boolean
+  price_range?: string
+}
 
 interface SalonCardProps {
   salon: Salon & {
