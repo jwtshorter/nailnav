@@ -20,7 +20,7 @@ CREATE TABLE vendor_tiers (
 CREATE TABLE salons (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   owner_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  tier_id UUID REFERENCES vendor_tiers(id) DEFAULT (SELECT id FROM vendor_tiers WHERE name = 'free'),
+  tier_id UUID REFERENCES vendor_tiers(id),
   
   -- Basic Information
   name VARCHAR(200) NOT NULL,

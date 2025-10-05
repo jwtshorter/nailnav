@@ -1,39 +1,3 @@
-# 🗄️ Supabase Database Setup Guide
-
-## 🚀 Quick Setup (Recommended)
-
-### Option A: One-Step Complete Setup
-
-1. **Access Supabase**: Go to [Supabase Dashboard](https://supabase.com/dashboard)
-2. **Open Your Project**: Navigate to project `ddenulleuvyhwqsulrod`
-3. **SQL Editor**: Click "SQL Editor" in the left sidebar
-4. **Copy & Run**: Copy the entire content from [`SUPABASE_COMPLETE_SETUP.sql`](./SUPABASE_COMPLETE_SETUP.sql) and paste into SQL Editor
-5. **Execute**: Click "RUN" - this will create everything at once!
-
-**✅ This single file includes:**
-- All database tables and relationships
-- Sample data for testing
-- Database functions and triggers
-- Row Level Security policies
-- Performance indexes
-
----
-
-## 🔧 Manual Step-by-Step Setup (Alternative)
-
-### 1. Access Your Supabase Project
-- Go to [Supabase Dashboard](https://supabase.com/dashboard)
-- Navigate to your project: `ddenulleuvyhwqsulrod`
-- Click on **SQL Editor** in the left sidebar
-
-### 2. Run Database Migrations
-
-#### Step 2.1: Create Initial Schema
-**⚠️ IMPORTANT**: Use this corrected version (fixes PostgreSQL subquery error):
-
-Copy and paste the following SQL into the SQL Editor and click **RUN**:
-
-```sql
 -- Enable PostGIS and UUID extensions
 CREATE EXTENSION IF NOT EXISTS "postgis";
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -136,12 +100,7 @@ CREATE TRIGGER set_salon_default_tier
   BEFORE INSERT ON salons
   FOR EACH ROW
   EXECUTE FUNCTION set_default_tier();
-```
 
-#### Step 2.2: Continue with Service Tables
-Run this next block:
-
-```sql
 -- Service Categories (Hierarchical)
 CREATE TABLE service_categories (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -205,12 +164,7 @@ CREATE TABLE product_brands (
   specialization VARCHAR(50), -- 'gel', 'acrylic', 'dip', 'natural'
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
-```
 
-#### Step 2.3: Add Reviews and Booking Tables
-Run this block:
-
-```sql
 -- Reviews & Ratings
 CREATE TABLE reviews (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -276,12 +230,7 @@ CREATE TABLE bookings (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
-```
 
-#### Step 2.4: Add Remaining Tables
-Run this final table creation block:
-
-```sql
 -- Content Management (Multi-language)
 CREATE TABLE content_translations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -354,12 +303,7 @@ CREATE TABLE featured_placements (
   
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
-```
 
-#### Step 2.5: Create Database Indexes
-Run this block for performance optimization:
-
-```sql
 -- Indexes for Performance
 CREATE INDEX idx_salons_location ON salons USING GIST (location);
 CREATE INDEX idx_salons_tier_published ON salons (tier_id, is_published);
@@ -370,132 +314,3 @@ CREATE INDEX idx_reviews_salon_rating ON reviews (salon_id, rating);
 CREATE INDEX idx_bookings_salon_date ON bookings (salon_id, appointment_date);
 CREATE INDEX idx_analytics_salon_date ON analytics_events (salon_id, created_at);
 CREATE INDEX idx_featured_active_priority ON featured_placements (is_active, priority_score);
-```
-
-### 3. Create Database Functions and RLS Policies
-
-#### Step 3.1: Create Functions
-Copy and paste the entire content from the file `/home/user/webapp/supabase/migrations/0002_functions_and_rls.sql` into the SQL Editor and run it.
-
-**Or manually run these key functions:**
-
-```sql
--- Function to increment salon view count
-CREATE OR REPLACE FUNCTION increment_salon_view_count(salon_id UUID)
-RETURNS INTEGER
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-DECLARE
-  new_count INTEGER;
-BEGIN
-  UPDATE salons 
-  SET view_count = view_count + 1, updated_at = now()
-  WHERE id = salon_id;
-  
-  SELECT view_count INTO new_count FROM salons WHERE id = salon_id;
-  RETURN COALESCE(new_count, 0);
-END;
-$$;
-
--- Function to calculate average rating for a salon
-CREATE OR REPLACE FUNCTION calculate_salon_average_rating(salon_id UUID)
-RETURNS DECIMAL(3,2)
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-DECLARE
-  avg_rating DECIMAL(3,2);
-BEGIN
-  SELECT ROUND(AVG(rating)::NUMERIC, 2) INTO avg_rating
-  FROM reviews 
-  WHERE salon_id = calculate_salon_average_rating.salon_id 
-    AND is_published = true;
-  
-  RETURN COALESCE(avg_rating, 0.0);
-END;
-$$;
-```
-
-#### Step 3.2: Enable Row Level Security
-```sql
--- Enable RLS on main tables
-ALTER TABLE salons ENABLE ROW LEVEL SECURITY;
-ALTER TABLE salon_services ENABLE ROW LEVEL SECURITY;
-ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
-ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
-
--- Public read access for published salons
-CREATE POLICY "Public can view published salons" ON salons
-  FOR SELECT USING (is_published = true);
-
--- Public read access for published reviews
-CREATE POLICY "Public can view published reviews" ON reviews
-  FOR SELECT USING (is_published = true);
-```
-
-### 4. Insert Sample Data
-
-Run the sample data from `/home/user/webapp/supabase/seed.sql`:
-
-```sql
--- Insert Vendor Tiers
-INSERT INTO vendor_tiers (name, display_name, price_monthly, features, max_services, booking_enabled, calendar_integration, analytics_enabled) VALUES
-('free', 'Free Listing', 0.00, '{"basic_listing": true, "photo_upload": 5, "review_responses": false}', 10, false, false, false),
-('premium', 'Premium', 29.99, '{"enhanced_listing": true, "photo_upload": 20, "review_responses": true, "priority_placement": true}', 50, true, false, true),
-('featured', 'Featured', 99.99, '{"premium_listing": true, "photo_upload": 100, "review_responses": true, "top_placement": true, "custom_branding": true}', null, true, true, true);
-
--- Insert Service Categories
-INSERT INTO service_categories (name, slug, description, icon, sort_order, is_active) VALUES
-('Manicures', 'manicures', 'Professional nail care for hands', 'fas fa-hand-paper', 1, true),
-('Pedicures', 'pedicures', 'Professional nail care for feet', 'fas fa-shoe-prints', 2, true),
-('Nail Art', 'nail-art', 'Creative and artistic nail designs', 'fas fa-palette', 3, true),
-('Extensions', 'extensions', 'Acrylic, gel, and other nail extensions', 'fas fa-expand', 4, true),
-('Treatments', 'treatments', 'Nail health and wellness treatments', 'fas fa-heart', 5, true);
-```
-
-Continue with the rest of the sample data...
-
-### 5. Verify Setup
-
-After running all migrations and sample data:
-
-1. Go to **Table Editor** in Supabase Dashboard
-2. You should see all tables created:
-   - `vendor_tiers`
-   - `salons` 
-   - `service_categories`
-   - `service_types`
-   - `salon_services`
-   - `reviews`
-   - `bookings`
-   - And others...
-
-3. Check that sample data was inserted by browsing the tables
-
-### 6. Test Database Connection
-
-Once setup is complete, your NailNav application should be able to:
-- ✅ Connect to the database
-- ✅ Fetch salon listings
-- ✅ Display featured vendors
-- ✅ Show reviews and ratings
-- ✅ Perform location-based searches
-
-## 🎯 Next Steps After Database Setup
-
-1. Test the application at: https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev
-2. Verify that salon listings appear on the homepage
-3. Test the search functionality
-4. Check that featured vendors section works
-
-## 🔍 Troubleshooting
-
-If you encounter any issues:
-
-1. **Permission Errors**: Make sure RLS policies are set correctly
-2. **Missing Data**: Verify that sample data was inserted properly
-3. **Function Errors**: Check that all functions were created successfully
-4. **Connection Issues**: Verify the API keys in your `.env.local` file
-
-The database is now ready for your NailNav application!
