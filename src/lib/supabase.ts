@@ -1,36 +1,69 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Safely get environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables. Please check your .env.local file.')
-}
-
-export const supabase = createClient(supabaseUrl, supabaseKey, {
-  auth: { 
-    autoRefreshToken: true, 
-    persistSession: true,
-    detectSessionInUrl: true
-  },
-  realtime: { 
-    params: { 
-      eventsPerSecond: 2 
-    } 
+// Create the Supabase client with fallback for SSR
+export const supabase = (() => {
+  // During SSR/build time, environment variables might not be loaded properly
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn('Supabase environment variables not found, creating placeholder client')
+    
+    // Return a placeholder client that won't cause errors during SSR
+    return createClient(
+      'https://placeholder.supabase.co', 
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder',
+      {
+        auth: { 
+          autoRefreshToken: false, 
+          persistSession: false,
+          detectSessionInUrl: false
+        },
+        realtime: { 
+          params: { 
+            eventsPerSecond: 0 
+          } 
+        }
+      }
+    )
   }
-})
-
-// Server-side client for admin operations
-export const supabaseAdmin = createClient(
-  supabaseUrl, 
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
+  
+  // Create the real client with environment variables
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: { 
+      autoRefreshToken: true, 
+      persistSession: true,
+      detectSessionInUrl: true
+    },
+    realtime: { 
+      params: { 
+        eventsPerSecond: 2 
+      } 
     }
+  })
+})()
+
+// Server-side client for admin operations (only create if service role key is available)
+export const supabaseAdmin = (() => {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!serviceRoleKey) {
+    console.warn('SUPABASE_SERVICE_ROLE_KEY not found. Admin operations will not be available.');
+    return null;
   }
-)
+  
+  return createClient(
+    supabaseUrl, 
+    serviceRoleKey,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    }
+  );
+})();
 
 // Database types
 export interface Salon {
