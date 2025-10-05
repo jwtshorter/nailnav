@@ -499,3 +499,15 @@ If you encounter any issues:
 4. **Connection Issues**: Verify the API keys in your `.env.local` file
 
 The database is now ready for your NailNav application!
+
+### 🔒 Optional: Privacy Enhancement
+
+To implement additional privacy features (contact forms, private contact data):
+
+1. **Run Privacy Update**: After the main setup, run the SQL from `SUPABASE_PRIVACY_UPDATE.sql`
+2. **Features Added**: 
+   - Private contact table for salon owners
+   - Secure contact form submission system
+   - Enhanced RLS policies for contact privacy
+
+This is optional but recommended for production deployments where contact privacy is important.
