@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Metadata, Viewport } from 'next'
 import { TranslationProvider } from '../contexts/TranslationContext'
+import { AuthProvider } from '../contexts/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -152,9 +153,11 @@ export default function RootLayout({
 
         {/* Main app container with safe area support */}
         <div className="min-h-full safe-area-top safe-area-bottom safe-area-left safe-area-right">
-          <TranslationProvider>
-            {children}
-          </TranslationProvider>
+          <AuthProvider>
+            <TranslationProvider>
+              {children}
+            </TranslationProvider>
+          </AuthProvider>
         </div>
 
         {/* Service worker registration */}
