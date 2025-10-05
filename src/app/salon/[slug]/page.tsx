@@ -370,7 +370,8 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
 
   const getCurrentStatus = (hours: Record<string, { open: string; close: string }>) => {
     const now = new Date()
-    const currentDay = now.toLocaleLowerCase().substring(0, 3)
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+    const currentDay = days[now.getDay()]
     const currentTime = now.toTimeString().substring(0, 5)
     
     const todayHours = hours[currentDay]
