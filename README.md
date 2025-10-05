@@ -105,12 +105,17 @@ NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIza...
 ```
 
 ### 3. Database Setup
-Follow the complete guide in **[SUPABASE_SETUP.md](./SUPABASE_SETUP.md)**:
+Follow the complete guide in **[SUPABASE_DATABASE_SETUP.md](./SUPABASE_DATABASE_SETUP.md)**:
 
-1. Create Supabase project
-2. Run database migrations
-3. Set up authentication
-4. Add sample data (optional)
+1. ✅ Supabase project created (`ddenulleuvyhwqsulrod`)
+2. ⏳ **NEXT STEP**: Run database migrations in Supabase SQL Editor
+3. ✅ Authentication configured
+4. ⏳ Add sample data (optional)
+
+**Quick Test**: After setup, test the connection:
+```bash
+curl http://localhost:3000/api/supabase-test
+```
 
 ### 4. Start Development
 ```bash
@@ -228,11 +233,19 @@ npm run type-check   # TypeScript validation
 npm run clean-port   # Kill port 3000 processes
 ```
 
-## 🌐 Live URLs
+## 🌐 Live URLs & Status
 
-- **Demo**: [https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev)
-- **GitHub**: [https://github.com/jwtshorter/nailnav](https://github.com/jwtshorter/nailnav)
-- **Production**: Ready for deployment to your domain
+- **Development Demo**: [https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev) ✅ ACTIVE
+- **GitHub Repository**: [https://github.com/jwtshorter/nailnav](https://github.com/jwtshorter/nailnav) ✅ UPDATED
+- **Supabase Project**: `ddenulleuvyhwqsulrod.supabase.co` ✅ CONNECTED
+- **Production**: Ready for Cloudflare Pages deployment
+
+### 🔧 Current Status
+- ✅ **Frontend**: Complete with all UI refinements
+- ✅ **Supabase Integration**: Environment variables configured and tested
+- ✅ **API Endpoints**: Health check and database test endpoints active
+- ⏳ **Database Schema**: Ready to deploy (requires running migrations in Supabase)
+- ✅ **GitHub**: All code committed and pushed
 
 ## 🤝 Contributing
 
@@ -258,8 +271,11 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ## 🆘 Support & Documentation
 
 ### Documentation
-- **[Supabase Setup Guide](./SUPABASE_SETUP.md)** - Complete database setup
-- **[API Documentation](./src/lib/api/)** - Backend service layer
+- **[Database Setup Guide](./SUPABASE_DATABASE_SETUP.md)** - Complete Supabase setup with migrations
+- **[API Endpoints](./src/app/api/)** - Backend service layer
+  - `/api/health` - System health check
+  - `/api/supabase-test` - Database connection test
+  - `/api/salons` - Salon listings (requires database setup)
 - **[Component Library](./src/components/)** - UI component usage
 
 ### Getting Help
