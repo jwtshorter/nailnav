@@ -1,0 +1,225 @@
+/* NailNav Custom Styles */
+/* Additional styles not covered by Tailwind CSS */
+
+/* Loading animations */
+.loading-dots::after {
+  content: '';
+  animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60%, 100% { content: '...'; }
+}
+
+/* Smooth transitions for mobile interactions */
+.touch-feedback {
+  transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+.touch-feedback:active {
+  transform: scale(0.98);
+}
+
+/* Enhanced focus states for better accessibility */
+.focus-ring {
+  outline: 2px solid transparent;
+  transition: outline-color 0.2s ease;
+}
+
+.focus-ring:focus {
+  outline-color: #ec4899;
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar for mobile */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(236, 72, 153, 0.3);
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.5);
+}
+
+/* Safe area adjustments */
+.safe-top {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.safe-left {
+  padding-left: max(1rem, env(safe-area-inset-left));
+}
+
+.safe-right {
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+/* PWA specific styles */
+.pwa-mode .desktop-only {
+  display: none !important;
+}
+
+.pwa-mode .mobile-pwa-header {
+  display: block;
+}
+
+/* Rating stars animation */
+.star-rating {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star-rating .star {
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.star-rating .star:hover {
+  transform: scale(1.1);
+}
+
+/* Card hover effects */
+.salon-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.salon-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Image lazy loading placeholder */
+.image-placeholder {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Search filter animations */
+.filter-slide-enter {
+  animation: slideDown 0.3s ease-out;
+}
+
+.filter-slide-exit {
+  animation: slideUp 0.3s ease-in;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: auto;
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: auto;
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+/* Pull to refresh (mobile) */
+.pull-to-refresh {
+  position: relative;
+  overflow-y: scroll;
+}
+
+.pull-to-refresh::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  border: 2px solid #ec4899;
+  border-radius: 50%;
+  border-top-color: transparent;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pull-to-refresh.pulling::before {
+  opacity: 1;
+  animation: spin 1s linear infinite;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .salon-card {
+    border: 2px solid #000;
+  }
+  
+  .btn-primary {
+    border: 2px solid #000;
+  }
+  
+  .focus-ring:focus {
+    outline-color: #000;
+    outline-width: 3px;
+  }
+}
+
+/* Dark mode support (for future implementation) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1f2937;
+    --text-primary: #f9fafb;
+    --border-color: #374151;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .salon-card {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
