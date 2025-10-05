@@ -1,19 +1,20 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Metadata, Viewport } from 'next'
+import { TranslationProvider } from '../contexts/TranslationContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | NailNav - Find the Perfect Nail Salon',
-    default: 'NailNav - Find the Perfect Nail Salon Near You'
+    template: '%s | Nail Nav - Find the Perfect Nail Salon',
+    default: 'Nail Nav - Find the Perfect Nail Salon Near You'
   },
   description: 'Discover the best nail salons in your area. Compare prices, read reviews, and book appointments at top-rated nail salons. Mobile-first directory for nail care services.',
   keywords: ['nail salon', 'manicure', 'pedicure', 'nail art', 'gel nails', 'acrylic nails', 'beauty salon'],
-  authors: [{ name: 'NailNav Team' }],
-  creator: 'NailNav',
-  publisher: 'NailNav',
+  authors: [{ name: 'Nail Nav Team' }],
+  creator: 'Nail Nav',
+  publisher: 'Nail Nav',
   formatDetection: {
     email: false,
     address: false,
@@ -29,16 +30,16 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'NailNav - Find the Perfect Nail Salon Near You',
+    title: 'Nail Nav - Find the Perfect Nail Salon Near You',
     description: 'Discover the best nail salons in your area. Compare prices, read reviews, and book appointments.',
     url: 'https://nailnav.com',
-    siteName: 'NailNav',
+    siteName: 'Nail Nav',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'NailNav - Nail Salon Directory',
+        alt: 'Nail Nav - Nail Salon Directory',
       },
     ],
     locale: 'en_US',
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NailNav - Find the Perfect Nail Salon Near You',
+    title: 'Nail Nav - Find the Perfect Nail Salon Near You',
     description: 'Discover the best nail salons in your area. Compare prices, read reviews, and book appointments.',
     images: ['/twitter-image.jpg'],
     creator: '@nailnavapp',
@@ -79,7 +80,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'NailNav',
+    title: 'Nail Nav',
     startupImage: [
       {
         url: '/startup-image-768x1024.png',
@@ -89,7 +90,7 @@ export const metadata: Metadata = {
   },
   other: {
     'mobile-web-app-capable': 'yes',
-    'application-name': 'NailNav',
+    'application-name': 'Nail Nav',
     'msapplication-TileColor': '#ec4899',
     'theme-color': '#ec4899',
   },
@@ -122,6 +123,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://maps.googleapis.com" />
         <link rel="dns-prefetch" href="//supabase.co" />
         
+        {/* Tan Garland Font */}
+        <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
+        
         {/* Critical CSS for above-the-fold content */}
         <style dangerouslySetInnerHTML={{
           __html: `
@@ -148,7 +152,9 @@ export default function RootLayout({
 
         {/* Main app container with safe area support */}
         <div className="min-h-full safe-area-top safe-area-bottom safe-area-left safe-area-right">
-          {children}
+          <TranslationProvider>
+            {children}
+          </TranslationProvider>
         </div>
 
         {/* Service worker registration */}
@@ -185,7 +191,7 @@ export default function RootLayout({
                 installBanner.innerHTML = \`
                   <div class="flex items-center justify-between">
                     <div>
-                      <h3 class="font-semibold">Install NailNav App</h3>
+                      <h3 class="font-semibold">Install Nail Nav App</h3>
                       <p class="text-sm opacity-90">Get quick access to find nail salons</p>
                     </div>
                     <div class="flex space-x-2">
@@ -220,7 +226,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "NailNav",
+              "name": "Nail Nav",
               "description": "Find the perfect nail salon near you",
               "url": "https://nailnav.com",
               "potentialAction": {

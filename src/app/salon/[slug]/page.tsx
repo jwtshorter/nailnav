@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import Footer from '@/components/mobile-first/Footer'
 import { 
   MapPin, 
   Phone, 
@@ -820,6 +821,9 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
           </div>
         </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

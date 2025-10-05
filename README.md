@@ -1,8 +1,8 @@
-# NailNav - Mobile-First Nail Salon Directory Platform
+# Nail Nav - Mobile-First Nail Salon Directory Platform
 
 ## Project Overview
 
-**NailNav** is a comprehensive, mobile-first nail salon directory platform built with Next.js 14, designed to help users discover, compare, and connect with nail salons in their area. The platform emphasizes mobile usability, performance, and accessibility.
+**Nail Nav** is a comprehensive, mobile-first nail salon directory platform built with Next.js 14, designed to help users discover, compare, and connect with nail salons in their area. The platform emphasizes mobile usability, performance, and accessibility.
 
 ### 🎯 Goals
 - Create the best mobile experience for finding nail salons

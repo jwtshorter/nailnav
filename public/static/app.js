@@ -1,8 +1,8 @@
-// NailNav Frontend JavaScript
+// Nail Nav Frontend JavaScript
 // This file handles client-side interactions and enhancements
 
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('NailNav app loaded successfully!')
+  console.log('Nail Nav app loaded successfully!')
   
   // Initialize PWA features
   initPWA()
@@ -112,7 +112,7 @@ function showUpdateNotification() {
 }
 
 // Export functions for use in other scripts
-window.NailNav = {
+window.Nail Nav = {
   trackEvent,
   trackPageView
 }

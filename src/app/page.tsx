@@ -3,8 +3,11 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, Star, TrendingUp, Shield, Clock } from 'lucide-react'
+import Navigation from '@/components/mobile-first/Navigation'
 import SearchFilter from '@/components/mobile-first/SearchFilter'
 import SalonCard from '@/components/mobile-first/SalonCard'
+import Footer from '@/components/mobile-first/Footer'
+import { useTranslation } from '../contexts/TranslationContext'
 // import { SalonService } from '@/lib/api/salons'
 // import { Salon, SalonSearchFilters } from '@/lib/supabase'
 
@@ -42,6 +45,7 @@ interface SalonWithDetails {
 }
 
 export default function HomePage() {
+  const { t } = useTranslation()
   const [searchResults, setSearchResults] = useState<SalonWithDetails[]>([])
   const [featuredSalons, setFeaturedSalons] = useState<SalonWithDetails[]>([])
   const [popularSalons, setPopularSalons] = useState<SalonWithDetails[]>([])
@@ -158,77 +162,74 @@ export default function HomePage() {
   const features = [
     {
       icon: MapPin,
-      title: 'Find Nearby',
-      description: 'Discover nail salons in your area with GPS-powered search'
+      title: t('home.whyChoose.comprehensive.title'),
+      description: t('home.whyChoose.comprehensive.description')
     },
     {
       icon: Star,
-      title: 'Read Reviews',
-      description: 'See what others say about their nail salon experiences'
+      title: t('home.whyChoose.verified.title'),
+      description: t('home.whyChoose.verified.description')
     },
     {
       icon: Shield,
-      title: 'Verified Salons',
-      description: 'Browse trusted, verified nail salon businesses'
+      title: t('home.whyChoose.easyBooking.title'),
+      description: t('home.whyChoose.easyBooking.description')
     },
     {
       icon: Clock,
-      title: 'Real-time Info',
-      description: 'Get up-to-date hours, availability, and pricing'
+      title: 'Real-Time Updates',
+      description: 'Get up-to-date availability, pricing, and service information for better planning and convenience.'
     }
   ]
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-primary-500 via-primary-600 to-accent-600 text-white">
-        <div className="container mx-auto px-4 py-8 md:py-12">
-          <motion.div 
-            className="text-center mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Find the Perfect
-              <br />
-              <span className="text-accent-200">Nail Salon</span> Near You
-            </h1>
-            <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
-              Discover top-rated nail salons, compare prices, read reviews, and book appointments
-              all in one mobile-first platform.
-            </p>
-          </motion.div>
+      {/* Navigation */}
+      <Navigation />
+      
+      {/* Hero Section with Overlaid Search */}
+      <div 
+        className="relative text-white min-h-[80vh] md:min-h-[70vh] flex items-center"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="container mx-auto px-4 py-12 md:py-16">
+          <div className="max-w-4xl mx-auto">
+            {/* Hero Content */}
+            <motion.div 
+              className="text-center mb-12 md:mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                {t('home.hero.title')}
+              </h1>
+              <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">
+                {t('home.hero.subtitle')}
+              </p>
+            </motion.div>
 
-          {/* Quick Stats */}
-          <motion.div 
-            className="grid grid-cols-3 gap-4 md:gap-8 mb-8 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div>
-              <div className="text-2xl md:text-3xl font-bold">1,000+</div>
-              <div className="text-sm md:text-base opacity-80">Nail Salons</div>
-            </div>
-            <div>
-              <div className="text-2xl md:text-3xl font-bold">50K+</div>
-              <div className="text-sm md:text-base opacity-80">Happy Customers</div>
-            </div>
-            <div>
-              <div className="text-2xl md:text-3xl font-bold">4.8★</div>
-              <div className="text-sm md:text-base opacity-80">Average Rating</div>
-            </div>
-          </motion.div>
+            {/* Overlaid Search Filter */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="p-6 md:p-8"
+            >
+              <SearchFilter 
+                onSearch={handleSearch}
+                loading={loading}
+                resultsCount={searchResults.length}
+              />
+            </motion.div>
+          </div>
         </div>
       </div>
-
-      {/* Search Filter */}
-      <SearchFilter 
-        onSearch={handleSearch}
-        loading={loading}
-        resultsCount={searchResults.length}
-      />
 
       {/* Main Content */}
       <main id="main-content" className="container mx-auto px-4 py-6">
@@ -241,7 +242,7 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Search Results {searchResults.length > 0 && `(${searchResults.length})`}
+              {t('search.results.found')} {searchResults.length > 0 && `(${searchResults.length})`}
             </h2>
             
             {loading ? (
@@ -269,16 +270,243 @@ export default function HomePage() {
                     onDirections={() => handleDirections(salon)}
                     onContact={() => handleContact(salon)}
                     showDistance={true}
+                    showActionButtons={false}
                   />
                 ))}
               </div>
             ) : (
               <div className="text-center py-8 text-gray-500">
                 <MapPin className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                <p>No salons found matching your criteria.</p>
-                <p className="text-sm">Try adjusting your filters or search area.</p>
+                <p>{t('search.results.noResults')}</p>
+                <p className="text-sm">{t('search.results.tryDifferent')}</p>
               </div>
             )}
+          </motion.section>
+        )}
+
+        {/* Featured Vendors Section */}
+        {!searchPerformed && (
+          <motion.section 
+            className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              {t('home.featuredVendors.title')}
+            </h2>
+            <p className="text-gray-600 text-center mb-8">
+              {t('home.featuredVendors.subtitle')}
+            </p>
+            
+            {/* 2 rows x 4 boxes grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+              {/* Row 1 */}
+              {[
+                {
+                  id: 'vendor-1',
+                  name: 'Elegant Nails Spa',
+                  image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121',
+                  specialties: ['Gel Manicures', 'Nail Art'],
+                  rating: 4.8,
+                  reviewCount: 127,
+                  location: 'Los Angeles, CA',
+                  verified: true
+                },
+                {
+                  id: 'vendor-2', 
+                  name: 'Luxe Nail Lounge',
+                  image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8',
+                  specialties: ['Premium Gel', 'Luxury Treatments'],
+                  rating: 4.9,
+                  reviewCount: 89,
+                  location: 'Beverly Hills, CA',
+                  verified: true
+                },
+                {
+                  id: 'vendor-3',
+                  name: 'Trendy Nails Studio',
+                  image: 'https://page.gensparksite.com/v1/base64_upload/fd5b1d89ee755b0b188cab2569983b82',
+                  specialties: ['Nail Art', 'Acrylic Extensions'],
+                  rating: 4.7,
+                  reviewCount: 156,
+                  location: 'Miami, FL',
+                  verified: true
+                },
+                {
+                  id: 'vendor-4',
+                  name: 'Pure Beauty Nails',
+                  image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121',
+                  specialties: ['French Manicure', 'Spa Pedicure'],
+                  rating: 4.6,
+                  reviewCount: 92,
+                  location: 'San Francisco, CA',
+                  verified: false
+                }
+              ].map((vendor, index) => (
+                <motion.div
+                  key={vendor.id}
+                  className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 cursor-pointer group"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 * index }}
+                  onClick={() => console.log('Vendor clicked:', vendor.name)}
+                >
+                  {/* Image */}
+                  <div className="aspect-square bg-gray-200 overflow-hidden relative">
+                    <img
+                      src={vendor.image}
+                      alt={vendor.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    {vendor.verified && (
+                      <div className="absolute top-2 right-2 bg-primary-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                        <Shield className="w-3 h-3" />
+                        <span>Verified</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                      {vendor.name}
+                    </h3>
+                    
+                    {/* Location */}
+                    <p className="text-sm text-accent-600 mb-2 flex items-center">
+                      <MapPin className="w-3 h-3 mr-1" />
+                      {vendor.location}
+                    </p>
+                    
+                    {/* Rating */}
+                    <div className="flex items-center mb-2">
+                      <div className="flex items-center space-x-1">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        <span className="text-sm font-medium text-gray-700">{vendor.rating}</span>
+                        <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
+                      </div>
+                    </div>
+                    
+                    {/* Specialties */}
+                    <div className="flex flex-wrap gap-1">
+                      {vendor.specialties.slice(0, 2).map((specialty) => (
+                        <span 
+                          key={specialty}
+                          className="text-xs bg-secondary-100 text-secondary-700 px-2 py-1 rounded-full"
+                        >
+                          {specialty}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+            
+            {/* Row 2 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  id: 'vendor-5',
+                  name: 'Glamour Nail Bar',
+                  image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8',
+                  specialties: ['Dip Powder', 'Nail Extensions'],
+                  rating: 4.5,
+                  reviewCount: 78,
+                  location: 'New York, NY',
+                  verified: true
+                },
+                {
+                  id: 'vendor-6',
+                  name: 'Serenity Spa Nails',
+                  image: 'https://page.gensparksite.com/v1/base64_upload/fd5b1d89ee755b0b188cab2569983b82',
+                  specialties: ['Organic Treatments', 'Wellness'],
+                  rating: 4.7,
+                  reviewCount: 134,
+                  location: 'Austin, TX',
+                  verified: true
+                },
+                {
+                  id: 'vendor-7',
+                  name: 'Modern Nails Boutique',
+                  image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121',
+                  specialties: ['Contemporary Art', 'Gel Polish'],
+                  rating: 4.4,
+                  reviewCount: 67,
+                  location: 'Seattle, WA',
+                  verified: false
+                },
+                {
+                  id: 'vendor-8',
+                  name: 'Royal Touch Nails',
+                  image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8',
+                  specialties: ['Luxury Service', 'VIP Experience'],
+                  rating: 4.8,
+                  reviewCount: 203,
+                  location: 'Las Vegas, NV',
+                  verified: true
+                }
+              ].map((vendor, index) => (
+                <motion.div
+                  key={vendor.id}
+                  className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 cursor-pointer group"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 + 0.1 * index }}
+                  onClick={() => console.log('Vendor clicked:', vendor.name)}
+                >
+                  {/* Image */}
+                  <div className="aspect-square bg-gray-200 overflow-hidden relative">
+                    <img
+                      src={vendor.image}
+                      alt={vendor.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    {vendor.verified && (
+                      <div className="absolute top-2 right-2 bg-primary-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                        <Shield className="w-3 h-3" />
+                        <span>Verified</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                      {vendor.name}
+                    </h3>
+                    
+                    {/* Location */}
+                    <p className="text-sm text-accent-600 mb-2 flex items-center">
+                      <MapPin className="w-3 h-3 mr-1" />
+                      {vendor.location}
+                    </p>
+                    
+                    {/* Rating */}
+                    <div className="flex items-center mb-2">
+                      <div className="flex items-center space-x-1">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        <span className="text-sm font-medium text-gray-700">{vendor.rating}</span>
+                        <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
+                      </div>
+                    </div>
+                    
+                    {/* Specialties */}
+                    <div className="flex flex-wrap gap-1">
+                      {vendor.specialties.slice(0, 2).map((specialty) => (
+                        <span 
+                          key={specialty}
+                          className="text-xs bg-secondary-100 text-secondary-700 px-2 py-1 rounded-full"
+                        >
+                          {specialty}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.section>
         )}
 
@@ -291,7 +519,7 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Why Choose NailNav?
+              {t('home.whyChoose.title')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {features.map((feature, index) => (
@@ -320,7 +548,7 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Featured Salons</h2>
+              <h2 className="text-2xl font-bold text-gray-900">{t('home.featuredSalons.title')}</h2>
               <TrendingUp className="w-6 h-6 text-primary-500" />
             </div>
             <div className="space-y-4">
@@ -331,6 +559,7 @@ export default function HomePage() {
                   onClick={() => handleSalonClick(salon)}
                   onDirections={() => handleDirections(salon)}
                   onContact={() => handleContact(salon)}
+                  showActionButtons={false}
                 />
               ))}
             </div>
@@ -344,7 +573,7 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Popular This Week</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('home.featuredSalons.title')}</h2>
             <div className="space-y-4">
               {popularSalons.map((salon) => (
                 <SalonCard
@@ -353,7 +582,119 @@ export default function HomePage() {
                   onClick={() => handleSalonClick(salon)}
                   onDirections={() => handleDirections(salon)}
                   onContact={() => handleContact(salon)}
+                  showActionButtons={false}
                 />
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        {/* Blog Section */}
+        {!searchPerformed && (
+          <motion.section
+            className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Latest from Our Blog</h2>
+              <a
+                href="/blog"
+                className="text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center space-x-1"
+              >
+                <span>View All</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  id: 1,
+                  title: "The Ultimate Guide to Nail Care: Tips for Healthy, Beautiful Nails",
+                  excerpt: "Discover professional secrets for maintaining healthy nails between salon visits.",
+                  image: "https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121",
+                  date: "Jan 15, 2025",
+                  category: "Nail Care",
+                  readTime: 5
+                },
+                {
+                  id: 2,
+                  title: "Top 10 Nail Art Trends for 2025: What's Hot This Year",
+                  excerpt: "Stay ahead of the curve with the latest nail art trends and fashion statements.",
+                  image: "https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8",
+                  date: "Jan 12, 2025",
+                  category: "Trends",
+                  readTime: 7
+                },
+                {
+                  id: 3,
+                  title: "How to Choose the Perfect Nail Salon: A Complete Checklist",
+                  excerpt: "Find the ideal nail salon with our comprehensive guide and safety tips.",
+                  image: "https://page.gensparksite.com/v1/base64_upload/fd5b1d89ee755b0b188cab2569983b82",
+                  date: "Jan 8, 2025",
+                  category: "Tips",
+                  readTime: 6
+                },
+                {
+                  id: 4,
+                  title: "Nail Care Basics: Essential Tools and Products",
+                  excerpt: "Master the fundamentals with our guide to essential nail care tools and products.",
+                  image: "https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121",
+                  date: "Jan 5, 2025",
+                  category: "Basics",
+                  readTime: 4
+                }
+              ].map((post, index) => (
+                <motion.article
+                  key={post.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 * index }}
+                  className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-shadow cursor-pointer group"
+                  onClick={() => window.location.href = '/blog'}
+                >
+                  {/* Image */}
+                  <div className="aspect-video bg-gray-200 overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="p-4">
+                    {/* Category & Read Time */}
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+                      <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded-full text-xs font-medium">
+                        {post.category}
+                      </span>
+                      <span className="text-xs">{post.readTime} min</span>
+                    </div>
+                    
+                    {/* Title */}
+                    <h3 className="text-sm font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    
+                    {/* Excerpt */}
+                    <p className="text-gray-600 text-xs mb-3 line-clamp-2">
+                      {post.excerpt}
+                    </p>
+                    
+                    {/* Date */}
+                    <div className="flex items-center text-xs text-gray-500">
+                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span>{post.date}</span>
+                    </div>
+                  </div>
+                </motion.article>
               ))}
             </div>
           </motion.section>
@@ -361,23 +702,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-12">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h3 className="text-xl font-bold mb-2">NailNav</h3>
-            <p className="text-gray-400 mb-4">Find the perfect nail salon near you</p>
-            <div className="flex justify-center space-x-6 text-sm text-gray-400">
-              <a href="/about" className="hover:text-white">About</a>
-              <a href="/privacy" className="hover:text-white">Privacy</a>
-              <a href="/terms" className="hover:text-white">Terms</a>
-              <a href="/contact" className="hover:text-white">Contact</a>
-            </div>
-            <div className="mt-4 text-xs text-gray-500">
-              © 2024 NailNav. All rights reserved.
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

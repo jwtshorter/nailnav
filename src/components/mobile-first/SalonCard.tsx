@@ -30,6 +30,8 @@ interface SalonCardProps {
   onDirections?: () => void
   onContact?: () => void
   showDistance?: boolean
+  showActionButtons?: boolean
+  isCompact?: boolean
 }
 
 export const SalonCard = ({ 
@@ -37,7 +39,9 @@ export const SalonCard = ({
   onClick, 
   onDirections, 
   onContact,
-  showDistance = false 
+  showDistance = false,
+  showActionButtons = false,
+  isCompact = false 
 }: SalonCardProps) => {
   const [imageError, setImageError] = useState(false)
 
@@ -75,6 +79,98 @@ export const SalonCard = ({
     )
   }
 
+  if (isCompact) {
+    // Compact vertical layout for grid view (4 across on desktop)
+    return (
+      <motion.div 
+        className="bg-white rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 p-4 border border-gray-100 cursor-pointer"
+        whileTap={{ scale: 0.98 }}
+        onClick={onClick}
+        style={{ minHeight: '44px' }}
+      >
+        {/* Salon Image */}
+        <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-200 mb-3">
+          {salon.logo_url && !imageError ? (
+            <img
+              src={salon.logo_url}
+              alt={salon.name}
+              className="w-full h-full object-cover"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-primary-100">
+              <span className="text-primary-600 font-semibold text-xl">
+                {salon.name.charAt(0)}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Salon Information */}
+        <div className="text-center">
+          <div className="flex items-center justify-center mb-1">
+            <h3 className="font-semibold text-base text-gray-900 truncate max-w-full">
+              {salon.name}
+            </h3>
+            {salon.is_verified && (
+              <CheckCircle className="w-4 h-4 text-green-500 ml-1 flex-shrink-0" />
+            )}
+          </div>
+
+          {/* Location */}
+          <div className="flex items-center justify-center text-gray-600 text-sm mb-2">
+            <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
+            <span className="truncate">{salon.city}, {salon.state}</span>
+          </div>
+
+          {/* Rating */}
+          {salon.average_rating && salon.review_count && (
+            <div className="flex justify-center mb-2">
+              <div className="flex items-center space-x-1">
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`w-3 h-3 ${
+                        star <= salon.average_rating! 
+                          ? 'text-yellow-400 fill-current' 
+                          : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-gray-600">
+                  {salon.average_rating.toFixed(1)} ({salon.review_count})
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Price */}
+          <div className="text-sm text-primary-600 font-medium mb-2">
+            {formatPrice(salon.price_from, salon.currency)}
+          </div>
+
+          {/* Distance (if shown) */}
+          {showDistance && salon.distance_meters && (
+            <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full inline-block mb-2">
+              {formatDistance(salon.distance_meters)}
+            </div>
+          )}
+
+          {/* Top Specialty */}
+          {salon.specialties && salon.specialties.length > 0 && (
+            <div className="text-xs text-gray-500 truncate">
+              {salon.specialties[0]}
+              {salon.specialties.length > 1 && ` +${salon.specialties.length - 1} more`}
+            </div>
+          )}
+        </div>
+      </motion.div>
+    )
+  }
+
+  // Original horizontal layout for list view
   return (
     <motion.div 
       className="bg-white rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 p-4 mb-4 border border-gray-100"
@@ -183,34 +279,36 @@ export const SalonCard = ({
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex space-x-2 mt-4">
-        <motion.button
-          onClick={(e) => {
-            e.stopPropagation()
-            onDirections?.()
-          }}
-          className="flex-1 bg-primary-500 text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center space-x-2"
-          style={{ minHeight: '44px', minWidth: '44px' }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <MapPin className="w-4 h-4" />
-          <span>Directions</span>
-        </motion.button>
+      {/* Action Buttons - Only show when explicitly requested */}
+      {showActionButtons && (
+        <div className="flex space-x-2 mt-4">
+          <motion.button
+            onClick={(e) => {
+              e.stopPropagation()
+              onDirections?.()
+            }}
+            className="flex-1 bg-primary-500 text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center space-x-2"
+            style={{ minHeight: '44px', minWidth: '44px' }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <MapPin className="w-4 h-4" />
+            <span>Directions</span>
+          </motion.button>
 
-        <motion.button
-          onClick={(e) => {
-            e.stopPropagation()
-            onContact?.()
-          }}
-          className="flex-1 bg-accent-500 text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center space-x-2"
-          style={{ minHeight: '44px', minWidth: '44px' }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Phone className="w-4 h-4" />
-          <span>Contact</span>
-        </motion.button>
-      </div>
+          <motion.button
+            onClick={(e) => {
+              e.stopPropagation()
+              onContact?.()
+            }}
+            className="flex-1 bg-accent-500 text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center space-x-2"
+            style={{ minHeight: '44px', minWidth: '44px' }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Phone className="w-4 h-4" />
+            <span>Contact</span>
+          </motion.button>
+        </div>
+      )}
     </motion.div>
   )
 }
