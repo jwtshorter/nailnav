@@ -172,7 +172,13 @@ Full internationalization support for:
 
 Translation context automatically detects and persists user language preferences.
 
-## 🔐 Authentication & Security
+## 🔐 Privacy & Security
+
+### Privacy-First Design
+- **No Public Phone Numbers**: All contact goes through secure forms
+- **Hidden Email Addresses**: Email protected behind contact/booking forms  
+- **Contact Form System**: Secure inquiry system for customer-salon communication
+- **Private Contact Data**: Salon contact info only accessible to salon owners
 
 ### User Management
 - **Supabase Auth** integration with email/password
@@ -182,6 +188,7 @@ Translation context automatically detects and persists user language preferences
 
 ### Data Protection
 - **Row Level Security** on all sensitive tables
+- **Contact Privacy**: Phone/email never exposed in public APIs
 - **Input Validation** with TypeScript type checking
 - **SQL Injection Prevention** with parameterized queries
 - **XSS Protection** with Next.js built-in security

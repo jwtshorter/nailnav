@@ -97,7 +97,7 @@ BEGIN
     s.address,
     s.city,
     s.state,
-    s.phone,
+    s.website,
     s.price_from,
     s.currency,
     s.specialties,

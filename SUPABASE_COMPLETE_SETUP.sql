@@ -98,8 +98,6 @@ CREATE TABLE salons (
   name VARCHAR(200) NOT NULL,
   slug VARCHAR(200) UNIQUE NOT NULL,
   description TEXT,
-  phone VARCHAR(20),
-  email VARCHAR(100),
   website VARCHAR(200),
   
   -- Location Data (PostGIS)
@@ -557,7 +555,7 @@ CREATE INDEX idx_featured_active_priority ON featured_placements (is_active, pri
 
 -- Insert Sample Salons
 INSERT INTO salons (
-  name, slug, description, phone, email, website,
+  name, slug, description, website,
   address, city, state, country, postal_code, latitude, longitude,
   operating_hours, services_offered, specialties, languages_spoken,
   accepts_walk_ins, parking_available, price_range, price_from, currency,
@@ -567,7 +565,7 @@ INSERT INTO salons (
 (
   'Luxe Nail Studio', 'luxe-nail-studio', 
   'Premium nail salon offering luxury manicures, pedicures, and custom nail art in the heart of downtown.',
-  '(555) 123-4567', 'info@luxenails.com', 'https://luxenailstudio.com',
+  'https://luxenailstudio.com',
   '123 Main St', 'New York', 'NY', 'USA', '10001', 40.7505, -73.9934,
   '{"monday": {"open": "09:00", "close": "19:00"}, "tuesday": {"open": "09:00", "close": "19:00"}, "wednesday": {"open": "09:00", "close": "19:00"}, "thursday": {"open": "09:00", "close": "20:00"}, "friday": {"open": "09:00", "close": "20:00"}, "saturday": {"open": "08:00", "close": "18:00"}, "sunday": {"open": "10:00", "close": "17:00"}}',
   ARRAY['manicures', 'pedicures', 'nail-art', 'gel-polish'],
@@ -582,7 +580,7 @@ INSERT INTO salons (
 (
   'Bella Nails & Spa', 'bella-nails-spa',
   'Full-service nail salon and spa offering relaxing treatments in a comfortable environment.',
-  '(555) 987-6543', 'hello@bellanails.com', 'https://bellanailsspa.com',
+  'https://bellanailsspa.com',
   '456 Oak Avenue', 'Los Angeles', 'CA', 'USA', '90210', 34.0736, -118.4004,
   '{"monday": {"open": "10:00", "close": "20:00"}, "tuesday": {"open": "10:00", "close": "20:00"}, "wednesday": {"open": "10:00", "close": "20:00"}, "thursday": {"open": "10:00", "close": "20:00"}, "friday": {"open": "10:00", "close": "21:00"}, "saturday": {"open": "09:00", "close": "21:00"}, "sunday": {"open": "10:00", "close": "19:00"}}',
   ARRAY['manicures', 'pedicures', 'spa-treatments', 'waxing'],
@@ -597,7 +595,7 @@ INSERT INTO salons (
 (
   'Quick Nails Express', 'quick-nails-express',
   'Fast and affordable nail services for busy professionals. No appointment necessary.',
-  '(555) 456-7890', 'info@quicknails.com', null,
+  null,
   '789 Business Blvd', 'Chicago', 'IL', 'USA', '60601', 41.8781, -87.6298,
   '{"monday": {"open": "08:00", "close": "20:00"}, "tuesday": {"open": "08:00", "close": "20:00"}, "wednesday": {"open": "08:00", "close": "20:00"}, "thursday": {"open": "08:00", "close": "20:00"}, "friday": {"open": "08:00", "close": "20:00"}, "saturday": {"open": "09:00", "close": "19:00"}, "sunday": {"open": "11:00", "close": "17:00"}}',
   ARRAY['quick-manicures', 'express-pedicures', 'polish-change'],
@@ -612,7 +610,7 @@ INSERT INTO salons (
 (
   'Artisan Nail Gallery', 'artisan-nail-gallery',
   'Artistic nail designs and premium services by award-winning nail technicians.',
-  '(555) 321-0987', 'create@artisannails.com', 'https://artisannailgallery.com',
+  'https://artisannailgallery.com',
   '321 Creative Way', 'Miami', 'FL', 'USA', '33101', 25.7617, -80.1918,
   '{"tuesday": {"open": "10:00", "close": "18:00"}, "wednesday": {"open": "10:00", "close": "18:00"}, "thursday": {"open": "10:00", "close": "20:00"}, "friday": {"open": "10:00", "close": "20:00"}, "saturday": {"open": "09:00", "close": "19:00"}, "sunday": {"open": "12:00", "close": "17:00"}}',
   ARRAY['nail-art', 'sculptured-nails', 'custom-designs', 'competitions'],

@@ -80,8 +80,6 @@ export interface Salon {
   postal_code?: string
   latitude: number
   longitude: number
-  phone?: string
-  email?: string
   website?: string
   price_range?: 'budget' | 'mid-range' | 'premium'
   price_from?: number
@@ -231,6 +229,34 @@ export interface SalonSearchFilters {
     lng: number
     radius: number
   }
+}
+
+// Contact form interfaces
+export interface ContactSubmission {
+  id: string
+  salon_id: string
+  visitor_name: string
+  visitor_email: string
+  visitor_phone?: string
+  subject?: string
+  message: string
+  service_interest?: string
+  preferred_contact_method: 'email' | 'phone' | 'either'
+  is_read: boolean
+  is_responded: boolean
+  salon_response?: string
+  response_date?: string
+  created_at: string
+}
+
+export interface SalonPrivateContact {
+  id: string
+  salon_id: string
+  email?: string
+  phone?: string
+  contact_preferences: Record<string, any>
+  created_at: string
+  updated_at: string
 }
 
 // API response types

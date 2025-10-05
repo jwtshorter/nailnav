@@ -34,7 +34,7 @@ interface SalonWithDetails {
   address: string
   city: string
   state: string
-  phone?: string
+  website?: string
   price_from?: number
   currency?: string
   specialties?: string[]
@@ -68,7 +68,7 @@ export default function HomePage() {
         address: '123 Main Street',
         city: 'Los Angeles',
         state: 'CA',
-        phone: '(555) 123-4567',
+        website: 'https://elegantnailsspa.com',
         price_from: 35,
         currency: 'USD',
         specialties: ['Gel Manicures', 'Nail Art', 'Spa Pedicures'],
@@ -90,7 +90,7 @@ export default function HomePage() {
         address: '456 Beverly Drive',
         city: 'Beverly Hills',
         state: 'CA',
-        phone: '(555) 987-6543',
+        website: 'https://luxenaillounge.com',
         price_from: 65,
         currency: 'USD',
         specialties: ['Premium Gel Services', 'Luxury Treatments'],
@@ -116,7 +116,7 @@ export default function HomePage() {
           address: '789 Downtown Blvd',
           city: 'Miami',
           state: 'FL',
-          phone: '(555) 456-7890',
+          website: 'https://quicknailsexpress.com',
           price_from: 20,
           currency: 'USD',
           specialties: ['Quick Service', 'Walk-ins Welcome'],
@@ -152,11 +152,8 @@ export default function HomePage() {
     // Mock tracking
     console.log('Contact requested for:', salon.name)
     
-    if (salon.phone) {
-      window.location.href = `tel:${salon.phone}`
-    } else {
-      alert(`Contact ${salon.name} - This would show contact options`)
-    }
+    // Navigate to contact form instead of calling
+    window.location.href = `/salon/${salon.slug}#contact`
   }
 
   const features = [

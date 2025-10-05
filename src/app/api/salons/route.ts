@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
         city,
         state,
         address,
-        phone,
+        website,
         specialties,
         is_verified,
         is_featured,

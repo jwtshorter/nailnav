@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { MapPin, Phone, Star, Clock, CheckCircle } from 'lucide-react'
+import { MapPin, Mail, Star, Clock, CheckCircle } from 'lucide-react'
 interface Salon {
   id: string
   name: string
@@ -10,7 +10,7 @@ interface Salon {
   address: string
   city: string
   state: string
-  phone?: string
+  website?: string
   price_from?: number
   currency?: string
   specialties?: string[]
@@ -304,7 +304,7 @@ export const SalonCard = ({
             style={{ minHeight: '44px', minWidth: '44px' }}
             whileTap={{ scale: 0.95 }}
           >
-            <Phone className="w-4 h-4" />
+            <Mail className="w-4 h-4" />
             <span>Contact</span>
           </motion.button>
         </div>
