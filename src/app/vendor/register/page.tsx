@@ -54,6 +54,93 @@ export default function VendorRegisterPage() {
     return Object.keys(newErrors).length === 0
   }
 
+  const generateSalonSlug = (salonName: string, city: string, state: string) => {
+    const cleanName = salonName.toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+    
+    const cleanCity = city.toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, '-')
+    
+    const cleanState = state.toLowerCase()
+      .replace(/[^a-z0-9]/g, '')
+    
+    return `${cleanName}-${cleanCity}-${cleanState}`
+  }
+
+  const generateSalonId = () => {
+    return Math.floor(100000 + Math.random() * 900000) // 6-digit random ID
+  }
+
+  const createSalonListing = async (formData: any) => {
+    const salonId = generateSalonId()
+    const salonSlug = generateSalonSlug(formData.salonName, formData.city, formData.state)
+    
+    // Auto-create salon listing immediately
+    const salonListing = {
+      id: salonId,
+      slug: salonSlug,
+      name: formData.salonName,
+      address: {
+        street: formData.address,
+        city: formData.city,
+        state: formData.state,
+        zip: formData.zip,
+        country: formData.country
+      },
+      contact: {
+        email: formData.email,
+        owner: formData.ownerName
+      },
+      status: 'active', // Auto-activate without email verification
+      verified: true, // Skip email verification
+      rating: 4.5, // Default good rating for new listings
+      reviewCount: 0,
+      services: [
+        'Manicure',
+        'Pedicure', 
+        'Gel Polish',
+        'Nail Art'
+      ], // Default services
+      pricing: {
+        manicure: '$25-45',
+        pedicure: '$35-55',
+        gelPolish: '$30-50'
+      },
+      hours: {
+        monday: '9:00 AM - 7:00 PM',
+        tuesday: '9:00 AM - 7:00 PM', 
+        wednesday: '9:00 AM - 7:00 PM',
+        thursday: '9:00 AM - 7:00 PM',
+        friday: '9:00 AM - 8:00 PM',
+        saturday: '9:00 AM - 8:00 PM',
+        sunday: '10:00 AM - 6:00 PM'
+      },
+      images: [
+        '/api/placeholder/600/400',
+        '/api/placeholder/600/400',
+        '/api/placeholder/600/400'
+      ],
+      description: `Welcome to ${formData.salonName}! We provide professional nail services in ${formData.city}, ${formData.state}. Our experienced team is dedicated to giving you beautiful, healthy nails in a relaxing environment.`,
+      amenities: ['Walk-ins Welcome', 'Credit Cards Accepted', 'Free Parking', 'Sanitized Tools'],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+
+    // In a real app, this would save to your database
+    console.log('Auto-created salon listing:', salonListing)
+    
+    // Save to localStorage for demo purposes (in real app, use your database API)
+    const existingSalons = JSON.parse(localStorage.getItem('salonListings') || '[]')
+    existingSalons.push(salonListing)
+    localStorage.setItem('salonListings', JSON.stringify(existingSalons))
+    
+    return salonListing
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -62,13 +149,15 @@ export default function VendorRegisterPage() {
     setIsSubmitting(true)
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Auto-create the salon listing immediately
+      const newSalonListing = await createSalonListing(formData)
       
-      // In a real app, you would make an API call here
-      console.log('Form submitted:', formData)
+      // Simulate processing time
+      await new Promise(resolve => setTimeout(resolve, 1500))
       
-      setSuccessMessage('Registration submitted successfully! We will review your application and get back to you within 24 hours.')
+      setSuccessMessage(`🎉 Congratulations! Your salon "${formData.salonName}" has been successfully listed on Nail Nav! Your listing is now live and customers can find you. You can view your listing at: /salon/${newSalonListing.slug}`)
+      
+      // Clear form
       setFormData({
         salonName: '',
         address: '',
@@ -80,8 +169,14 @@ export default function VendorRegisterPage() {
         email: '',
         termsAccepted: false
       })
+
+      // Auto-redirect to the new salon listing after 3 seconds
+      setTimeout(() => {
+        window.location.href = `/salon/${newSalonListing.slug}`
+      }, 3000)
+      
     } catch (error) {
-      setErrors({ submit: 'An error occurred. Please try again.' })
+      setErrors({ submit: 'An error occurred while creating your listing. Please try again.' })
     } finally {
       setIsSubmitting(false)
     }
@@ -112,9 +207,9 @@ export default function VendorRegisterPage() {
             <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Store className="w-10 h-10 text-primary-600" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">List Your Nail Salon</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">List Your Nail Salon - Go Live Instantly!</h1>
             <p className="text-lg text-gray-600 max-w-lg mx-auto">
-              Join thousands of salon owners who have grown their business with Nail Nav
+              ⚡ No email verification required! Your salon listing goes live immediately after registration.
             </p>
           </motion.div>
 
@@ -128,12 +223,12 @@ export default function VendorRegisterPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Why Join Nail Nav?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
-                'Reach new customers in your area',
-                'Manage bookings and appointments',
-                'Showcase your services and pricing',
-                'Build your online reputation',
-                'Get discovered by local searchers',
-                'Mobile-optimized business profile'
+                'Go live instantly - no email verification needed',
+                'Reach new customers in your area immediately',
+                'Professional listing created automatically',
+                'Start getting bookings right away',
+                'Get discovered by local searchers today',
+                'Mobile-optimized business profile included'
               ].map((benefit, index) => (
                 <div key={index} className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -156,9 +251,18 @@ export default function VendorRegisterPage() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6"
+                className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg mb-6"
               >
-                {successMessage}
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-green-900 mb-2">Salon Listed Successfully!</p>
+                    <p className="text-green-700 leading-relaxed">{successMessage}</p>
+                    <p className="text-green-600 text-sm mt-2 font-medium">
+                      📍 Redirecting to your new listing in 3 seconds...
+                    </p>
+                  </div>
+                </div>
               </motion.div>
             )}
 
@@ -411,7 +515,7 @@ export default function VendorRegisterPage() {
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               >
                 <Store className="w-5 h-5" />
-                <span>{isSubmitting ? 'Submitting...' : 'Submit Registration'}</span>
+                <span>{isSubmitting ? 'Creating Your Listing...' : 'Create My Listing Now'}</span>
               </motion.button>
             </form>
 
