@@ -86,12 +86,9 @@ export default function VendorLoginPage() {
         console.warn('Could not verify vendor role, proceeding with login')
       }
 
-      setSuccessMessage('Login successful! Redirecting to dashboard...')
+      setSuccessMessage('Login successful! Click below to access your dashboard.')
       
-      // Redirect to vendor dashboard
-      setTimeout(() => {
-        window.location.href = '/vendor/dashboard'
-      }, 1000)
+      // Don't auto-redirect - let user click when ready
     } catch (error: any) {
       console.error('Login error:', error)
       if (error?.message?.includes('Invalid login credentials')) {
@@ -140,7 +137,13 @@ export default function VendorLoginPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6"
               >
-                {successMessage}
+                <p className="mb-3">{successMessage}</p>
+                <a
+                  href="/vendor/dashboard"
+                  className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Go to Dashboard →
+                </a>
               </motion.div>
             )}
 

@@ -202,9 +202,9 @@ export default function VendorRegisterPage() {
       const result = await createVendorAccount(formData)
       
       if (result.fallbackMode) {
-        setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted. Please note: The database schema needs to be updated for full functionality. See VENDOR_ADMIN_SETUP.md for setup instructions. You can still log in with your credentials.`)
+        setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted. Please note: The database schema needs to be updated for full functionality. See VENDOR_ADMIN_SETUP.md for setup instructions.`)
       } else {
-        setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted for admin review. You'll receive an email once your listing is approved and goes live. You can now log in to update your salon details and photos.`)
+        setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted for admin review. You'll receive an email once your listing is approved and goes live.`)
       }
       
       // Clear form
@@ -224,10 +224,8 @@ export default function VendorRegisterPage() {
         termsAccepted: false
       })
 
-      // Redirect to login page after 3 seconds
-      setTimeout(() => {
-        window.location.href = '/vendor/login'
-      }, 3000)
+      // Show success message with manual redirect option
+      // Don't auto-redirect to give user time to read the message
       
     } catch (error: any) {
       console.error('Registration error:', error)
@@ -319,9 +317,17 @@ export default function VendorRegisterPage() {
                   <div>
                     <p className="font-semibold text-green-900 mb-2">Salon Listed Successfully!</p>
                     <p className="text-green-700 leading-relaxed">{successMessage}</p>
-                    <p className="text-green-600 text-sm mt-2 font-medium">
-                      📍 Redirecting to your new listing in 3 seconds...
-                    </p>
+                    <div className="mt-4 space-y-3">
+                      <a
+                        href="/vendor/login"
+                        className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                      >
+                        Continue to Login →
+                      </a>
+                      <p className="text-green-600 text-xs">
+                        Use your new credentials to log in and manage your salon details.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </motion.div>
