@@ -41,15 +41,19 @@ export const translations = {
         subtitle: 'Your trusted guide to finding the perfect nail care experience',
         comprehensive: {
           title: 'Comprehensive Directory',
-          description: 'Extensive database of verified nail salons across Australia with detailed information and real reviews.'
+          description: 'We are the premier nail salon directory in the world with detailed information and real reviews'
         },
         verified: {
-          title: 'Verified Reviews',
-          description: 'Authentic customer reviews and ratings to help you make informed decisions about your nail care.'
+          title: 'Authentic Reviews',
+          description: 'Real customer reviews and ratings to help you make informed decisions about your nail care.'
         },
         easyBooking: {
           title: 'Easy Booking',
-          description: 'Seamless booking process with direct links to salon websites and phone numbers for quick appointments.'
+          description: 'Find your next salon fast. Compare nearby spots and book with the one you love'
+        },
+        supportLocal: {
+          title: 'Support Local Businesses',
+          description: 'You\'re supporting small businesses that care about quality and community.'
         }
       },
       featuredSalons: {

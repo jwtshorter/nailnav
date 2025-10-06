@@ -36,7 +36,7 @@ export default function BlogPage() {
       date: '2025-01-15',
       category: 'nail-care',
       tags: ['nail health', 'DIY', 'maintenance'],
-      image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121',
+      image: 'https://cdn1.genspark.ai/user-upload-image/5_generated/5de0f390-7a30-4ecd-821b-9cf041783001',
       readTime: 5,
       featured: true
     },
@@ -49,7 +49,7 @@ export default function BlogPage() {
       date: '2025-01-12',
       category: 'trends',
       tags: ['nail art', 'trends', '2025', 'fashion'],
-      image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8',
+      image: 'https://cdn1.genspark.ai/user-upload-image/5_generated/4370c9c9-49cb-4ff5-97bd-7a9196f0b295',
       readTime: 7,
       featured: true
     },
@@ -62,7 +62,7 @@ export default function BlogPage() {
       date: '2025-01-10',
       category: 'education',
       tags: ['gel nails', 'polish', 'comparison'],
-      image: 'https://page.gensparksite.com/v1/base64_upload/fd5b1d89ee755b0b188cab2569983b82',
+      image: 'https://cdn1.genspark.ai/user-upload-image/5_generated/209ff14d-37f2-409e-8b07-aaf607457f83',
       readTime: 4,
       featured: false
     },
@@ -75,7 +75,7 @@ export default function BlogPage() {
       date: '2025-01-08',
       category: 'tips',
       tags: ['salon selection', 'hygiene', 'reviews'],
-      image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121',
+      image: 'https://cdn1.genspark.ai/user-upload-image/5_generated/1e0f356a-74af-42c5-923e-e07aa56d7a45',
       readTime: 6,
       featured: false
     },
@@ -88,7 +88,7 @@ export default function BlogPage() {
       date: '2025-01-05',
       category: 'diy',
       tags: ['DIY', 'manicure', 'tutorial'],
-      image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8',
+      image: 'https://cdn1.genspark.ai/user-upload-image/5_generated/05c3be11-a17c-4eb5-9809-23740d71c9df',
       readTime: 8,
       featured: false
     },
@@ -101,7 +101,7 @@ export default function BlogPage() {
       date: '2025-01-03',
       category: 'health',
       tags: ['nail health', 'medical', 'symptoms'],
-      image: 'https://page.gensparksite.com/v1/base64_upload/fd5b1d89ee755b0b188cab2569983b82',
+      image: 'https://cdn1.genspark.ai/user-upload-image/5_generated/d50b8c86-3fd4-45d3-97cb-c29de5211d4b',
       readTime: 5,
       featured: false
     }
@@ -143,17 +143,27 @@ export default function BlogPage() {
       <Navigation />
       
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-primary-500 to-secondary-500 text-white py-16 md:py-24">
-        <div className="container mx-auto px-4">
+      <div className="relative bg-gradient-to-br from-primary-500 to-secondary-500 text-white py-16 md:py-24 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://page.gensparksite.com/v1/base64_upload/16405fdbec78dc7b2aa9598fdbfae56f"
+            alt="Professional nail care and color selection"
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/80 to-secondary-500/80"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-shadow-lg">
               Nail Nav Blog
             </h1>
-            <p className="text-xl md:text-2xl opacity-90 leading-relaxed mb-8">
+            <p className="text-xl md:text-2xl opacity-90 leading-relaxed mb-8 text-shadow">
               Your ultimate resource for nail care tips, trends, and professional insights
             </p>
             
@@ -165,7 +175,7 @@ export default function BlogPage() {
                 placeholder="Search articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-white focus:outline-none"
+                className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-white focus:outline-none shadow-lg"
               />
             </div>
           </motion.div>
@@ -247,7 +257,7 @@ export default function BlogPage() {
             </div>
 
             {/* Blog Posts Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {filteredPosts.map((post, index) => (
                 <motion.article
                   key={post.id}
@@ -255,6 +265,7 @@ export default function BlogPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-shadow group cursor-pointer"
+                  onClick={() => window.location.href = `/blog/${post.id}`}
                 >
                   {/* Post Image */}
                   <div className="aspect-video bg-gray-200 overflow-hidden">
@@ -266,54 +277,22 @@ export default function BlogPage() {
                   </div>
 
                   {/* Post Content */}
-                  <div className="p-6">
+                  <div className="p-4">
                     {/* Category & Read Time */}
-                    <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
                       <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded-full text-xs font-medium">
                         {categories.find(c => c.id === post.category)?.name}
                       </span>
-                      <span>{post.readTime} min read</span>
+                      <span className="text-xs">{post.readTime} min</span>
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
                       {post.title}
                     </h3>
 
-                    {/* Excerpt */}
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-
-                    {/* Meta Info */}
-                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-1">
-                          <User className="w-4 h-4" />
-                          <span>{post.author}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Calendar className="w-4 h-4" />
-                          <span>{formatDate(post.date)}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {post.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="inline-flex items-center space-x-1 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full"
-                        >
-                          <Tag className="w-3 h-3" />
-                          <span>{tag}</span>
-                        </span>
-                      ))}
-                    </div>
-
                     {/* Read More */}
-                    <div className="flex items-center text-primary-600 font-medium text-sm group-hover:text-primary-700">
+                    <div className="flex items-center text-primary-600 font-medium text-xs group-hover:text-primary-700">
                       <span>Read More</span>
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </div>

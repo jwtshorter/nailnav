@@ -202,7 +202,6 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                   <div className="flex items-center space-x-1 text-xs text-accent-600 font-medium">
                     <div className="w-2 h-2 bg-accent-600 rounded-full"></div>
-                    <span>Using your location</span>
                   </div>
                 </div>
               )}
@@ -313,42 +312,10 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
               </button>
             </motion.div>
           )}
-          
-          {/* Enhanced Search Button */}
-          <motion.button
-            onClick={handleSearch}
-            disabled={loading}
-            className="w-full mt-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white py-3 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
-            style={{ minHeight: '48px' }}
-            whileTap={{ scale: 0.98 }}
-            whileHover={{ scale: 1.01 }}
-          >
-            {loading ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                <span>Searching...</span>
-              </>
-            ) : (
-              <>
-                <Search className="w-5 h-5" />
-                <span>Search Salons</span>
-                {activeFilterCount > 0 && (
-                  <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs font-bold">
-                    {activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''}
-                  </span>
-                )}
-              </>
-            )}
-          </motion.button>
+
         </div>
 
-        {/* Location Status */}
-        {locationPermission === 'granted' && (
-          <div className="flex items-center mt-2 text-sm text-green-600">
-            <MapPin className="w-4 h-4 mr-1" />
-            <span>Using your location for nearby results</span>
-          </div>
-        )}
+
 
         {/* Results Count */}
         {resultsCount !== undefined && (

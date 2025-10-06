@@ -4,8 +4,71 @@ import Navigation from '@/components/mobile-first/Navigation'
 import Footer from '@/components/mobile-first/Footer'
 import { motion } from 'framer-motion'
 import { LogIn, Store, ArrowLeft } from 'lucide-react'
+import { useState } from 'react'
 
 export default function VendorLoginPage() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    country: '',
+    rememberMe: false
+  })
+  
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [successMessage, setSuccessMessage] = useState('')
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value, type } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [id]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    }))
+    
+    // Clear error when user starts typing
+    if (errors[id]) {
+      setErrors(prev => ({ ...prev, [id]: '' }))
+    }
+  }
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    
+    if (!formData.email.trim()) newErrors.email = 'Email address is required'
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format'
+    if (!formData.password.trim()) newErrors.password = 'Password is required'
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!validateForm()) return
+    
+    setIsSubmitting(true)
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      // In a real app, you would make an API call here
+      console.log('Login submitted:', formData)
+      
+      setSuccessMessage('Login successful! Redirecting to dashboard...')
+      
+      // Simulate redirect
+      setTimeout(() => {
+        window.location.href = '/vendor/dashboard'
+      }, 1000)
+    } catch (error) {
+      setErrors({ submit: 'Invalid email or password. Please try again.' })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -36,7 +99,27 @@ export default function VendorLoginPage() {
               <p className="text-gray-600">Access your salon dashboard</p>
             </div>
 
-            <form className="space-y-6">
+            {successMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6"
+              >
+                {successMessage}
+              </motion.div>
+            )}
+
+            {errors.submit && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6"
+              >
+                {errors.submit}
+              </motion.div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
@@ -44,9 +127,16 @@ export default function VendorLoginPage() {
                 <input
                   type="email"
                   id="email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
+                    errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                  }`}
                   placeholder="your@salon.com"
                 />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
               </div>
 
               <div>
@@ -56,14 +146,80 @@ export default function VendorLoginPage() {
                 <input
                   type="password"
                   id="password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
+                    errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                  }`}
                   placeholder="Enter your password"
                 />
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                  Country
+                </label>
+                <select
+                  id="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                >
+                  <option value="">Select Country</option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="GB">United Kingdom</option>
+                  <option value="AU">Australia</option>
+                  <option value="DE">Germany</option>
+                  <option value="FR">France</option>
+                  <option value="IT">Italy</option>
+                  <option value="ES">Spain</option>
+                  <option value="NL">Netherlands</option>
+                  <option value="BE">Belgium</option>
+                  <option value="CH">Switzerland</option>
+                  <option value="AT">Austria</option>
+                  <option value="SE">Sweden</option>
+                  <option value="NO">Norway</option>
+                  <option value="DK">Denmark</option>
+                  <option value="FI">Finland</option>
+                  <option value="JP">Japan</option>
+                  <option value="KR">South Korea</option>
+                  <option value="SG">Singapore</option>
+                  <option value="HK">Hong Kong</option>
+                  <option value="NZ">New Zealand</option>
+                  <option value="IE">Ireland</option>
+                  <option value="PT">Portugal</option>
+                  <option value="GR">Greece</option>
+                  <option value="PL">Poland</option>
+                  <option value="CZ">Czech Republic</option>
+                  <option value="HU">Hungary</option>
+                  <option value="RO">Romania</option>
+                  <option value="BG">Bulgaria</option>
+                  <option value="HR">Croatia</option>
+                  <option value="SI">Slovenia</option>
+                  <option value="SK">Slovakia</option>
+                  <option value="LT">Lithuania</option>
+                  <option value="LV">Latvia</option>
+                  <option value="EE">Estonia</option>
+                  <option value="MT">Malta</option>
+                  <option value="CY">Cyprus</option>
+                  <option value="LU">Luxembourg</option>
+                  <option value="IS">Iceland</option>
+                </select>
               </div>
 
               <div className="flex items-center justify-between">
                 <label className="flex items-center">
-                  <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
+                  <input 
+                    type="checkbox" 
+                    id="rememberMe"
+                    checked={formData.rememberMe}
+                    onChange={handleInputChange}
+                    className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" 
+                  />
                   <span className="ml-2 text-sm text-gray-600">Remember me</span>
                 </label>
                 <a href="/vendor/forgot-password" className="text-sm text-primary-600 hover:text-primary-700">
@@ -73,11 +229,16 @@ export default function VendorLoginPage() {
 
               <motion.button
                 type="submit"
-                className="w-full bg-primary-500 text-white py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors flex items-center justify-center space-x-2"
-                whileTap={{ scale: 0.98 }}
+                disabled={isSubmitting}
+                className={`w-full py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 ${
+                  isSubmitting 
+                    ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                    : 'bg-primary-500 text-white hover:bg-primary-600'
+                }`}
+                whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               >
                 <LogIn className="w-5 h-5" />
-                <span>Login to Dashboard</span>
+                <span>{isSubmitting ? 'Signing In...' : 'Login to Dashboard'}</span>
               </motion.button>
             </form>
 

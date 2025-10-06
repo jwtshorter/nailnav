@@ -174,8 +174,8 @@ export default function HomePage() {
     },
     {
       icon: Clock,
-      title: 'Real-Time Updates',
-      description: 'Get up-to-date availability, pricing, and service information for better planning and convenience.'
+      title: t('home.whyChoose.supportLocal.title'),
+      description: t('home.whyChoose.supportLocal.description')
     }
   ]
 
@@ -347,7 +347,19 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 * index }}
-                  onClick={() => console.log('Vendor clicked:', vendor.name)}
+                  onClick={() => {
+                    const slugMap: Record<string, string> = {
+                      'vendor-1': 'elegant-nails-spa',
+                      'vendor-2': 'luxe-nail-lounge', 
+                      'vendor-3': 'elegant-nails-spa',
+                      'vendor-4': 'elegant-nails-spa',
+                      'vendor-5': 'luxe-nail-lounge',
+                      'vendor-6': 'elegant-nails-spa',
+                      'vendor-7': 'elegant-nails-spa',
+                      'vendor-8': 'luxe-nail-lounge'
+                    }
+                    window.location.href = `/salon/${slugMap[vendor.id] || 'elegant-nails-spa'}`
+                  }}
                 >
                   {/* Image */}
                   <div className="aspect-square bg-gray-200 overflow-hidden relative">
@@ -451,7 +463,19 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.6 + 0.1 * index }}
-                  onClick={() => console.log('Vendor clicked:', vendor.name)}
+                  onClick={() => {
+                    const slugMap: Record<string, string> = {
+                      'vendor-1': 'elegant-nails-spa',
+                      'vendor-2': 'luxe-nail-lounge', 
+                      'vendor-3': 'elegant-nails-spa',
+                      'vendor-4': 'elegant-nails-spa',
+                      'vendor-5': 'luxe-nail-lounge',
+                      'vendor-6': 'elegant-nails-spa',
+                      'vendor-7': 'elegant-nails-spa',
+                      'vendor-8': 'luxe-nail-lounge'
+                    }
+                    window.location.href = `/salon/${slugMap[vendor.id] || 'elegant-nails-spa'}`
+                  }}
                 >
                   {/* Image */}
                   <div className="aspect-square bg-gray-200 overflow-hidden relative">
@@ -536,55 +560,7 @@ export default function HomePage() {
           </motion.section>
         )}
 
-        {/* Featured Salons */}
-        {!searchPerformed && featuredSalons.length > 0 && (
-          <motion.section 
-            className="mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">{t('home.featuredSalons.title')}</h2>
-              <TrendingUp className="w-6 h-6 text-primary-500" />
-            </div>
-            <div className="space-y-4">
-              {featuredSalons.map((salon) => (
-                <SalonCard
-                  key={salon.id}
-                  salon={salon}
-                  onClick={() => handleSalonClick(salon)}
-                  onDirections={() => handleDirections(salon)}
-                  onContact={() => handleContact(salon)}
-                  showActionButtons={false}
-                />
-              ))}
-            </div>
-          </motion.section>
-        )}
 
-        {/* Popular Salons */}
-        {!searchPerformed && popularSalons.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('home.featuredSalons.title')}</h2>
-            <div className="space-y-4">
-              {popularSalons.map((salon) => (
-                <SalonCard
-                  key={salon.id}
-                  salon={salon}
-                  onClick={() => handleSalonClick(salon)}
-                  onDirections={() => handleDirections(salon)}
-                  onContact={() => handleContact(salon)}
-                  showActionButtons={false}
-                />
-              ))}
-            </div>
-          </motion.section>
-        )}
 
         {/* Blog Section */}
         {!searchPerformed && (
@@ -613,7 +589,7 @@ export default function HomePage() {
                   id: 1,
                   title: "The Ultimate Guide to Nail Care: Tips for Healthy, Beautiful Nails",
                   excerpt: "Discover professional secrets for maintaining healthy nails between salon visits.",
-                  image: "https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121",
+                  image: "https://cdn1.genspark.ai/user-upload-image/5_generated/5de0f390-7a30-4ecd-821b-9cf041783001",
                   date: "Jan 15, 2025",
                   category: "Nail Care",
                   readTime: 5
@@ -622,7 +598,7 @@ export default function HomePage() {
                   id: 2,
                   title: "Top 10 Nail Art Trends for 2025: What's Hot This Year",
                   excerpt: "Stay ahead of the curve with the latest nail art trends and fashion statements.",
-                  image: "https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8",
+                  image: "https://cdn1.genspark.ai/user-upload-image/5_generated/4370c9c9-49cb-4ff5-97bd-7a9196f0b295",
                   date: "Jan 12, 2025",
                   category: "Trends",
                   readTime: 7
@@ -631,16 +607,16 @@ export default function HomePage() {
                   id: 3,
                   title: "How to Choose the Perfect Nail Salon: A Complete Checklist",
                   excerpt: "Find the ideal nail salon with our comprehensive guide and safety tips.",
-                  image: "https://page.gensparksite.com/v1/base64_upload/fd5b1d89ee755b0b188cab2569983b82",
+                  image: "https://cdn1.genspark.ai/user-upload-image/5_generated/1e0f356a-74af-42c5-923e-e07aa56d7a45",
                   date: "Jan 8, 2025",
                   category: "Tips",
                   readTime: 6
                 },
                 {
                   id: 4,
-                  title: "Nail Care Basics: Essential Tools and Products",
-                  excerpt: "Master the fundamentals with our guide to essential nail care tools and products.",
-                  image: "https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121",
+                  title: "DIY Manicure at Home: Professional Results Without the Salon",
+                  excerpt: "Master the art of at-home manicures with step-by-step instructions.",
+                  image: "https://cdn1.genspark.ai/user-upload-image/5_generated/05c3be11-a17c-4eb5-9809-23740d71c9df",
                   date: "Jan 5, 2025",
                   category: "Basics",
                   readTime: 4
@@ -652,7 +628,7 @@ export default function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 * index }}
                   className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-shadow cursor-pointer group"
-                  onClick={() => window.location.href = '/blog'}
+                  onClick={() => window.location.href = `/blog/${post.id}`}
                 >
                   {/* Image */}
                   <div className="aspect-video bg-gray-200 overflow-hidden">

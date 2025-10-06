@@ -518,7 +518,7 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
 
               <div className="flex items-center text-gray-600 mb-4">
                 <DollarSign className="w-4 h-4 mr-2" />
-                <span>{formatPrice(salon.price_from || 0)} and up • {salon.price_range.replace('-', ' ')}</span>
+                <span>{formatPrice(salon.price_from || 0)} and up - {salon.price_range.replace('-', ' ')}</span>
               </div>
             </div>
 
@@ -540,19 +540,7 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
           </div>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {salon.phone && (
-              <motion.button
-                onClick={() => handleContact('phone')}
-                className="flex items-center justify-center bg-green-500 text-white px-4 py-3 rounded-lg font-medium"
-                style={{ minHeight: '44px' }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                Call
-              </motion.button>
-            )}
-
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <motion.button
               onClick={() => handleContact('directions')}
               className="flex items-center justify-center bg-blue-500 text-white px-4 py-3 rounded-lg font-medium"
@@ -593,7 +581,7 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
               { key: 'overview', label: 'Overview', icon: null },
               { key: 'services', label: 'Services', icon: null },
               { key: 'reviews', label: 'Reviews', icon: MessageSquare },
-              { key: 'contact', label: 'Contact', icon: Phone }
+              { key: 'contact', label: 'Contact', icon: Mail }
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -760,14 +748,7 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
                     </div>
                   </div>
 
-                  {salon.phone && (
-                    <div className="flex items-center">
-                      <Phone className="w-5 h-5 text-gray-400 mr-3" />
-                      <a href={`tel:${salon.phone}`} className="text-primary-600 font-medium">
-                        {salon.phone}
-                      </a>
-                    </div>
-                  )}
+
 
                   {salon.email && (
                     <div className="flex items-center">
@@ -813,7 +794,7 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
                     onClick={() => handleContact('directions')}
                     className="text-blue-600 font-medium text-sm"
                   >
-                    Get Directions →
+                    Get Directions
                   </button>
                 </div>
               </div>
