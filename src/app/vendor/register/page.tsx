@@ -69,6 +69,17 @@ export default function VendorRegisterPage() {
     return Object.keys(newErrors).length === 0
   }
 
+  const normalizeWebsiteUrl = (url: string) => {
+    if (!url) return ''
+    
+    // If URL doesn't start with http:// or https://, add https://
+    if (url && !url.match(/^https?:\/\//)) {
+      return `https://${url}`
+    }
+    
+    return url
+  }
+
   const createVendorAccount = async (formData: any) => {
     try {
       // 1. Create Supabase auth user with email/password
@@ -99,7 +110,7 @@ export default function VendorRegisterPage() {
         owner_name: formData.ownerName,
         email: formData.email,
         phone: formData.phone,
-        website: formData.website,
+        website: normalizeWebsiteUrl(formData.website),
         status: 'pending',
         draft_data: {
           description: `Welcome to ${formData.salonName}! We provide professional nail services in ${formData.city}, ${formData.state}.`,
@@ -507,13 +518,16 @@ export default function VendorRegisterPage() {
                         Website (Optional)
                       </label>
                       <input
-                        type="url"
+                        type="text"
                         id="website"
                         value={formData.website}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        placeholder="https://yoursalon.com"
+                        placeholder="yoursalon.com"
                       />
+                      <p className="mt-1 text-xs text-gray-500">
+                        Enter your domain name (we'll add https:// automatically)
+                      </p>
                     </div>
                   </div>
                 </div>
