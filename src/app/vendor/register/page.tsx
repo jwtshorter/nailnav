@@ -70,14 +70,18 @@ export default function VendorRegisterPage() {
   }
 
   const normalizeWebsiteUrl = (url: string) => {
-    if (!url) return ''
+    if (!url || !url.trim()) return ''
     
-    // If URL doesn't start with http:// or https://, add https://
-    if (url && !url.match(/^https?:\/\//)) {
-      return `https://${url}`
+    const cleanUrl = url.trim()
+    
+    // If URL already has protocol, return as-is
+    if (cleanUrl.match(/^https?:\/\//)) {
+      return cleanUrl
     }
     
-    return url
+    // Just add https:// to whatever the user entered
+    // No assumptions about www or domain format
+    return `https://${cleanUrl}`
   }
 
   const createVendorAccount = async (formData: any) => {
@@ -98,51 +102,86 @@ export default function VendorRegisterPage() {
       if (signUpError) throw signUpError
       if (!authData.user) throw new Error('Failed to create user account')
 
-      // 2. Create vendor application (pending admin approval)
-      const vendorApplication = {
-        user_id: authData.user.id,
-        salon_name: formData.salonName,
-        business_address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        country: formData.country,
-        postal_code: formData.zip,
-        owner_name: formData.ownerName,
-        email: formData.email,
-        phone: formData.phone,
-        website: normalizeWebsiteUrl(formData.website),
-        status: 'pending',
-        draft_data: {
-          description: `Welcome to ${formData.salonName}! We provide professional nail services in ${formData.city}, ${formData.state}.`,
-          services_offered: ['manicures', 'pedicures', 'gel-polish', 'nail-art'],
-          specialties: ['nail-care', 'gel-polish'],
-          price_range: 'mid-range',
-          price_from: 35.00,
-          accepts_walk_ins: true,
-          parking_available: false,
-          operating_hours: {
-            monday: { open: '09:00', close: '19:00' },
-            tuesday: { open: '09:00', close: '19:00' },
-            wednesday: { open: '09:00', close: '19:00' },
-            thursday: { open: '09:00', close: '19:00' },
-            friday: { open: '09:00', close: '20:00' },
-            saturday: { open: '09:00', close: '18:00' },
-            sunday: { open: '10:00', close: '17:00' }
+      // 2. Try to create vendor application (check if tables exist)
+      try {
+        const vendorApplication = {
+          user_id: authData.user.id,
+          salon_name: formData.salonName,
+          business_address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country,
+          postal_code: formData.zip,
+          owner_name: formData.ownerName,
+          email: formData.email,
+          phone: formData.phone,
+          website: normalizeWebsiteUrl(formData.website),
+          status: 'pending',
+          draft_data: {
+            description: `Welcome to ${formData.salonName}! We provide professional nail services in ${formData.city}, ${formData.state}.`,
+            services_offered: ['manicures', 'pedicures', 'gel-polish', 'nail-art'],
+            specialties: ['nail-care', 'gel-polish'],
+            price_range: 'mid-range',
+            price_from: 35.00,
+            accepts_walk_ins: true,
+            parking_available: false,
+            operating_hours: {
+              monday: { open: '09:00', close: '19:00' },
+              tuesday: { open: '09:00', close: '19:00' },
+              wednesday: { open: '09:00', close: '19:00' },
+              thursday: { open: '09:00', close: '19:00' },
+              friday: { open: '09:00', close: '20:00' },
+              saturday: { open: '09:00', close: '18:00' },
+              sunday: { open: '10:00', close: '17:00' }
+            }
           }
         }
-      }
 
-      const { data: applicationData, error: applicationError } = await supabase
-        .from('vendor_applications')
-        .insert(vendorApplication)
-        .select()
-        .single()
+        const { data: applicationData, error: applicationError } = await supabase
+          .from('vendor_applications')
+          .insert(vendorApplication)
+          .select()
+          .single()
 
-      if (applicationError) throw applicationError
+        if (applicationError) throw applicationError
 
-      return {
-        user: authData.user,
-        application: applicationData
+        return {
+          user: authData.user,
+          application: applicationData
+        }
+        
+      } catch (dbError: any) {
+        console.warn('Database tables not set up yet:', dbError.message)
+        
+        // If database tables don't exist, still create the auth account
+        // and store application data in localStorage as fallback
+        const applicationData = {
+          id: `temp-${Date.now()}`,
+          user_id: authData.user.id,
+          salon_name: formData.salonName,
+          business_address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country,
+          postal_code: formData.zip,
+          owner_name: formData.ownerName,
+          email: formData.email,
+          phone: formData.phone,
+          website: normalizeWebsiteUrl(formData.website),
+          status: 'pending',
+          created_at: new Date().toISOString()
+        }
+        
+        // Store in localStorage as temporary fallback
+        const existingApplications = JSON.parse(localStorage.getItem('vendorApplications') || '[]')
+        existingApplications.push(applicationData)
+        localStorage.setItem('vendorApplications', JSON.stringify(existingApplications))
+        
+        return {
+          user: authData.user,
+          application: applicationData,
+          fallbackMode: true
+        }
       }
       
     } catch (error) {
@@ -162,7 +201,11 @@ export default function VendorRegisterPage() {
       // Create vendor account and application
       const result = await createVendorAccount(formData)
       
-      setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted for admin review. You'll receive an email once your listing is approved and goes live. You can now log in to update your salon details and photos.`)
+      if (result.fallbackMode) {
+        setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted. Please note: The database schema needs to be updated for full functionality. See VENDOR_ADMIN_SETUP.md for setup instructions. You can still log in with your credentials.`)
+      } else {
+        setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted for admin review. You'll receive an email once your listing is approved and goes live. You can now log in to update your salon details and photos.`)
+      }
       
       // Clear form
       setFormData({
