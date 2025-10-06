@@ -26,13 +26,16 @@ A comprehensive, mobile-first nail salon directory platform that helps users dis
 - **🔒 Security**: Row Level Security (RLS) and proper data validation
 
 ### 🏢 **Business Features**
-- **⚡ Instant Listings**: Auto-create salon listings without email verification
+- **👥 Vendor Management**: Complete application and approval workflow
+- **🔐 Admin Dashboard**: Review, approve, and manage vendor applications
+- **🎛️ Vendor Dashboard**: Update details, photos, and salon information
+- **🔒 Secure Authentication**: Email/password with role-based access
+- **⚖️ Admin Oversight**: All listings require admin approval before going live
 - **💼 Vendor Tiers**: Free, Premium, and Featured listing options  
 - **📅 Booking System**: Online appointment scheduling (Premium feature)
 - **📈 Analytics**: Visitor tracking and business insights
 - **🎯 Featured Listings**: Homepage placement for premium vendors
 - **💳 Payment Ready**: Stripe integration framework included
-- **🔄 No Email Verification**: Listings go live immediately upon registration
 
 ## 🛠️ Tech Stack
 
@@ -245,28 +248,43 @@ npm run clean-port   # Kill port 3000 processes
 ## 🌐 Live URLs & Status
 
 - **Development Demo**: [https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev) ✅ ACTIVE
-- **Vendor Registration**: [/vendor/register](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/vendor/register) ⚡ INSTANT LISTING
-- **Vendor Login**: [/vendor/login](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/vendor/login) 🔐 WITH COUNTRY FIELD  
+- **Vendor Registration**: [/vendor/register](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/vendor/register) 🔐 ACCOUNT CREATION
+- **Vendor Login**: [/vendor/login](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/vendor/login) 🎛️ DASHBOARD ACCESS
+- **Vendor Dashboard**: [/vendor/dashboard](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/vendor/dashboard) ✏️ PROFILE EDITING
+- **Admin Login**: [/admin/login](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/admin/login) 🔐 ADMIN ACCESS
+- **Admin Dashboard**: [/admin/dashboard](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/admin/dashboard) 👥 VENDOR MANAGEMENT  
 - **GitHub Repository**: [https://github.com/jwtshorter/nailnav](https://github.com/jwtshorter/nailnav) ✅ UPDATED
 - **Supabase Project**: `ddenulleuvyhwqsulrod.supabase.co` ✅ CONNECTED
 - **Production**: Ready for Cloudflare Pages deployment
 
-### ⚡ Quick Test - Instant Listing Feature
+### ⚡ Quick Test - Vendor Management System
+
+**⚠️ IMPORTANT: Database Update Required First**
+Before testing, you must update Supabase schema. See [`VENDOR_ADMIN_SETUP.md`](./VENDOR_ADMIN_SETUP.md)
+
+#### Test Vendor Registration:
 1. Visit: [/vendor/register](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/vendor/register)
-2. Fill out the form (all fields required, including **Country dropdown**)
-3. Click "Create My Listing Now" 
-4. ✨ **Your listing goes live instantly!** No email verification needed
-5. Auto-redirects to your new salon page after 3 seconds
+2. Create account with email/password (all fields required, including **Country dropdown**)
+3. ✅ **Account created** → Application submitted for admin review
+4. Login at: [/vendor/login](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/vendor/login)
+5. Access vendor dashboard to update details & photos
+
+#### Test Admin System:
+1. **Setup admin account** (see setup guide)
+2. Visit: [/admin/login](https://3000-i39lv5760p8w8ozqnpzp4-6532622b.e2b.dev/admin/login)
+3. Review pending applications in admin dashboard
+4. Approve applications → Salons go live automatically
 
 ### 🔧 Current Status
-- ✅ **Frontend**: Complete with all UI refinements and instant listing feature
-- ✅ **Vendor Registration**: Auto-creates listings without email verification
+- ✅ **Frontend**: Complete with all UI refinements
+- ✅ **Vendor Management**: Complete authentication and admin approval workflow
+- ✅ **Admin Dashboard**: Full vendor application management system
+- ✅ **Vendor Dashboard**: Profile editing, photo upload UI, and status tracking
+- ✅ **Security**: Role-based access with Supabase Auth and RLS policies
 - ✅ **Country Field**: Added to both login and registration forms
 - ✅ **Form Validation**: Complete with real-time error handling
-- ✅ **Instant Go-Live**: Salon listings activate immediately upon registration
 - ✅ **Supabase Integration**: Environment variables configured and tested
-- ✅ **API Endpoints**: Health check and database test endpoints active
-- ⏳ **Database Schema**: Ready to deploy (requires running migrations in Supabase)
+- ❗ **Database Schema**: **REQUIRES UPDATE** - See `VENDOR_ADMIN_SETUP.md`
 - ✅ **GitHub**: All code committed and pushed
 
 ## 🤝 Contributing

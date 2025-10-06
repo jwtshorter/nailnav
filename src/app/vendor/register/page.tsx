@@ -3,8 +3,15 @@
 import Navigation from '@/components/mobile-first/Navigation'
 import Footer from '@/components/mobile-first/Footer'
 import { motion } from 'framer-motion'
-import { Store, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Store, ArrowLeft, CheckCircle, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 export default function VendorRegisterPage() {
   const [formData, setFormData] = useState({
@@ -16,6 +23,10 @@ export default function VendorRegisterPage() {
     country: '',
     ownerName: '',
     email: '',
+    password: '',
+    confirmPassword: '',
+    phone: '',
+    website: '',
     termsAccepted: false
   })
   
@@ -48,97 +59,85 @@ export default function VendorRegisterPage() {
     if (!formData.ownerName.trim()) newErrors.ownerName = 'Owner/Manager name is required'
     if (!formData.email.trim()) newErrors.email = 'Email address is required'
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format'
+    if (!formData.password.trim()) newErrors.password = 'Password is required'
+    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters'
+    if (!formData.confirmPassword.trim()) newErrors.confirmPassword = 'Please confirm your password'
+    else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match'
     if (!formData.termsAccepted) newErrors.termsAccepted = 'You must accept the terms and conditions'
     
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const generateSalonSlug = (salonName: string, city: string, state: string) => {
-    const cleanName = salonName.toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '')
-    
-    const cleanCity = city.toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .replace(/\s+/g, '-')
-    
-    const cleanState = state.toLowerCase()
-      .replace(/[^a-z0-9]/g, '')
-    
-    return `${cleanName}-${cleanCity}-${cleanState}`
-  }
+  const createVendorAccount = async (formData: any) => {
+    try {
+      // 1. Create Supabase auth user with email/password
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            first_name: formData.ownerName.split(' ')[0],
+            last_name: formData.ownerName.split(' ').slice(1).join(' '),
+            role: 'vendor'
+          }
+        }
+      })
 
-  const generateSalonId = () => {
-    return Math.floor(100000 + Math.random() * 900000) // 6-digit random ID
-  }
+      if (signUpError) throw signUpError
+      if (!authData.user) throw new Error('Failed to create user account')
 
-  const createSalonListing = async (formData: any) => {
-    const salonId = generateSalonId()
-    const salonSlug = generateSalonSlug(formData.salonName, formData.city, formData.state)
-    
-    // Auto-create salon listing immediately
-    const salonListing = {
-      id: salonId,
-      slug: salonSlug,
-      name: formData.salonName,
-      address: {
-        street: formData.address,
+      // 2. Create vendor application (pending admin approval)
+      const vendorApplication = {
+        user_id: authData.user.id,
+        salon_name: formData.salonName,
+        business_address: formData.address,
         city: formData.city,
         state: formData.state,
-        zip: formData.zip,
-        country: formData.country
-      },
-      contact: {
+        country: formData.country,
+        postal_code: formData.zip,
+        owner_name: formData.ownerName,
         email: formData.email,
-        owner: formData.ownerName
-      },
-      status: 'active', // Auto-activate without email verification
-      verified: true, // Skip email verification
-      rating: 4.5, // Default good rating for new listings
-      reviewCount: 0,
-      services: [
-        'Manicure',
-        'Pedicure', 
-        'Gel Polish',
-        'Nail Art'
-      ], // Default services
-      pricing: {
-        manicure: '$25-45',
-        pedicure: '$35-55',
-        gelPolish: '$30-50'
-      },
-      hours: {
-        monday: '9:00 AM - 7:00 PM',
-        tuesday: '9:00 AM - 7:00 PM', 
-        wednesday: '9:00 AM - 7:00 PM',
-        thursday: '9:00 AM - 7:00 PM',
-        friday: '9:00 AM - 8:00 PM',
-        saturday: '9:00 AM - 8:00 PM',
-        sunday: '10:00 AM - 6:00 PM'
-      },
-      images: [
-        '/api/placeholder/600/400',
-        '/api/placeholder/600/400',
-        '/api/placeholder/600/400'
-      ],
-      description: `Welcome to ${formData.salonName}! We provide professional nail services in ${formData.city}, ${formData.state}. Our experienced team is dedicated to giving you beautiful, healthy nails in a relaxing environment.`,
-      amenities: ['Walk-ins Welcome', 'Credit Cards Accepted', 'Free Parking', 'Sanitized Tools'],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
+        phone: formData.phone,
+        website: formData.website,
+        status: 'pending',
+        draft_data: {
+          description: `Welcome to ${formData.salonName}! We provide professional nail services in ${formData.city}, ${formData.state}.`,
+          services_offered: ['manicures', 'pedicures', 'gel-polish', 'nail-art'],
+          specialties: ['nail-care', 'gel-polish'],
+          price_range: 'mid-range',
+          price_from: 35.00,
+          accepts_walk_ins: true,
+          parking_available: false,
+          operating_hours: {
+            monday: { open: '09:00', close: '19:00' },
+            tuesday: { open: '09:00', close: '19:00' },
+            wednesday: { open: '09:00', close: '19:00' },
+            thursday: { open: '09:00', close: '19:00' },
+            friday: { open: '09:00', close: '20:00' },
+            saturday: { open: '09:00', close: '18:00' },
+            sunday: { open: '10:00', close: '17:00' }
+          }
+        }
+      }
 
-    // In a real app, this would save to your database
-    console.log('Auto-created salon listing:', salonListing)
-    
-    // Save to localStorage for demo purposes (in real app, use your database API)
-    const existingSalons = JSON.parse(localStorage.getItem('salonListings') || '[]')
-    existingSalons.push(salonListing)
-    localStorage.setItem('salonListings', JSON.stringify(existingSalons))
-    
-    return salonListing
+      const { data: applicationData, error: applicationError } = await supabase
+        .from('vendor_applications')
+        .insert(vendorApplication)
+        .select()
+        .single()
+
+      if (applicationError) throw applicationError
+
+      return {
+        user: authData.user,
+        application: applicationData
+      }
+      
+    } catch (error) {
+      console.error('Error creating vendor account:', error)
+      throw error
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -149,13 +148,10 @@ export default function VendorRegisterPage() {
     setIsSubmitting(true)
     
     try {
-      // Auto-create the salon listing immediately
-      const newSalonListing = await createSalonListing(formData)
+      // Create vendor account and application
+      const result = await createVendorAccount(formData)
       
-      // Simulate processing time
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      setSuccessMessage(`🎉 Congratulations! Your salon "${formData.salonName}" has been successfully listed on Nail Nav! Your listing is now live and customers can find you. You can view your listing at: /salon/${newSalonListing.slug}`)
+      setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted for admin review. You'll receive an email once your listing is approved and goes live. You can now log in to update your salon details and photos.`)
       
       // Clear form
       setFormData({
@@ -167,16 +163,27 @@ export default function VendorRegisterPage() {
         country: '',
         ownerName: '',
         email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        website: '',
         termsAccepted: false
       })
 
-      // Auto-redirect to the new salon listing after 3 seconds
+      // Redirect to login page after 3 seconds
       setTimeout(() => {
-        window.location.href = `/salon/${newSalonListing.slug}`
+        window.location.href = '/vendor/login'
       }, 3000)
       
-    } catch (error) {
-      setErrors({ submit: 'An error occurred while creating your listing. Please try again.' })
+    } catch (error: any) {
+      console.error('Registration error:', error)
+      if (error?.message?.includes('User already registered')) {
+        setErrors({ submit: 'An account with this email already exists. Please try logging in instead.' })
+      } else if (error?.message?.includes('Password')) {
+        setErrors({ password: error.message })
+      } else {
+        setErrors({ submit: 'An error occurred during registration. Please try again.' })
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -207,9 +214,9 @@ export default function VendorRegisterPage() {
             <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Store className="w-10 h-10 text-primary-600" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">List Your Nail Salon - Go Live Instantly!</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">List Your Nail Salon</h1>
             <p className="text-lg text-gray-600 max-w-lg mx-auto">
-              ⚡ No email verification required! Your salon listing goes live immediately after registration.
+              Create your vendor account and submit your salon for listing. Update details and photos before going live!
             </p>
           </motion.div>
 
@@ -223,12 +230,12 @@ export default function VendorRegisterPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Why Join Nail Nav?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
-                'Go live instantly - no email verification needed',
-                'Reach new customers in your area immediately',
-                'Professional listing created automatically',
-                'Start getting bookings right away',
-                'Get discovered by local searchers today',
-                'Mobile-optimized business profile included'
+                'Create secure vendor account with dashboard access',
+                'Update salon details, photos, and hours before going live',
+                'Professional listing reviewed by our team',  
+                'Get discovered by local customers when approved',
+                'Mobile-optimized business profile included',
+                'Full control over your salon information'
               ].map((benefit, index) => (
                 <div key={index} className="flex items-center space-x-3">
                   <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -441,44 +448,121 @@ export default function VendorRegisterPage() {
               {/* Contact Information */}
               <div>
                 <h3 className="font-medium text-gray-900 mb-4">Contact Information</h3>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="ownerName" className="block text-sm font-medium text-gray-700 mb-2">
+                        Owner/Manager Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="ownerName"
+                        value={formData.ownerName}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
+                          errors.ownerName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
+                        placeholder="Your Full Name"
+                      />
+                      {errors.ownerName && (
+                        <p className="mt-1 text-sm text-red-600">{errors.ownerName}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
+                          errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
+                        placeholder="owner@beautifulnails.com"
+                      />
+                      {errors.email && (
+                        <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="(555) 123-4567"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
+                        Website (Optional)
+                      </label>
+                      <input
+                        type="url"
+                        id="website"
+                        value={formData.website}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        placeholder="https://yoursalon.com"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Account Security */}
+              <div>
+                <h3 className="font-medium text-gray-900 mb-4">Account Security</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="ownerName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Owner/Manager Name *
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                      Password *
                     </label>
                     <input
-                      type="text"
-                      id="ownerName"
-                      value={formData.ownerName}
+                      type="password"
+                      id="password"
+                      value={formData.password}
                       onChange={handleInputChange}
                       className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
-                        errors.ownerName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
                       }`}
-                      placeholder="Your Full Name"
+                      placeholder="Choose a secure password"
                     />
-                    {errors.ownerName && (
-                      <p className="mt-1 text-sm text-red-600">{errors.ownerName}</p>
+                    {errors.password && (
+                      <p className="mt-1 text-sm text-red-600">{errors.password}</p>
                     )}
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address *
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                      Confirm Password *
                     </label>
                     <input
-                      type="email"
-                      id="email"
-                      value={formData.email}
+                      type="password"
+                      id="confirmPassword"
+                      value={formData.confirmPassword}
                       onChange={handleInputChange}
                       className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
-                        errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-gray-300'
                       }`}
-                      placeholder="owner@beautifulnails.com"
+                      placeholder="Confirm your password"
                     />
-                    {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                    {errors.confirmPassword && (
+                      <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
                     )}
                   </div>
                 </div>
+                <p className="mt-2 text-sm text-gray-600">
+                  Your password must be at least 6 characters long.
+                </p>
               </div>
 
               {/* Terms */}
@@ -515,7 +599,7 @@ export default function VendorRegisterPage() {
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               >
                 <Store className="w-5 h-5" />
-                <span>{isSubmitting ? 'Creating Your Listing...' : 'Create My Listing Now'}</span>
+                <span>{isSubmitting ? 'Creating Account...' : 'Submit Application'}</span>
               </motion.button>
             </form>
 

@@ -5,6 +5,13 @@ import Footer from '@/components/mobile-first/Footer'
 import { motion } from 'framer-motion'
 import { LogIn, Store, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 export default function VendorLoginPage() {
   const [formData, setFormData] = useState({
@@ -50,20 +57,40 @@ export default function VendorLoginPage() {
     setIsSubmitting(true)
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      // In a real app, you would make an API call here
-      console.log('Login submitted:', formData)
-      
+      // Sign in with Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      })
+
+      if (error) throw error
+
+      // Check if user is vendor
+      const { data: profile, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single()
+
+      if (profileError || !profile || profile.role !== 'vendor') {
+        await supabase.auth.signOut()
+        setErrors({ submit: 'Access denied. Vendor account required.' })
+        return
+      }
+
       setSuccessMessage('Login successful! Redirecting to dashboard...')
       
-      // Simulate redirect
+      // Redirect to vendor dashboard
       setTimeout(() => {
         window.location.href = '/vendor/dashboard'
       }, 1000)
-    } catch (error) {
-      setErrors({ submit: 'Invalid email or password. Please try again.' })
+    } catch (error: any) {
+      console.error('Login error:', error)
+      if (error?.message?.includes('Invalid login credentials')) {
+        setErrors({ submit: 'Invalid email or password. Please try again.' })
+      } else {
+        setErrors({ submit: 'An error occurred during login. Please try again.' })
+      }
     } finally {
       setIsSubmitting(false)
     }
