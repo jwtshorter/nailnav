@@ -40,6 +40,46 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false)
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null)
   
+  // Handle URL search parameters and auto-search
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const service = urlParams.get('service') || ''
+    const location = urlParams.get('location') || ''
+    
+    if (service) {
+      setServiceQuery(decodeURIComponent(service))
+    }
+    if (location) {
+      setLocationQuery(decodeURIComponent(location))
+    }
+    
+    // Auto-search if parameters are provided
+    if (service || location) {
+      setTimeout(() => {
+        setLoading(true)
+        setTimeout(() => {
+          const filteredSalons = mockSalons.filter(salon => {
+            const serviceMatch = service === '' || 
+              salon.name.toLowerCase().includes(service.toLowerCase()) ||
+              salon.specialties?.some(spec => spec.toLowerCase().includes(service.toLowerCase()))
+            
+            const locationMatch = location === '' ||
+              salon.city.toLowerCase().includes(location.toLowerCase()) ||
+              salon.address.toLowerCase().includes(location.toLowerCase()) ||
+              salon.state.toLowerCase().includes(location.toLowerCase())
+            
+            return serviceMatch && locationMatch
+          })
+          setSalons(filteredSalons)
+          if (leafletMapRef.current) {
+            addSalonMarkers(filteredSalons)
+          }
+          setLoading(false)
+        }, 500)
+      }, 1500) // Delay to ensure map is loaded
+    }
+  }, [])
+  
   const mapRef = useRef<HTMLDivElement>(null)
   const leafletMapRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
@@ -369,7 +409,7 @@ export default function SearchPage() {
       <NavigationComponent />
       
       {/* Search Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-16 z-40">
+      <div className="bg-white border-b border-gray-200 sticky top-16 z-50">
         <div className="container mx-auto px-4 py-4">
           {/* Search Bar */}
           <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3 mb-4">
@@ -464,14 +504,18 @@ export default function SearchPage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex h-[calc(100vh-140px)]">
+      <div className="flex h-[calc(100vh-140px)] relative">
         {/* Map Container */}
-        <div className={`${viewMode === 'map' ? 'flex-1' : 'hidden md:block md:w-1/2'} relative`}>
+        <div className={`${
+          viewMode === 'map' 
+            ? 'w-full md:w-1/2' 
+            : 'hidden md:block md:w-1/2'
+        } relative z-10`}>
           <div ref={mapRef} className="w-full h-full" />
           
           {/* Map Loading Overlay */}
           {loading && (
-            <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center">
+            <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-20">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
             </div>
           )}
@@ -480,9 +524,9 @@ export default function SearchPage() {
         {/* Results Panel */}
         <div className={`${
           viewMode === 'list' 
-            ? 'flex-1' 
-            : 'w-0 md:w-1/2'
-        } bg-white border-l border-gray-200 overflow-hidden transition-all duration-300`}>
+            ? 'w-full md:w-1/2' 
+            : 'hidden md:block md:w-1/2'
+        } bg-white border-l border-gray-200 overflow-hidden transition-all duration-300 z-10`}>
           <div className="h-full overflow-y-auto">
             {salons.length > 0 ? (
               <div className="p-4 space-y-4">

@@ -92,17 +92,19 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
   }, [])
 
   const handleSearch = () => {
-    const searchFilters: SalonSearchFilters = {
-      ...filters,
-      city: locationQuery.trim() || undefined,
-      services: serviceQuery.trim() ? [serviceQuery.trim(), ...(filters.services || [])] : filters.services,
-      location: userLocation ? {
-        ...userLocation,
-        radius: 25000 // 25km default radius
-      } : undefined
+    // Redirect to search page with parameters
+    const params = new URLSearchParams()
+    
+    if (serviceQuery.trim()) {
+      params.set('service', encodeURIComponent(serviceQuery.trim()))
     }
     
-    onSearch(searchFilters)
+    if (locationQuery.trim()) {
+      params.set('location', encodeURIComponent(locationQuery.trim()))
+    }
+    
+    // Redirect to search page
+    window.location.href = `/search?${params.toString()}`
   }
 
   const toggleFilter = (type: keyof SalonSearchFilters, value: string) => {
@@ -470,7 +472,7 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
                   className="flex-1 px-4 py-2 text-white bg-primary-500 border border-primary-500 rounded-lg font-medium"
                   style={{ minHeight: '44px' }}
                 >
-                  Apply Filters
+                  Search Results
                 </button>
               </div>
             </div>
