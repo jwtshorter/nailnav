@@ -388,7 +388,7 @@ export default function VendorDashboard() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Last Updated</span>
-                  <span className="text-sm font-medium">{new Date(application.updated_at || application.created_at).toLocaleDateString()}</span>
+                  <span className="text-sm font-medium">{new Date(application.created_at).toLocaleDateString()}</span>
                 </div>
               </div>
             </div>

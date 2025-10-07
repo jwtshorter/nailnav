@@ -29,13 +29,6 @@ interface Salon {
   image?: string
 }
 
-declare global {
-  interface Window {
-    google: any
-    initMap: () => void
-  }
-}
-
 export default function SearchPage() {
   const { t } = useTranslation()
   const [serviceQuery, setServiceQuery] = useState('')
@@ -48,7 +41,7 @@ export default function SearchPage() {
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null)
   
   const mapRef = useRef<HTMLDivElement>(null)
-  const googleMapRef = useRef<any>(null)
+  const leafletMapRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
 
   // Mock salon data
@@ -111,40 +104,45 @@ export default function SearchPage() {
     }
   ]
 
-  // Initialize map
+  // Initialize OpenStreetMap with Leaflet
   useEffect(() => {
-    const initializeMap = () => {
-      if (mapRef.current && window.google) {
+    const initializeMap = async () => {
+      if (mapRef.current && !leafletMapRef.current) {
+        // Dynamic import of Leaflet to avoid SSR issues
+        const L = (await import('leaflet')).default
+        
+        // Fix for default markers in Next.js
+        delete (L.Icon.Default.prototype as any)._getIconUrl
+        L.Icon.Default.mergeOptions({
+          iconRetinaUrl: '/leaflet/marker-icon-2x.png',
+          iconUrl: '/leaflet/marker-icon.png',
+          shadowUrl: '/leaflet/marker-shadow.png',
+        })
+
         const defaultCenter = userLocation || { lat: -37.8136, lng: 144.9631 } // Melbourne
         
-        googleMapRef.current = new window.google.maps.Map(mapRef.current, {
-          zoom: 13,
-          center: defaultCenter,
-          styles: [
-            {
-              featureType: 'poi.business',
-              stylers: [{ visibility: 'off' }]
-            }
-          ]
-        })
+        leafletMapRef.current = L.map(mapRef.current).setView([defaultCenter.lat, defaultCenter.lng], 13)
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 19,
+        }).addTo(leafletMapRef.current)
 
         // Add salon markers
         addSalonMarkers(mockSalons)
       }
     }
 
-    // Load Google Maps API
-    if (!window.google) {
-      const script = document.createElement('script')
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}&callback=initMap`
-      script.async = true
-      script.defer = true
-      
-      window.initMap = initializeMap
-      document.head.appendChild(script)
-    } else {
-      initializeMap()
+    // Load Leaflet CSS
+    if (!document.querySelector('link[href*="leaflet.css"]')) {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
+      document.head.appendChild(link)
     }
+
+    initializeMap()
 
     // Get user location
     if (navigator.geolocation) {
@@ -156,8 +154,8 @@ export default function SearchPage() {
           }
           setUserLocation(location)
           
-          if (googleMapRef.current) {
-            googleMapRef.current.setCenter(location)
+          if (leafletMapRef.current) {
+            leafletMapRef.current.setView([location.lat, location.lng], 13)
           }
         },
         (error) => {
@@ -167,34 +165,94 @@ export default function SearchPage() {
     }
 
     setSalons(mockSalons)
-  }, [userLocation])
 
-  const addSalonMarkers = (salonsData: Salon[]) => {
-    if (!googleMapRef.current || !window.google) return
+    // Cleanup map on unmount
+    return () => {
+      if (leafletMapRef.current) {
+        leafletMapRef.current.remove()
+        leafletMapRef.current = null
+      }
+    }
+  }, [])
+
+  const addSalonMarkers = async (salonsData: Salon[]) => {
+    if (!leafletMapRef.current) return
+
+    const L = (await import('leaflet')).default
 
     // Clear existing markers
-    markersRef.current.forEach(marker => marker.setMap(null))
+    markersRef.current.forEach(marker => leafletMapRef.current.removeLayer(marker))
     markersRef.current = []
 
-    salonsData.forEach(salon => {
-      const marker = new window.google.maps.Marker({
-        position: { lat: salon.lat, lng: salon.lng },
-        map: googleMapRef.current,
-        title: salon.name,
-        icon: {
-          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-            <svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 0C7.164 0 0 7.164 0 16C0 24.836 16 40 16 40C16 40 32 24.836 32 16C32 7.164 24.836 0 16 0Z" fill="#F4C7B8"/>
-              <circle cx="16" cy="16" r="8" fill="white"/>
-              <circle cx="16" cy="16" r="4" fill="#2F2F2F"/>
-            </svg>
-          `),
-          scaledSize: new window.google.maps.Size(32, 40),
-          anchor: new window.google.maps.Point(16, 40)
-        }
-      })
+    // Create custom nail salon icon
+    const nailIcon = L.divIcon({
+      html: `
+        <div style="
+          background-color: #F4C7B8;
+          border: 3px solid #fff;
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        ">
+          <div style="
+            background-color: #2F2F2F;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+          "></div>
+        </div>
+      `,
+      className: 'nail-salon-marker',
+      iconSize: [24, 24],
+      iconAnchor: [12, 24]
+    })
 
-      marker.addListener('click', () => {
+    salonsData.forEach(salon => {
+      const marker = L.marker([salon.lat, salon.lng], { icon: nailIcon })
+        .addTo(leafletMapRef.current)
+        .bindPopup(`
+          <div style="min-width: 200px;">
+            <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold;">${salon.name}</h3>
+            <p style="margin: 0 0 4px 0; font-size: 14px; color: #666;">📍 ${salon.address}, ${salon.city}</p>
+            ${salon.phone ? `<p style="margin: 0 0 4px 0; font-size: 14px; color: #666;">📞 ${salon.phone}</p>` : ''}
+            ${salon.average_rating ? `<p style="margin: 0 0 8px 0; font-size: 14px; color: #666;">⭐ ${salon.average_rating} (${salon.review_count} reviews)</p>` : ''}
+            <button 
+              onclick="window.location.href='tel:${salon.phone || ''}'" 
+              style="
+                background: #F4C7B8; 
+                border: none; 
+                padding: 6px 12px; 
+                border-radius: 4px; 
+                cursor: pointer; 
+                margin-right: 8px;
+                font-size: 12px;
+              "
+              ${!salon.phone ? 'disabled' : ''}
+            >
+              Call
+            </button>
+            <button 
+              onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(salon.address + ', ' + salon.city + ', ' + salon.state)}', '_blank')"
+              style="
+                background: #2F2F2F; 
+                color: white; 
+                border: none; 
+                padding: 6px 12px; 
+                border-radius: 4px; 
+                cursor: pointer;
+                font-size: 12px;
+              "
+            >
+              Directions
+            </button>
+          </div>
+        `)
+
+      marker.on('click', () => {
         setSelectedSalon(salon)
         setViewMode('list')
       })
@@ -227,9 +285,8 @@ export default function SearchPage() {
 
   const handleSalonClick = (salon: Salon) => {
     setSelectedSalon(salon)
-    if (googleMapRef.current) {
-      googleMapRef.current.setCenter({ lat: salon.lat, lng: salon.lng })
-      googleMapRef.current.setZoom(16)
+    if (leafletMapRef.current) {
+      leafletMapRef.current.setView([salon.lat, salon.lng], 16)
     }
   }
 
