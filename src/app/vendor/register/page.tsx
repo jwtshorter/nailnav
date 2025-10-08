@@ -217,11 +217,15 @@ export default function VendorRegisterPage() {
       
       setSuccessMessage(`🎉 Welcome to NailNav! Your account for "${formData.salonName}" has been created successfully. 
 
+Setting up your vendor dashboard...
+
 Next steps:
-1. Login to your vendor dashboard to complete your salon profile
-2. Add photos, services, and business details  
+1. Complete your salon profile with photos and details
+2. Add services, hours, and business information  
 3. Submit for admin review when ready
-4. Go live once approved!`)
+4. Go live once approved!
+
+You'll be redirected to your dashboard in a few seconds...`)
       
       // Clear form
       setFormData({
@@ -240,10 +244,11 @@ Next steps:
         termsAccepted: false
       })
 
-      // Auto-redirect to dashboard immediately to skip login step
+      // Auto-redirect to dashboard after allowing time for database sync
+      // Increased delay to ensure application is fully created and synced
       setTimeout(() => {
         window.location.href = '/vendor/dashboard'
-      }, 500)
+      }, 3000)
       
     } catch (error: any) {
       console.error('Registration error:', error)
@@ -355,7 +360,7 @@ Next steps:
                         Access Dashboard Now →
                       </a>
                       <p className="text-green-600 text-xs">
-                        Redirecting automatically... Or click above to go now.
+                        Redirecting in 3 seconds... Or click above to go now.
                       </p>
                     </div>
                   </div>
