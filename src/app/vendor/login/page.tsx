@@ -66,23 +66,54 @@ export default function VendorLoginPage() {
 
       // Check if user is vendor (gracefully handle missing tables)
       try {
-        const { data: profile, error: profileError } = await supabase
-          .from('user_profiles')
-          .select('role')
-          .eq('id', data.user.id)
+        // First, try to check if user has a vendor application
+        const { data: vendorApp, error: vendorAppError } = await supabase
+          .from('vendor_applications')
+          .select('id, status')
+          .eq('user_id', data.user.id)
           .single()
 
-        if (profileError && profileError.code === '42P01') {
-          // Table doesn't exist - allow login but show warning
-          console.warn('Database tables not set up. See VENDOR_ADMIN_SETUP.md')
-        } else if (profileError || !profile || profile.role !== 'vendor') {
+        if (vendorApp) {
+          // User has a vendor application, allow login
+          console.log('Vendor application found, allowing login')
+        } else if (vendorAppError && vendorAppError.code === '42P01') {
+          // vendor_applications table doesn't exist - check localStorage fallback
+          const localApplications = JSON.parse(localStorage.getItem('vendorApplications') || '[]')
+          const userApp = localApplications.find((app: any) => app.user_id === data.user.id)
+          
+          if (userApp) {
+            console.log('Found vendor application in localStorage fallback, allowing login')
+          } else {
+            // Try checking user_profiles table as secondary check
+            try {
+              const { data: profile, error: profileError } = await supabase
+                .from('user_profiles')
+                .select('role')
+                .eq('id', data.user.id)
+                .single()
+
+              if (profileError && profileError.code === '42P01') {
+                // Neither table exists - allow login but show warning
+                console.warn('Database tables not set up. Allowing vendor login in fallback mode.')
+              } else if (profileError || !profile || profile.role !== 'vendor') {
+                await supabase.auth.signOut()
+                setErrors({ submit: 'Access denied. Please register as a vendor first.' })
+                return
+              }
+            } catch (error) {
+              // If all checks fail, allow login anyway (fallback mode for new registrations)
+              console.warn('Could not verify vendor role, proceeding with login in fallback mode')
+            }
+          }
+        } else if (vendorAppError) {
+          // Table exists but no vendor application found
           await supabase.auth.signOut()
-          setErrors({ submit: 'Access denied. Vendor account required.' })
+          setErrors({ submit: 'No vendor account found. Please register as a vendor first.' })
           return
         }
       } catch (error) {
-        // If database check fails, allow login anyway (fallback mode)
-        console.warn('Could not verify vendor role, proceeding with login')
+        // If database check fails completely, allow login anyway (fallback mode)
+        console.warn('Could not verify vendor role, proceeding with login in fallback mode')
       }
 
       setSuccessMessage('Login successful! Click below to access your dashboard.')

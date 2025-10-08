@@ -124,7 +124,7 @@ export default function VendorRegisterPage() {
           email: formData.email,
           phone: formData.phone,
           website: normalizeWebsiteUrl(formData.website),
-          status: 'pending',
+          status: 'draft',
           draft_data: {
             description: `Welcome to ${formData.salonName}! We provide professional nail services in ${formData.city}, ${formData.state}.`,
             services_offered: ['manicures', 'pedicures', 'gel-polish', 'nail-art'],
@@ -182,7 +182,7 @@ export default function VendorRegisterPage() {
           email: formData.email,
           phone: formData.phone,
           website: normalizeWebsiteUrl(formData.website),
-          status: 'pending',
+          status: 'draft',
           created_at: new Date().toISOString()
         }
         
@@ -215,11 +215,13 @@ export default function VendorRegisterPage() {
       // Create vendor account and application
       const result = await createVendorAccount(formData)
       
-      if (result.fallbackMode) {
-        setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted. Please note: The database schema needs to be updated for full functionality. See VENDOR_ADMIN_SETUP.md for setup instructions.`)
-      } else {
-        setSuccessMessage(`✅ Account created successfully! Your vendor application for "${formData.salonName}" has been submitted for admin review. You'll receive an email once your listing is approved and goes live.`)
-      }
+      setSuccessMessage(`🎉 Welcome to NailNav! Your account for "${formData.salonName}" has been created successfully. 
+
+Next steps:
+1. Login to your vendor dashboard to complete your salon profile
+2. Add photos, services, and business details  
+3. Submit for admin review when ready
+4. Go live once approved!`)
       
       // Clear form
       setFormData({
@@ -238,8 +240,10 @@ export default function VendorRegisterPage() {
         termsAccepted: false
       })
 
-      // Show success message with manual redirect option
-      // Don't auto-redirect to give user time to read the message
+      // Auto-redirect to dashboard after 3 seconds to skip login step
+      setTimeout(() => {
+        window.location.href = '/vendor/dashboard'
+      }, 3000)
       
     } catch (error: any) {
       console.error('Registration error:', error)
@@ -341,17 +345,17 @@ export default function VendorRegisterPage() {
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-green-900 mb-2">Salon Listed Successfully!</p>
-                    <p className="text-green-700 leading-relaxed">{successMessage}</p>
+                    <p className="font-semibold text-green-900 mb-2">Account Created Successfully! 🎉</p>
+                    <div className="text-green-700 leading-relaxed whitespace-pre-line mb-4">{successMessage}</div>
                     <div className="mt-4 space-y-3">
                       <a
-                        href="/vendor/login"
+                        href="/vendor/dashboard"
                         className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
                       >
-                        Continue to Login →
+                        Access Dashboard Now →
                       </a>
                       <p className="text-green-600 text-xs">
-                        Use your new credentials to log in and manage your salon details.
+                        Redirecting automatically in 3 seconds... Or click above to go now.
                       </p>
                     </div>
                   </div>
