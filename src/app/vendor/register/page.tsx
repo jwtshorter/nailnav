@@ -5,13 +5,7 @@ import Footer from '@/components/mobile-first/Footer'
 import { motion } from 'framer-motion'
 import { Store, ArrowLeft, CheckCircle, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { supabase } from '@/lib/supabase'
 
 export default function VendorRegisterPage() {
   const [formData, setFormData] = useState({
@@ -60,7 +54,10 @@ export default function VendorRegisterPage() {
     if (!formData.email.trim()) newErrors.email = 'Email address is required'
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format'
     if (!formData.password.trim()) newErrors.password = 'Password is required'
-    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters'
+    else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters'
+    else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?])/.test(formData.password)) {
+      newErrors.password = 'Password must contain uppercase, lowercase, number, and special character'
+    }
     if (!formData.confirmPassword.trim()) newErrors.confirmPassword = 'Please confirm your password'
     else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match'
     if (!formData.termsAccepted) newErrors.termsAccepted = 'You must accept the terms and conditions'
@@ -86,7 +83,10 @@ export default function VendorRegisterPage() {
 
   const createVendorAccount = async (formData: any) => {
     try {
+      console.log('Starting vendor registration process...')
+      
       // 1. Create Supabase auth user with email/password
+      console.log('Creating auth user for:', formData.email)
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -99,8 +99,16 @@ export default function VendorRegisterPage() {
         }
       })
 
-      if (signUpError) throw signUpError
-      if (!authData.user) throw new Error('Failed to create user account')
+      if (signUpError) {
+        console.error('Auth signup error:', signUpError)
+        throw signUpError
+      }
+      if (!authData.user) {
+        console.error('No user returned from signup')
+        throw new Error('Failed to create user account')
+      }
+      
+      console.log('Auth user created successfully:', authData.user.id)
 
       // 2. Try to create vendor application (check if tables exist)
       try {
@@ -137,13 +145,19 @@ export default function VendorRegisterPage() {
           }
         }
 
+        console.log('Inserting vendor application:', vendorApplication)
         const { data: applicationData, error: applicationError } = await supabase
           .from('vendor_applications')
           .insert(vendorApplication)
           .select()
           .single()
 
-        if (applicationError) throw applicationError
+        if (applicationError) {
+          console.error('Database insertion error:', applicationError)
+          throw applicationError
+        }
+        
+        console.log('Vendor application created successfully:', applicationData)
 
         return {
           user: authData.user,
@@ -229,12 +243,24 @@ export default function VendorRegisterPage() {
       
     } catch (error: any) {
       console.error('Registration error:', error)
-      if (error?.message?.includes('User already registered')) {
+      
+      // More detailed error handling
+      if (error?.message?.includes('User already registered') || error?.message?.includes('already exists')) {
         setErrors({ submit: 'An account with this email already exists. Please try logging in instead.' })
       } else if (error?.message?.includes('Password')) {
         setErrors({ password: error.message })
+      } else if (error?.message?.includes('Email')) {
+        setErrors({ email: error.message })
+      } else if (error?.message?.includes('weak password') || error?.message?.includes('Password should contain')) {
+        setErrors({ password: 'Password must contain uppercase, lowercase, number, and special character (!@#$%^&*etc.)' })
+      } else if (error?.message?.includes('Database error saving new user')) {
+        setErrors({ submit: 'Database configuration issue. Please contact support or check that database migrations have been run.' })
+      } else if (error?.message?.includes('rate limit')) {
+        setErrors({ submit: 'Too many attempts. Please wait a moment and try again.' })
       } else {
-        setErrors({ submit: 'An error occurred during registration. Please try again.' })
+        // Show the actual error message for debugging
+        const errorMsg = error?.message || 'An unknown error occurred'
+        setErrors({ submit: `Registration failed: ${errorMsg}. Please try again or contact support if the issue persists.` })
       }
     } finally {
       setIsSubmitting(false)
@@ -600,6 +626,9 @@ export default function VendorRegisterPage() {
                       }`}
                       placeholder="Choose a secure password"
                     />
+                    {!errors.password && (
+                      <p className="mt-1 text-xs text-gray-500">Must include: uppercase, lowercase, number, and special character</p>
+                    )}
                     {errors.password && (
                       <p className="mt-1 text-sm text-red-600">{errors.password}</p>
                     )}
