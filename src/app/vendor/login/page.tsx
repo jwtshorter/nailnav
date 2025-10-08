@@ -117,9 +117,12 @@ export default function VendorLoginPage() {
         console.warn('Could not verify vendor role, proceeding with login in fallback mode:', error)
       }
 
-      setSuccessMessage('Login successful! Click below to access your dashboard.')
+      setSuccessMessage('Login successful! Redirecting to dashboard...')
       
-      // Don't auto-redirect - let user click when ready
+      // Auto-redirect to dashboard after brief delay
+      setTimeout(() => {
+        window.location.href = '/vendor/dashboard'
+      }, 1500)
     } catch (error: any) {
       console.error('Login error:', error)
       console.error('Error details:', {
@@ -184,12 +187,10 @@ export default function VendorLoginPage() {
                 className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6"
               >
                 <p className="mb-3">{successMessage}</p>
-                <a
-                  href="/vendor/dashboard"
-                  className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Go to Dashboard →
-                </a>
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                  <span className="ml-3 text-sm text-green-700">Redirecting to dashboard...</span>
+                </div>
               </motion.div>
             )}
 

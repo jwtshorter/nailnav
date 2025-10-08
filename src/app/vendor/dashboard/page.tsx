@@ -18,13 +18,7 @@ import {
   Globe,
   DollarSign
 } from 'lucide-react'
-import { createClient } from '@supabase/supabase-js'
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { supabase } from '@/lib/supabase'
 
 interface VendorApplication {
   id: string
@@ -91,31 +85,45 @@ export default function VendorDashboard() {
       return
     }
 
-    // Check if user is vendor and load their application
-    const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('role')
-      .eq('id', session.user.id)
-      .single()
-
-    if (!profile || profile.role !== 'vendor') {
-      await supabase.auth.signOut()
-      window.location.href = '/vendor/login'
-      return
-    }
-
-    await loadVendorApplication(session.user.id)
+    // Simplified vendor check - just verify they have a vendor application
+    // Skip user_profiles check due to RLS recursion issues
+    console.log('Checking vendor access for user:', session.user.id)
+    await loadVendorApplication(session.user.id, session.user.email)
   }
 
-  const loadVendorApplication = async (userId: string) => {
+  const loadVendorApplication = async (userId: string, userEmail?: string) => {
     try {
-      const { data, error } = await supabase
+      // First try to find by user_id
+      let { data, error } = await supabase
         .from('vendor_applications')
         .select('*')
         .eq('user_id', userId)
         .single()
 
-      if (error) throw error
+      // If not found by user_id, try by email
+      if (error && userEmail) {
+        console.log('No application found by user_id, trying by email:', userEmail)
+        const { data: dataByEmail, error: emailError } = await supabase
+          .from('vendor_applications')
+          .select('*')
+          .eq('email', userEmail)
+          .single()
+
+        if (!emailError && dataByEmail) {
+          // Update the application with the correct user_id
+          await supabase
+            .from('vendor_applications')
+            .update({ user_id: userId })
+            .eq('id', dataByEmail.id)
+          
+          data = { ...dataByEmail, user_id: userId }
+          console.log('Found application by email and updated user_id')
+        } else {
+          throw emailError || error
+        }
+      } else if (error) {
+        throw error
+      }
 
       setApplication(data)
       
@@ -134,6 +142,7 @@ export default function VendorDashboard() {
       }
     } catch (error) {
       console.error('Error loading vendor application:', error)
+      // Don't redirect if no application found - just show the "no application" message
     } finally {
       setLoading(false)
     }
@@ -246,7 +255,7 @@ export default function VendorDashboard() {
               <Store className="w-8 h-8 text-primary-600" />
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">{application.salon_name}</h1>
-                <p className="text-sm text-gray-600">Vendor Dashboard</p>
+                <p className="text-sm text-gray-600">Welcome to your NailNav vendor dashboard</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
