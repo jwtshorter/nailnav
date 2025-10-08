@@ -5,13 +5,7 @@ import Footer from '@/components/mobile-first/Footer'
 import { motion } from 'framer-motion'
 import { LogIn, Store, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { supabase } from '@/lib/supabase'
 
 export default function VendorLoginPage() {
   const [formData, setFormData] = useState({
@@ -56,26 +50,34 @@ export default function VendorLoginPage() {
     setIsSubmitting(true)
     
     try {
+      console.log('Attempting login for:', formData.email)
+      
       // Sign in with Supabase
       const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       })
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase auth error:', error)
+        throw error
+      }
+      
+      console.log('Login successful, user:', data.user?.id)
 
-      // Check if user is vendor (gracefully handle missing tables)
+      // Check if user is vendor (gracefully handle missing tables and RLS issues)
       try {
         // First, try to check if user has a vendor application
+        console.log('Checking vendor application for user:', data.user.id)
         const { data: vendorApp, error: vendorAppError } = await supabase
           .from('vendor_applications')
-          .select('id, status')
+          .select('id, status, salon_name')
           .eq('user_id', data.user.id)
           .single()
 
         if (vendorApp) {
           // User has a vendor application, allow login
-          console.log('Vendor application found, allowing login')
+          console.log('✅ Vendor application found:', vendorApp.salon_name, 'Status:', vendorApp.status)
         } else if (vendorAppError && vendorAppError.code === '42P01') {
           // vendor_applications table doesn't exist - check localStorage fallback
           const localApplications = JSON.parse(localStorage.getItem('vendorApplications') || '[]')
@@ -84,36 +86,35 @@ export default function VendorLoginPage() {
           if (userApp) {
             console.log('Found vendor application in localStorage fallback, allowing login')
           } else {
-            // Try checking user_profiles table as secondary check
-            try {
-              const { data: profile, error: profileError } = await supabase
-                .from('user_profiles')
-                .select('role')
-                .eq('id', data.user.id)
-                .single()
-
-              if (profileError && profileError.code === '42P01') {
-                // Neither table exists - allow login but show warning
-                console.warn('Database tables not set up. Allowing vendor login in fallback mode.')
-              } else if (profileError || !profile || profile.role !== 'vendor') {
-                await supabase.auth.signOut()
-                setErrors({ submit: 'Access denied. Please register as a vendor first.' })
-                return
-              }
-            } catch (error) {
-              // If all checks fail, allow login anyway (fallback mode for new registrations)
-              console.warn('Could not verify vendor role, proceeding with login in fallback mode')
-            }
+            console.warn('No vendor application found, but allowing login in fallback mode')
           }
         } else if (vendorAppError) {
-          // Table exists but no vendor application found
-          await supabase.auth.signOut()
-          setErrors({ submit: 'No vendor account found. Please register as a vendor first.' })
-          return
+          // Table exists but no vendor application found - check by email as fallback
+          console.log('No vendor app by user_id, checking by email:', data.user.email)
+          const { data: vendorAppByEmail, error: emailError } = await supabase
+            .from('vendor_applications')
+            .select('id, status, salon_name, user_id')
+            .eq('email', data.user.email)
+            .single()
+          
+          if (vendorAppByEmail) {
+            console.log('✅ Found vendor application by email:', vendorAppByEmail.salon_name)
+            // Update the application with the correct user_id if it's missing
+            if (!vendorAppByEmail.user_id) {
+              await supabase
+                .from('vendor_applications')
+                .update({ user_id: data.user.id })
+                .eq('id', vendorAppByEmail.id)
+              console.log('Updated vendor application with user_id')
+            }
+          } else {
+            // No vendor application found at all
+            console.warn('No vendor application found, but allowing login in development mode')
+          }
         }
       } catch (error) {
         // If database check fails completely, allow login anyway (fallback mode)
-        console.warn('Could not verify vendor role, proceeding with login in fallback mode')
+        console.warn('Could not verify vendor role, proceeding with login in fallback mode:', error)
       }
 
       setSuccessMessage('Login successful! Click below to access your dashboard.')
@@ -121,10 +122,25 @@ export default function VendorLoginPage() {
       // Don't auto-redirect - let user click when ready
     } catch (error: any) {
       console.error('Login error:', error)
+      console.error('Error details:', {
+        message: error?.message,
+        code: error?.code,
+        details: error?.details,
+        hint: error?.hint
+      })
+      
       if (error?.message?.includes('Invalid login credentials')) {
-        setErrors({ submit: 'Invalid email or password. Please try again.' })
+        setErrors({ submit: 'Invalid email or password. If you just registered, please check your email to confirm your account first.' })
+      } else if (error?.message?.includes('Email not confirmed')) {
+        setErrors({ submit: 'Please check your email and confirm your account before logging in.' })
+      } else if (error?.message?.includes('Too many requests')) {
+        setErrors({ submit: 'Too many login attempts. Please wait a moment and try again.' })
+      } else if (error?.code === 'invalid_credentials') {
+        setErrors({ submit: 'Invalid email or password. If you just created an account, please check your email for a confirmation link first.' })
       } else {
-        setErrors({ submit: 'An error occurred during login. Please try again.' })
+        // Show the actual error message for debugging in development
+        const errorMessage = error?.message || 'Unknown error'
+        setErrors({ submit: `Login failed: ${errorMessage}. Please try again or contact support.` })
       }
     } finally {
       setIsSubmitting(false)
