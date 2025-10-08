@@ -85,10 +85,16 @@ export default function VendorDashboard() {
       return
     }
 
-    // Simplified vendor check - just verify they have a vendor application
-    // Skip user_profiles check due to RLS recursion issues
+    // Check if user is admin first
     console.log('Checking vendor access for user:', session.user.id)
-    await loadVendorApplication(session.user.id, session.user.email)
+    const userApplication = await loadVendorApplication(session.user.id, session.user.email)
+    
+    // If user is an admin, redirect to admin dashboard
+    if (userApplication && userApplication.salon_name?.toLowerCase().includes('admin') && userApplication.status === 'approved') {
+      console.log('Admin user detected, redirecting to admin dashboard')
+      window.location.href = '/admin/dashboard'
+      return
+    }
   }
 
   const loadVendorApplication = async (userId: string, userEmail?: string) => {
@@ -140,9 +146,12 @@ export default function VendorDashboard() {
           hours: data.draft_data.operating_hours || salonData.hours
         })
       }
+      
+      return data // Return the application data for admin check
     } catch (error) {
       console.error('Error loading vendor application:', error)
       // Don't redirect if no application found - just show the "no application" message
+      return null
     } finally {
       setLoading(false)
     }

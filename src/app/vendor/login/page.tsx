@@ -117,12 +117,33 @@ export default function VendorLoginPage() {
         console.warn('Could not verify vendor role, proceeding with login in fallback mode:', error)
       }
 
-      setSuccessMessage('Login successful! Redirecting to dashboard...')
+      // Check if user is admin by looking at their vendor application
+      let isAdmin = false
+      try {
+        const { data: userApp } = await supabase
+          .from('vendor_applications')
+          .select('salon_name, status')
+          .or(`user_id.eq.${data.user.id},email.eq.${data.user.email}`)
+          .single()
+        
+        if (userApp && userApp.salon_name?.toLowerCase().includes('admin') && userApp.status === 'approved') {
+          isAdmin = true
+        }
+      } catch (error) {
+        console.log('Could not check admin status, proceeding as regular user')
+      }
       
-      // Auto-redirect to dashboard after brief delay
-      setTimeout(() => {
-        window.location.href = '/vendor/dashboard'
-      }, 1500)
+      if (isAdmin) {
+        setSuccessMessage('Admin login successful! Redirecting to admin dashboard...')
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard'
+        }, 1500)
+      } else {
+        setSuccessMessage('Login successful! Redirecting to dashboard...')
+        setTimeout(() => {
+          window.location.href = '/vendor/dashboard'
+        }, 1500)
+      }
     } catch (error: any) {
       console.error('Login error:', error)
       console.error('Error details:', {
