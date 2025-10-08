@@ -134,15 +134,11 @@ export default function VendorLoginPage() {
       }
       
       if (isAdmin) {
-        setSuccessMessage('Admin login successful! Redirecting to admin dashboard...')
-        setTimeout(() => {
-          window.location.href = '/admin/dashboard'
-        }, 1500)
+        setSuccessMessage('Admin login successful! Redirecting...')
+        window.location.href = '/admin/dashboard'
       } else {
-        setSuccessMessage('Login successful! Redirecting to dashboard...')
-        setTimeout(() => {
-          window.location.href = '/vendor/dashboard'
-        }, 1500)
+        setSuccessMessage('Login successful! Redirecting...')
+        window.location.href = '/vendor/dashboard'
       }
     } catch (error: any) {
       console.error('Login error:', error)

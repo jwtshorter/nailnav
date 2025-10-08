@@ -16,7 +16,8 @@ import {
   Mail,
   Phone,
   MapPin,
-  Calendar
+  Calendar,
+  Trash2
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
@@ -121,6 +122,34 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error updating application:', error)
       alert('Failed to update application. Please try again.')
+    } finally {
+      setProcessing(false)
+    }
+  }
+
+  const deleteApplication = async (applicationId: string) => {
+    if (!confirm('Are you sure you want to permanently delete this application? This action cannot be undone.')) {
+      return
+    }
+
+    setProcessing(true)
+    try {
+      const { error } = await supabase
+        .from('vendor_applications')
+        .delete()
+        .eq('id', applicationId)
+
+      if (error) throw error
+
+      // Update local state
+      setApplications(prev => prev.filter(app => app.id !== applicationId))
+
+      alert('Application deleted successfully!')
+      setSelectedApplication(null)
+      setAdminNotes('')
+    } catch (error) {
+      console.error('Error deleting application:', error)
+      alert('Failed to delete application. Please try again.')
     } finally {
       setProcessing(false)
     }
@@ -411,8 +440,33 @@ export default function AdminDashboard() {
                   />
                 </div>
 
+                {/* View Salon Post Link */}
+                <div className="flex justify-between items-center pt-4 border-t">
+                  <div className="flex space-x-3">
+                    <a
+                      href={`/salon/${selectedApplication.salon_name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Salon Post
+                    </a>
+                    
+                    <button
+                      onClick={() => deleteApplication(selectedApplication.id)}
+                      disabled={processing}
+                      className="inline-flex items-center px-4 py-2 bg-red-700 text-white text-sm font-medium rounded-lg hover:bg-red-800 disabled:opacity-50"
+                      title="Permanently delete this application"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      {processing ? 'Deleting...' : 'Delete'}
+                    </button>
+                  </div>
+                </div>
+
                 {/* Actions */}
-                <div className="flex justify-end space-x-3 pt-6 border-t">
+                <div className="flex justify-end space-x-3 pt-4">
                   {selectedApplication.status !== 'approved' && (
                     <button
                       onClick={() => updateApplicationStatus(selectedApplication.id, 'approved', adminNotes)}

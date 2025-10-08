@@ -240,10 +240,10 @@ Next steps:
         termsAccepted: false
       })
 
-      // Auto-redirect to dashboard after 3 seconds to skip login step
+      // Auto-redirect to dashboard immediately to skip login step
       setTimeout(() => {
         window.location.href = '/vendor/dashboard'
-      }, 3000)
+      }, 500)
       
     } catch (error: any) {
       console.error('Registration error:', error)
@@ -355,7 +355,7 @@ Next steps:
                         Access Dashboard Now →
                       </a>
                       <p className="text-green-600 text-xs">
-                        Redirecting automatically in 3 seconds... Or click above to go now.
+                        Redirecting automatically... Or click above to go now.
                       </p>
                     </div>
                   </div>
