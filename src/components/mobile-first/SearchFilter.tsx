@@ -11,6 +11,9 @@ interface SalonSearchFilters {
   priceRange?: string[]
   specialties?: string[]
   languages?: string[]
+  expertise?: string[]
+  hours?: string[]
+  booking?: string[]
   isVerified?: boolean
   acceptsWalkIns?: boolean
   hasParking?: boolean
@@ -53,6 +56,41 @@ const popularSpecialties = [
   'Spa Pedicures',
   'Walk-ins Welcome',
   'Premium Brands'
+]
+
+const expertiseFilters = [
+  'Certified Nail Technicians',
+  'Licensed Professionals',
+  'Award-Winning Staff',
+  'Experienced Team',
+  'Qualified Technicians',
+  'Specialty Certified',
+  'Advanced Training',
+  'Master Technicians'
+]
+
+const hoursFilters = [
+  'Open Monday',
+  'Open Tuesday',
+  'Open Wednesday', 
+  'Open Thursday',
+  'Open Friday',
+  'Open Saturday',
+  'Open Sunday',
+  'Extended Hours',
+  'Late Night',
+  'Early Morning'
+]
+
+const bookingFilters = [
+  'Online Booking',
+  'Phone Booking',
+  'Walk-ins Welcome',
+  'Appointment Required',
+  'Same Day Booking',
+  'Mobile Nails',
+  'Group Bookings',
+  'Advance Booking'
 ]
 
 const languages = [
@@ -303,6 +341,21 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
                   +{(filters.services?.length || 0) - 2} more
                 </span>
               )}
+              {filters.expertise?.slice(0, 1).map((expertise) => (
+                <span key={expertise} className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
+                  {expertise}
+                </span>
+              ))}
+              {filters.hours?.slice(0, 1).map((hours) => (
+                <span key={hours} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                  {hours}
+                </span>
+              ))}
+              {filters.booking?.slice(0, 1).map((booking) => (
+                <span key={booking} className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                  {booking}
+                </span>
+              ))}
               {filters.acceptsWalkIns && (
                 <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Walk-ins</span>
               )}
@@ -427,6 +480,78 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
                     >
                       {lang.name}
                       {filters.languages?.includes(lang.code) && (
+                        <Check className="w-4 h-4 inline ml-1" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Expertise */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Expertise</h3>
+                <div className="flex flex-wrap gap-2">
+                  {expertiseFilters.map((expertise) => (
+                    <button
+                      key={expertise}
+                      onClick={() => toggleFilter('expertise', expertise)}
+                      className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                        filters.expertise?.includes(expertise)
+                          ? 'bg-purple-100 text-purple-800 border-purple-300'
+                          : 'bg-white text-gray-700 border-gray-300'
+                      } border`}
+                      style={{ minHeight: '36px' }}
+                    >
+                      {expertise}
+                      {filters.expertise?.includes(expertise) && (
+                        <Check className="w-4 h-4 inline ml-1" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Hours */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Hours</h3>
+                <div className="flex flex-wrap gap-2">
+                  {hoursFilters.map((hours) => (
+                    <button
+                      key={hours}
+                      onClick={() => toggleFilter('hours', hours)}
+                      className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                        filters.hours?.includes(hours)
+                          ? 'bg-blue-100 text-blue-800 border-blue-300'
+                          : 'bg-white text-gray-700 border-gray-300'
+                      } border`}
+                      style={{ minHeight: '36px' }}
+                    >
+                      {hours}
+                      {filters.hours?.includes(hours) && (
+                        <Check className="w-4 h-4 inline ml-1" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Booking */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Booking</h3>
+                <div className="flex flex-wrap gap-2">
+                  {bookingFilters.map((booking) => (
+                    <button
+                      key={booking}
+                      onClick={() => toggleFilter('booking', booking)}
+                      className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                        filters.booking?.includes(booking)
+                          ? 'bg-green-100 text-green-800 border-green-300'
+                          : 'bg-white text-gray-700 border-gray-300'
+                      } border`}
+                      style={{ minHeight: '36px' }}
+                    >
+                      {booking}
+                      {filters.booking?.includes(booking) && (
                         <Check className="w-4 h-4 inline ml-1" />
                       )}
                     </button>

@@ -31,11 +31,14 @@ A comprehensive, mobile-first nail salon directory platform that helps users dis
 - **🎛️ Vendor Dashboard**: Update details, photos, and salon information
 - **🔒 Secure Authentication**: Email/password with role-based access
 - **⚖️ Admin Oversight**: All listings require admin approval before going live
-- **💼 Vendor Tiers**: Free, Premium, and Featured listing options  
+- **💼 Vendor Tiers**: Free (1 photo), Premium (10 photos), Featured (unlimited photos)  
+- **📸 Photo Management**: Tier-based photo limits with drag-and-drop upload
 - **📅 Booking System**: Online appointment scheduling (Premium feature)
-- **📈 Analytics**: Visitor tracking and business insights
+- **📈 Advanced Analytics**: Detailed insights for Premium/Featured tiers
 - **🎯 Featured Listings**: Homepage placement for premium vendors
-- **💳 Payment Ready**: Stripe integration framework included
+- **💳 Stripe Integration**: Complete subscription payment system
+- **🔍 Enhanced Filters**: Expertise, hours, and booking options
+- **👑 Admin Console**: Comprehensive platform management tools
 
 ## 🛠️ Tech Stack
 
@@ -276,15 +279,20 @@ Before testing, you must update Supabase schema. See [`VENDOR_ADMIN_SETUP.md`](.
 4. Approve applications → Salons go live automatically
 
 ### 🔧 Current Status
-- ✅ **Frontend**: Complete with all UI refinements
+- ✅ **Frontend**: Complete with all UI refinements and enhanced filters
 - ✅ **Vendor Management**: Complete authentication and admin approval workflow
 - ✅ **Admin Dashboard**: Full vendor application management system
 - ✅ **Vendor Dashboard**: Profile editing, photo upload UI, and status tracking
+- ✅ **Photo Management**: Tier-based limits (1/10/unlimited) with drag-and-drop
+- ✅ **Advanced Analytics**: Premium/Featured tier analytics with competitive insights
+- ✅ **Admin Console**: Comprehensive platform management and revenue tracking
+- ✅ **Stripe Integration**: Complete payment system with subscription management
+- ✅ **Enhanced Filters**: Added Expertise (Qualified Technicians), Hours, and Booking
 - ✅ **Security**: Role-based access with Supabase Auth and RLS policies
 - ✅ **Country Field**: Added to both login and registration forms
 - ✅ **Form Validation**: Complete with real-time error handling
 - ✅ **Supabase Integration**: Environment variables configured and tested
-- ❗ **Database Schema**: **REQUIRES UPDATE** - See `VENDOR_ADMIN_SETUP.md`
+- ⚠️ **Database Schema**: New tables for photos/analytics - See setup files
 - ✅ **GitHub**: All code committed and pushed
 
 ## 🤝 Contributing
@@ -312,11 +320,19 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### Documentation
 - **[Database Setup Guide](./SUPABASE_DATABASE_SETUP.md)** - Complete Supabase setup with migrations
+- **[Service Catalog Setup](./SETUP_SERVICE_CATALOG.md)** - 70+ nail services across 18 categories
+- **[Photo Management Setup](./UPDATE_PHOTO_MANAGEMENT.sql)** - Tier-based photo system
+- **[Stripe Integration Guide](./STRIPE_INTEGRATION_GUIDE.md)** - Complete payment system setup
 - **[API Endpoints](./src/app/api/)** - Backend service layer
   - `/api/health` - System health check
   - `/api/supabase-test` - Database connection test
   - `/api/salons` - Salon listings (requires database setup)
+  - `/api/upload/photo` - Photo management system
+  - `/api/stripe/*` - Payment processing endpoints
 - **[Component Library](./src/components/)** - UI component usage
+  - `PhotoManager` - Tier-based photo management
+  - `AdvancedAnalytics` - Premium analytics dashboard
+  - `AdminConsole` - Platform management interface
 
 ### Getting Help
 - **Issues**: [GitHub Issues](https://github.com/jwtshorter/nailnav/issues)
@@ -325,13 +341,21 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🎯 Roadmap
 
+### Recently Added Features ✨
+- ✅ **Photo Management System** - Tier-based photo limits with upload/management
+- ✅ **Advanced Analytics** - Comprehensive insights for Premium/Featured tiers
+- ✅ **Stripe Integration** - Complete subscription payment system
+- ✅ **Enhanced Filters** - Expertise, Hours, and Booking options
+- ✅ **Admin Console** - Platform management and revenue tracking
+- ✅ **Service Catalog** - 70+ services across 18 nail care categories
+
 ### Upcoming Features
 - [ ] **Advanced Booking System** with calendar integration
-- [ ] **Payment Processing** with Stripe integration
-- [ ] **Vendor Dashboard** for business management
 - [ ] **Mobile Apps** (React Native)
 - [ ] **AI-Powered Recommendations** based on user preferences
 - [ ] **Social Features** with photo sharing and follows
+- [ ] **Video Upload Support** for salon showcases
+- [ ] **Customer Loyalty Programs** with points and rewards
 
 ### Technical Improvements
 - [ ] **Real-time Updates** with WebSocket integration
