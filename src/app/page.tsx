@@ -351,12 +351,12 @@ export default function HomePage() {
                     const slugMap: Record<string, string> = {
                       'vendor-1': 'elegant-nails-spa',
                       'vendor-2': 'luxe-nail-lounge', 
-                      'vendor-3': 'elegant-nails-spa',
-                      'vendor-4': 'elegant-nails-spa',
-                      'vendor-5': 'luxe-nail-lounge',
-                      'vendor-6': 'elegant-nails-spa',
-                      'vendor-7': 'elegant-nails-spa',
-                      'vendor-8': 'luxe-nail-lounge'
+                      'vendor-3': 'trendy-nails-studio',
+                      'vendor-4': 'pure-beauty-nails',
+                      'vendor-5': 'glamour-nail-bar',
+                      'vendor-6': 'serenity-spa-nails',
+                      'vendor-7': 'modern-nails-boutique',
+                      'vendor-8': 'royal-touch-nails'
                     }
                     window.location.href = `/salon/${slugMap[vendor.id] || 'elegant-nails-spa'}`
                   }}
@@ -377,13 +377,13 @@ export default function HomePage() {
                   </div>
                   
                   {/* Content */}
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                  <div className="p-3">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors line-clamp-2">
                       {vendor.name}
                     </h3>
                     
                     {/* Location */}
-                    <p className="text-sm text-accent-600 mb-2 flex items-center">
+                    <p className="text-xs text-accent-600 mb-2 flex items-center">
                       <MapPin className="w-3 h-3 mr-1" />
                       {vendor.location}
                     </p>
@@ -391,8 +391,8 @@ export default function HomePage() {
                     {/* Rating */}
                     <div className="flex items-center mb-2">
                       <div className="flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="text-sm font-medium text-gray-700">{vendor.rating}</span>
+                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                        <span className="text-xs font-medium text-gray-700">{vendor.rating}</span>
                         <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
                       </div>
                     </div>
@@ -402,7 +402,7 @@ export default function HomePage() {
                       {vendor.specialties.slice(0, 2).map((specialty) => (
                         <span 
                           key={specialty}
-                          className="text-xs bg-secondary-100 text-secondary-700 px-2 py-1 rounded-full"
+                          className="text-xs bg-secondary-100 text-secondary-700 px-1.5 py-0.5 rounded-full"
                         >
                           {specialty}
                         </span>
@@ -467,12 +467,12 @@ export default function HomePage() {
                     const slugMap: Record<string, string> = {
                       'vendor-1': 'elegant-nails-spa',
                       'vendor-2': 'luxe-nail-lounge', 
-                      'vendor-3': 'elegant-nails-spa',
-                      'vendor-4': 'elegant-nails-spa',
-                      'vendor-5': 'luxe-nail-lounge',
-                      'vendor-6': 'elegant-nails-spa',
-                      'vendor-7': 'elegant-nails-spa',
-                      'vendor-8': 'luxe-nail-lounge'
+                      'vendor-3': 'trendy-nails-studio',
+                      'vendor-4': 'pure-beauty-nails',
+                      'vendor-5': 'glamour-nail-bar',
+                      'vendor-6': 'serenity-spa-nails',
+                      'vendor-7': 'modern-nails-boutique',
+                      'vendor-8': 'royal-touch-nails'
                     }
                     window.location.href = `/salon/${slugMap[vendor.id] || 'elegant-nails-spa'}`
                   }}
@@ -493,13 +493,13 @@ export default function HomePage() {
                   </div>
                   
                   {/* Content */}
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                  <div className="p-3">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors line-clamp-2">
                       {vendor.name}
                     </h3>
                     
                     {/* Location */}
-                    <p className="text-sm text-accent-600 mb-2 flex items-center">
+                    <p className="text-xs text-accent-600 mb-2 flex items-center">
                       <MapPin className="w-3 h-3 mr-1" />
                       {vendor.location}
                     </p>
@@ -507,8 +507,8 @@ export default function HomePage() {
                     {/* Rating */}
                     <div className="flex items-center mb-2">
                       <div className="flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="text-sm font-medium text-gray-700">{vendor.rating}</span>
+                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                        <span className="text-xs font-medium text-gray-700">{vendor.rating}</span>
                         <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
                       </div>
                     </div>
@@ -518,7 +518,7 @@ export default function HomePage() {
                       {vendor.specialties.slice(0, 2).map((specialty) => (
                         <span 
                           key={specialty}
-                          className="text-xs bg-secondary-100 text-secondary-700 px-2 py-1 rounded-full"
+                          className="text-xs bg-secondary-100 text-secondary-700 px-1.5 py-0.5 rounded-full"
                         >
                           {specialty}
                         </span>
@@ -561,6 +561,56 @@ export default function HomePage() {
         )}
 
 
+
+        {/* Explore Cities Section */}
+        {!searchPerformed && (
+          <motion.section
+            className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Explore Cities
+            </h2>
+            <p className="text-gray-600 text-center mb-8">
+              Find the best nail salons in these popular locations
+            </p>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+              {[
+                // USA Cities
+                { name: 'Los Angeles', country: 'USA', slug: 'los-angeles-ca' },
+                { name: 'New York', country: 'USA', slug: 'new-york-ny' },
+                { name: 'Miami', country: 'USA', slug: 'miami-fl' },
+                { name: 'Chicago', country: 'USA', slug: 'chicago-il' },
+                { name: 'Las Vegas', country: 'USA', slug: 'las-vegas-nv' },
+                { name: 'San Francisco', country: 'USA', slug: 'san-francisco-ca' },
+                // Australia Cities  
+                { name: 'Sydney', country: 'Australia', slug: 'sydney-nsw' },
+                { name: 'Melbourne', country: 'Australia', slug: 'melbourne-vic' }
+              ].map((city, index) => (
+                <motion.a
+                  key={city.slug}
+                  href={`/search?location=${encodeURIComponent(city.name)}`}
+                  className="bg-white p-4 rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer group text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 * index }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                    {city.name}
+                  </h3>
+                  <p className="text-xs text-gray-600">
+                    {city.country}
+                  </p>
+                </motion.a>
+              ))}
+            </div>
+          </motion.section>
+        )}
 
         {/* Blog Section */}
         {!searchPerformed && (

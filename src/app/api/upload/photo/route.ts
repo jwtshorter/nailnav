@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
 
     // Convert file to buffer
     const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
+    const buffer = Buffer.from(bytes as ArrayBuffer)
 
     // Generate unique filename
     const photoId = uuidv4()
@@ -105,18 +105,20 @@ export async function POST(request: NextRequest) {
 
       // Resize if too large (max 1920px width)
       if (width > 1920) {
-        processedBuffer = await image
+        const resizedBuffer = await image
           .resize(1920, null, { 
             withoutEnlargement: true,
             fit: 'inside'
           })
           .jpeg({ quality: 85 })
           .toBuffer()
+        processedBuffer = Buffer.from(resizedBuffer)
       } else {
         // Just optimize quality
-        processedBuffer = await image
+        const optimizedBuffer = await image
           .jpeg({ quality: 90 })
           .toBuffer()
+        processedBuffer = Buffer.from(optimizedBuffer)
       }
     } catch (sharpError) {
       console.warn('Sharp processing failed, using original file:', sharpError)

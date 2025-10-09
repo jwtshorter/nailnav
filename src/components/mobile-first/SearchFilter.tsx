@@ -104,8 +104,7 @@ const languages = [
 export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterProps) => {
   const { t } = useTranslation()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [serviceQuery, setServiceQuery] = useState('')
-  const [locationQuery, setLocationQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   const [filters, setFilters] = useState<SalonSearchFilters>({})
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [locationPermission, setLocationPermission] = useState<'pending' | 'granted' | 'denied'>('pending')
@@ -133,12 +132,10 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
     // Redirect to search page with parameters
     const params = new URLSearchParams()
     
-    if (serviceQuery.trim()) {
-      params.set('service', encodeURIComponent(serviceQuery.trim()))
-    }
-    
-    if (locationQuery.trim()) {
-      params.set('location', encodeURIComponent(locationQuery.trim()))
+    if (searchQuery.trim()) {
+      // Parse the search query - for now treat as service search
+      // TODO: Implement smart parsing to detect location vs service
+      params.set('service', encodeURIComponent(searchQuery.trim()))
     }
     
     // Redirect to search page
@@ -168,21 +165,20 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
 
   const clearFilters = () => {
     setFilters({})
-    setServiceQuery('')
-    setLocationQuery('')
+    setSearchQuery('')
   }
 
   const activeFilterCount = Object.values(filters).filter(Boolean).length
 
   const quickFilters = [
-    { label: t('search.filters.gelNails'), type: 'service', value: 'Gel Manicure' },
-    { label: t('search.filters.manicure'), type: 'service', value: 'Classic Manicure' },
-    { label: t('search.filters.pedicure'), type: 'service', value: 'Gel Pedicure' },
-    { label: t('search.filters.acrylicNails'), type: 'service', value: 'Acrylic Nails' },
-    { label: t('search.filters.nailArt'), type: 'service', value: 'Nail Art' },
-    { label: t('search.filters.nailExtensions'), type: 'service', value: 'Gel Extensions' },
-    { label: t('search.filters.nailRepair'), type: 'service', value: 'Classic Pedicure' },
-    { label: t('search.filters.frenchManicure'), type: 'service', value: 'French Manicure' }
+    { label: 'Manicure', type: 'service', value: 'Classic Manicure' },
+    { label: 'Pedicure', type: 'service', value: 'Gel Pedicure' },
+    { label: 'Acrylic Nails', type: 'service', value: 'Acrylic Nails' },
+    { label: 'Gel Extensions', type: 'service', value: 'Gel Extensions' },
+    { label: 'Gel X', type: 'service', value: 'Gel X' },
+    { label: 'Dip Powder', type: 'service', value: 'Dip Powder' },
+    { label: 'Builders Gel', type: 'service', value: 'Builders Gel' },
+    { label: 'Nail Art', type: 'service', value: 'Nail Art' }
   ]
 
   const handleQuickFilter = (filter: typeof quickFilters[0]) => {
@@ -209,47 +205,53 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
       {/* Search Bar */}
       <div>
         <div className="relative">
-          {/* Search Input Fields Row */}
-          <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3">
-            {/* Service/Business Name Input */}
-            <div className="flex-1 relative">
+          {/* Single Search Input */}
+          <div className="mb-4">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search services or business name..."
-                value={serviceQuery}
-                onChange={(e) => setServiceQuery(e.target.value)}
+                placeholder="Search service, business or location"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg"
                 style={{ minHeight: '48px' }}
               />
-            </div>
-            
-            {/* Location Input */}
-            <div className="flex-1 relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Location (city, suburb, postcode)"
-                value={locationQuery}
-                onChange={(e) => setLocationQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                style={{ minHeight: '48px' }}
-              />
-              {/* Location Permission Status */}
-              {locationPermission === 'granted' && userLocation && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="flex items-center space-x-1 text-xs text-accent-600 font-medium">
-                    <div className="w-2 h-2 bg-accent-600 rounded-full"></div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
+
+          {/* Quick Filter Chips */}
+          {!isFilterOpen && activeFilterCount === 0 && (
+            <motion.div 
+              className="flex flex-wrap gap-2 mb-4"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <span className="text-xs text-gray-500 font-medium mb-1 w-full">Quick filters:</span>
+              {quickFilters.map((filter, index) => (
+                <motion.button
+                  key={filter.label}
+                  onClick={() => handleQuickFilter(filter)}
+                  className={`px-3 py-1.5 text-xs rounded-full border transition-all duration-200 flex items-center space-x-1 ${
+                    isQuickFilterActive(filter)
+                      ? 'bg-primary-100 text-primary-700 border-primary-300'
+                      : 'bg-gray-100 hover:bg-primary-50 hover:text-primary-700 text-gray-600 border-gray-200 hover:border-primary-200'
+                  }`}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 * index }}
+                >
+                  <span>{filter.label}</span>
+                </motion.button>
+              ))}
+            </motion.div>
+          )}
           
           {/* Search and Filter Buttons Row */}
-          <div className="flex space-x-3 mt-3">
+          <div className="flex space-x-3">
             {/* Search Button */}
             <motion.button
               onClick={handleSearch}
@@ -289,34 +291,7 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
             </motion.button>
           </div>
 
-          {/* Quick Filter Chips */}
-          {!isFilterOpen && activeFilterCount === 0 && (
-            <motion.div 
-              className="flex flex-wrap gap-2 mt-3"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <span className="text-xs text-gray-500 font-medium mb-1 w-full">Quick filters:</span>
-              {quickFilters.map((filter, index) => (
-                <motion.button
-                  key={filter.label}
-                  onClick={() => handleQuickFilter(filter)}
-                  className={`px-3 py-1.5 text-xs rounded-full border transition-all duration-200 flex items-center space-x-1 ${
-                    isQuickFilterActive(filter)
-                      ? 'bg-primary-100 text-primary-700 border-primary-300'
-                      : 'bg-gray-100 hover:bg-primary-50 hover:text-primary-700 text-gray-600 border-gray-200 hover:border-primary-200'
-                  }`}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 * index }}
-                >
-                  <span>{filter.label}</span>
-                </motion.button>
-              ))}
-            </motion.div>
-          )}
+
 
           {/* Active Filters Summary */}
           {activeFilterCount > 0 && !isFilterOpen && (

@@ -261,7 +261,7 @@ export default function VendorMenuPage() {
   }
 
   // Group menu items by category
-  const categories = [...new Set(menuItems.map(item => item.category).filter(Boolean))]
+  const categories = Array.from(new Set(menuItems.map(item => item.category).filter(Boolean)))
   const activeItems = menuItems.filter(item => item.isActive && item.price > 0)
   const groupedItems = categories.reduce((acc, category) => {
     acc[category] = menuItems.filter(item => item.category === category)

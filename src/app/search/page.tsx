@@ -529,7 +529,7 @@ export default function SearchPage() {
         } bg-white border-l border-gray-200 overflow-hidden transition-all duration-300 z-10`}>
           <div className="h-full overflow-y-auto">
             {salons.length > 0 ? (
-              <div className="p-4 space-y-4">
+              <div className="p-3 space-y-3">
                 {salons.map((salon) => (
                   <motion.div
                     key={salon.id}
@@ -538,16 +538,80 @@ export default function SearchPage() {
                     className={`cursor-pointer ${
                       selectedSalon?.id === salon.id ? 'ring-2 ring-primary-500 rounded-lg' : ''
                     }`}
-                    onClick={() => handleSalonClick(salon)}
+                    onClick={() => {
+                      // Navigate to vendor page when clicking salon box
+                      window.location.href = `/salon/${salon.slug}`
+                    }}
                   >
-                    <SalonCard
-                      salon={salon}
-                      onClick={() => handleSalonClick(salon)}
-                      onDirections={() => getDirections(salon)}
-                      onContact={() => callSalon(salon)}
-                      showActionButtons={true}
-                      showDistance={true}
-                    />
+                    {/* Smaller, more compact card layout - Made even smaller */}
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-2 hover:shadow-md transition-all duration-200">
+                      <div className="flex space-x-2">
+                        {/* Smaller salon image */}
+                        <div className="flex-shrink-0">
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-200">
+                            {salon.image ? (
+                              <img
+                                src={salon.image}
+                                alt={salon.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-primary-100">
+                                <span className="text-primary-600 font-semibold text-lg">
+                                  {salon.name.charAt(0)}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Compact salon information */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between mb-1">
+                            <h3 className="font-semibold text-sm text-gray-900 truncate">
+                              {salon.name}
+                            </h3>
+                            {salon.is_verified && (
+                              <div className="flex items-center ml-2">
+                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="flex items-center text-gray-600 text-xs mb-1">
+                            <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
+                            <span className="truncate">{salon.city}, {salon.state}</span>
+                          </div>
+
+                          {salon.average_rating && (
+                            <div className="flex items-center mb-1">
+                              <Star className="w-3 h-3 text-yellow-400 fill-current mr-1" />
+                              <span className="text-xs text-gray-600">
+                                {salon.average_rating.toFixed(1)} ({salon.review_count})
+                              </span>
+                            </div>
+                          )}
+
+                          <div className="text-xs text-primary-600 font-medium">
+                            From ${salon.price_from || 25} 
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Compact action button - Changed from Contact & Directions to Learn More */}
+                      <div className="mt-2">
+                        <motion.button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            window.location.href = `/salon/${salon.slug}`
+                          }}
+                          className="w-full bg-primary-500 text-white px-2 py-1 rounded-md text-xs font-medium flex items-center justify-center space-x-1"
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <span>Learn More</span>
+                        </motion.button>
+                      </div>
+                    </div>
                   </motion.div>
                 ))}
               </div>

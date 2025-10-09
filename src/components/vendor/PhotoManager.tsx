@@ -92,11 +92,12 @@ export const PhotoManager = ({
       const newPhotos = [...photos, ...uploadedPhotos]
       
       // If this is the first photo, make it primary
-      if (photos.length === 0 && uploadedPhotos.length > 0) {
-        uploadedPhotos[0].isPrimary = true
-      }
+      const photosWithPrimary = newPhotos.map((photo, index) => ({
+        ...photo,
+        isPrimary: photos.length === 0 && index === 0
+      }))
 
-      onPhotosChange(newPhotos)
+      onPhotosChange(photosWithPrimary)
     } catch (error) {
       console.error('Upload error:', error)
       alert(`Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`)

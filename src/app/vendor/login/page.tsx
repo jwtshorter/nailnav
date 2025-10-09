@@ -52,7 +52,53 @@ export default function VendorLoginPage() {
     try {
       console.log('Attempting login for:', formData.email)
       
-      // Sign in with Supabase
+      // Demo mode: Check if this is a demo environment
+      const isDemoMode = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder') || 
+                         !process.env.NEXT_PUBLIC_SUPABASE_URL || 
+                         process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co'
+      
+      if (isDemoMode) {
+        // Demo login - accept any email/password combination for demonstration
+        console.log('Demo mode detected - allowing demo login')
+        
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
+        // Create a mock user session for demo
+        const mockUser = {
+          id: 'demo-user-' + Date.now(),
+          email: formData.email,
+          user_metadata: {
+            full_name: formData.email.split('@')[0]
+          }
+        }
+        
+        // Store demo session in localStorage
+        localStorage.setItem('demo_user_session', JSON.stringify({
+          user: mockUser,
+          expires_at: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
+          access_token: 'demo_token_' + Date.now()
+        }))
+        
+        // Check if this is admin login
+        const isAdmin = formData.email.toLowerCase().includes('admin') || 
+                       formData.email.toLowerCase().includes('support')
+        
+        if (isAdmin) {
+          setSuccessMessage('Demo Admin login successful! Redirecting...')
+          setTimeout(() => {
+            window.location.href = '/admin/dashboard'
+          }, 1500)
+        } else {
+          setSuccessMessage('Demo login successful! Redirecting...')
+          setTimeout(() => {
+            window.location.href = '/vendor/dashboard'
+          }, 1500)
+        }
+        return
+      }
+      
+      // Real Supabase authentication (when proper credentials are configured)
       const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
@@ -195,6 +241,16 @@ export default function VendorLoginPage() {
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Vendor Login</h1>
               <p className="text-gray-600">Access your salon dashboard</p>
+              
+              {/* Demo Mode Notice */}
+              {(process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder') || 
+                !process.env.NEXT_PUBLIC_SUPABASE_URL || 
+                process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co') && (
+                <div className="mt-4 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
+                  <strong>🎯 Demo Mode:</strong> Use any email and password to test the platform.<br />
+                  Try <strong>admin@demo.com</strong> for admin access or <strong>vendor@demo.com</strong> for vendor access.
+                </div>
+              )}
             </div>
 
             {successMessage && (

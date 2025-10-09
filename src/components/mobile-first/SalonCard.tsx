@@ -298,14 +298,15 @@ export const SalonCard = ({
           <motion.button
             onClick={(e) => {
               e.stopPropagation()
-              onContact?.()
+              // Navigate to salon detail page
+              window.location.href = `/salon/${salon.slug}`
             }}
             className="flex-1 bg-accent-500 text-white px-4 py-3 rounded-lg text-sm font-medium flex items-center justify-center space-x-2"
             style={{ minHeight: '44px', minWidth: '44px' }}
             whileTap={{ scale: 0.95 }}
           >
             <Mail className="w-4 h-4" />
-            <span>Contact</span>
+            <span>Learn More</span>
           </motion.button>
         </div>
       )}

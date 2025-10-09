@@ -21,7 +21,7 @@ import {
   Heart,
   Wifi,
   Car,
-  Wheelchair,
+
   Coffee,
   Scissors,
   Baby,
@@ -166,6 +166,91 @@ export default function NewVendorDashboard() {
   }, [])
 
   const checkVendorAccess = async (retryCount = 0) => {
+    // Check for demo mode first
+    const isDemoMode = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder') || 
+                       !process.env.NEXT_PUBLIC_SUPABASE_URL || 
+                       process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co'
+    
+    if (isDemoMode) {
+      // Demo mode - check localStorage for demo session
+      const demoSession = localStorage.getItem('demo_user_session')
+      if (!demoSession) {
+        console.log('No demo session found, redirecting to login')
+        window.location.href = '/vendor/login'
+        return
+      }
+      
+      try {
+        const session = JSON.parse(demoSession)
+        if (session.expires_at < Date.now()) {
+          console.log('Demo session expired, redirecting to login')
+          localStorage.removeItem('demo_user_session')
+          window.location.href = '/vendor/login'
+          return
+        }
+        
+        // Check if user claimed a specific salon
+        const claimedSalonInfo = localStorage.getItem('claimingSpecificSalon')
+        let demoApplication
+        
+        if (claimedSalonInfo) {
+          try {
+            const salonInfo = JSON.parse(claimedSalonInfo)
+            // Create demo application based on claimed salon
+            demoApplication = {
+              id: 'claimed-' + salonInfo.id,
+              salon_name: salonInfo.name,
+              business_address: salonInfo.address,
+              city: salonInfo.city,
+              state: salonInfo.state,
+              country: 'USA',
+              postal_code: '12345',
+              owner_name: session.user.user_metadata?.full_name || session.user.email.split('@')[0],
+              phone: '(555) 123-4567',
+              email: session.user.email,
+              website: `https://${salonInfo.slug}.com`,
+              status: 'approved',
+              admin_notes: 'Claimed business application',
+              created_at: new Date().toISOString().split('T')[0]
+            }
+            console.log('Demo mode: Using claimed salon application for', salonInfo.name)
+          } catch (error) {
+            console.error('Error parsing claimed salon info:', error)
+          }
+        }
+        
+        // Fallback to generic demo if no claimed salon
+        if (!demoApplication) {
+          demoApplication = {
+            id: 'demo-app-1',
+            salon_name: 'Demo Nail Salon',
+            business_address: '123 Demo Street',
+            city: 'Demo City',
+            state: 'Demo State',
+            country: 'Demo Country',
+            postal_code: '12345',
+            owner_name: session.user.user_metadata?.full_name || session.user.email.split('@')[0],
+            phone: '(555) 123-4567',
+            email: session.user.email,
+            website: 'https://demo-nail-salon.com',
+            status: 'approved',
+            admin_notes: 'Demo application',
+            created_at: new Date().toISOString().split('T')[0]
+          }
+        }
+        
+        console.log('Demo mode: Using demo vendor application')
+        setApplication(demoApplication)
+        setLoading(false)
+        return
+      } catch (error) {
+        console.error('Error parsing demo session:', error)
+        window.location.href = '/vendor/login'
+        return
+      }
+    }
+    
+    // Real Supabase mode
     const { data: { session } } = await supabase.auth.getSession()
     
     if (!session) {
@@ -344,7 +429,7 @@ export default function NewVendorDashboard() {
     { key: 'lgbtqiFriendly', label: 'LGBTQI+ Friendly', icon: Heart, category: 'Atmosphere' },
     { key: 'freeWifi', label: 'Free Wi-Fi', icon: Wifi, category: 'Amenities' },
     { key: 'parkingAvailable', label: 'Parking Available', icon: Car, category: 'Amenities' },
-    { key: 'wheelchairAccessible', label: 'Wheelchair Accessible', icon: Wheelchair, category: 'Amenities' },
+    { key: 'wheelchairAccessible', label: 'Wheelchair Accessible', icon: Users, category: 'Amenities' },
     { key: 'complimentaryBeverage', label: 'Complimentary Beverage', icon: Coffee, category: 'Amenities' },
     { key: 'heatedMassageChairs', label: 'Heated Massage Chairs', icon: Sparkles, category: 'Equipment' },
     { key: 'footSpas', label: 'Foot Spas', icon: Sparkles, category: 'Equipment' },
@@ -358,10 +443,10 @@ export default function NewVendorDashboard() {
     { key: 'openLate', label: 'Open Late', icon: Clock, category: 'Hours' },
     { key: 'openSunday', label: 'Open Sunday', icon: Calendar, category: 'Hours' },
     { key: 'openSaturday', label: 'Open Saturday', icon: Calendar, category: 'Hours' },
-    { key: 'mobileNails', label: 'Mobile Nails', icon: Car, category: 'Service Type' },
     { key: 'walkInsWelcome', label: 'Walk-Ins Welcome', icon: Users, category: 'Booking' },
     { key: 'appointmentOnly', label: 'Appointment Only', icon: Calendar, category: 'Booking' },
     { key: 'groupBookings', label: 'Group Bookings', icon: Users, category: 'Booking' },
+    { key: 'mobileNails', label: 'Mobile Nails', icon: Car, category: 'Booking' },
     { key: 'flexibleCancellation', label: 'Flexible Cancellation', icon: CheckCircle, category: 'Policies' },
     { key: 'fixedPricing', label: 'Fixed Pricing', icon: DollarSign, category: 'Policies' },
     { key: 'depositRequired', label: 'Deposit Required', icon: CreditCard, category: 'Policies' },
@@ -479,7 +564,54 @@ export default function NewVendorDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Main Site Navigation Header */}
+      <nav className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <a 
+                href="/"
+                className="flex items-center space-x-3"
+              >
+                <img 
+                  src="https://page.gensparksite.com/v1/base64_upload/1f1454bd566330cbbeffb5137b348d57"
+                  alt="NailNav Logo"
+                  className="h-8 w-auto"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    const target = e.target as HTMLImageElement
+                    target.style.display = 'none'
+                    target.nextElementSibling!.textContent = 'Nail Nav'
+                  }}
+                />
+                <span className="text-xl font-bold text-gray-900 hidden">Nail Nav</span>
+              </a>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
+              <a href="/search" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+                Search
+              </a>
+              <a href="/blog" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+                Blog
+              </a>
+              <a href="/about" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+                About
+              </a>
+              <a href="/contact" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+                Contact
+              </a>
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <span>Vendor Portal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Vendor Dashboard Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
@@ -491,13 +623,6 @@ export default function NewVendorDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <a
-                href="/vendor/menu"
-                className="inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-              >
-                <Scissors className="w-4 h-4" />
-                <span>Manage Menu</span>
-              </a>
               <a
                 href="/vendor/billing"
                 className="inline-flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
@@ -511,7 +636,7 @@ export default function NewVendorDashboard() {
                 className="inline-flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
-                <span>{saving ? 'Saving...' : 'Save All Changes'}</span>
+                <span>{saving ? 'Saving...' : 'Save Changes'}</span>
               </button>
               <button
                 onClick={handleSignOut}
@@ -550,6 +675,18 @@ export default function NewVendorDashboard() {
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
               <div className="space-y-4">
+                {(application as any).is_claimed && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                    <div className="flex items-center">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                      <div>
+                        <p className="text-sm font-medium text-green-800">Claimed Business</p>
+                        <p className="text-xs text-green-600">You are managing an existing listing. Changes you make here will update the live page.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex items-center space-x-3">
                   <Store className="w-5 h-5 text-gray-400" />
                   <div>
@@ -603,17 +740,19 @@ export default function NewVendorDashboard() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-3">
                 <a
-                  href={`/salon/${application.salon_name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}
-                  target="_blank"
+                  href={`/salon/${(application as any).claimed_salon_slug || application.salon_name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}
                   className="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
                   <Eye className="w-4 h-4 mr-2" />
-                  View Public Page
+                  {(application as any).is_claimed ? 'View Live Page' : 'View Public Page'}
                 </a>
-                <button className="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <a
+                  href="/vendor/billing"
+                  className="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                >
                   <Crown className="w-4 h-4 mr-2" />
                   Upgrade to Featured
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -672,7 +811,7 @@ export default function NewVendorDashboard() {
                         ...prev,
                         hours: {
                           ...prev.hours,
-                          [day]: { ...prev.hours[day], open: e.target.value }
+                          [day]: { ...prev.hours[day as keyof typeof prev.hours], open: e.target.value }
                         }
                       }))}
                       className="px-2 py-1 border border-gray-300 rounded text-sm"
@@ -685,7 +824,7 @@ export default function NewVendorDashboard() {
                         ...prev,
                         hours: {
                           ...prev.hours,
-                          [day]: { ...prev.hours[day], close: e.target.value }
+                          [day]: { ...prev.hours[day as keyof typeof prev.hours], close: e.target.value }
                         }
                       }))}
                       className="px-2 py-1 border border-gray-300 rounded text-sm"

@@ -4,7 +4,7 @@ import Navigation from '@/components/mobile-first/Navigation'
 import Footer from '@/components/mobile-first/Footer'
 import { motion } from 'framer-motion'
 import { Store, ArrowLeft, CheckCircle, Eye, EyeOff } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export default function VendorRegisterPage() {
@@ -27,6 +27,38 @@ export default function VendorRegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [successMessage, setSuccessMessage] = useState('')
+  const [isClaiming, setIsClaiming] = useState(false)
+  const [claimingSalonInfo, setClaimingSalonInfo] = useState<any>(null)
+
+  useEffect(() => {
+    // Check if this is a claim registration
+    const urlParams = new URLSearchParams(window.location.search)
+    const isClaimingMode = urlParams.get('claiming') === 'true'
+    
+    if (isClaimingMode) {
+      setIsClaiming(true)
+      
+      // Get the salon info from localStorage
+      const storedSalonInfo = localStorage.getItem('claimingSpecificSalon')
+      if (storedSalonInfo) {
+        try {
+          const salonInfo = JSON.parse(storedSalonInfo)
+          setClaimingSalonInfo(salonInfo)
+          
+          // Pre-populate form with salon info
+          setFormData(prev => ({
+            ...prev,
+            salonName: salonInfo.name || '',
+            address: salonInfo.address || '',
+            city: salonInfo.city || '',
+            state: salonInfo.state || ''
+          }))
+        } catch (error) {
+          console.error('Error parsing claiming salon info:', error)
+        }
+      }
+    }
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value, type } = e.target
@@ -301,10 +333,26 @@ You'll be redirected to your dashboard in a few seconds...`)
             <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Store className="w-10 h-10 text-primary-600" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">List Your Nail Salon</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              {isClaiming ? `Claim ${claimingSalonInfo?.name || 'Your Business'}` : 'List Your Nail Salon'}
+            </h1>
             <p className="text-lg text-gray-600 max-w-lg mx-auto">
-              Create your vendor account and submit your salon for listing. Update details and photos before going live!
+              {isClaiming 
+                ? 'Complete your business claim by creating your vendor account. Some information has been pre-filled from the listing.'
+                : 'Create your vendor account and submit your salon for listing. Update details and photos before going live!'
+              }
             </p>
+            
+            {isClaiming && claimingSalonInfo && (
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg max-w-lg mx-auto">
+                <p className="text-sm text-blue-800">
+                  <strong>Claiming:</strong> {claimingSalonInfo.name}
+                </p>
+                <p className="text-xs text-blue-600 mt-1">
+                  {claimingSalonInfo.address}, {claimingSalonInfo.city}, {claimingSalonInfo.state}
+                </p>
+              </div>
+            )}
           </motion.div>
 
           {/* Benefits */}

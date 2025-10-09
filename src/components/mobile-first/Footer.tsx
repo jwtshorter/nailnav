@@ -24,12 +24,6 @@ const Footer = () => {
           {/* Right side - Links */}
           <div className="flex items-center space-x-6">
             <a 
-              href="/blog" 
-              className="hover:text-primary-600 transition-colors"
-            >
-              Blog
-            </a>
-            <a 
               href="/help" 
               className="hover:text-primary-600 transition-colors"
             >

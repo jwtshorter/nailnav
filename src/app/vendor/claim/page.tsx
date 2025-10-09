@@ -21,9 +21,22 @@ export default function VendorClaimPage() {
   const [allListings, setAllListings] = useState<ExistingListing[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedListing, setSelectedListing] = useState<string | null>(null)
+  const [claimingSalon, setClaimingSalon] = useState<any>(null)
 
   useEffect(() => {
     loadAllListings()
+    
+    // Check if user came from a specific salon page
+    const storedSalon = localStorage.getItem('claimingSalon')
+    if (storedSalon) {
+      try {
+        const salonInfo = JSON.parse(storedSalon)
+        setClaimingSalon(salonInfo)
+        setUserAddress(`${salonInfo.name}, ${salonInfo.address}, ${salonInfo.city}, ${salonInfo.state}`)
+      } catch (error) {
+        console.error('Error parsing stored salon info:', error)
+      }
+    }
   }, [])
 
   const loadAllListings = async () => {
@@ -114,13 +127,61 @@ export default function VendorClaimPage() {
             </p>
           </motion.div>
 
+          {/* Direct Claim Section (when coming from salon page) */}
+          {claimingSalon && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8"
+            >
+              <h2 className="text-xl font-semibold text-blue-900 mb-4">
+                Claim "{claimingSalon.name}"
+              </h2>
+              
+              <div className="bg-white rounded-lg p-4 mb-4">
+                <h3 className="font-medium text-gray-900 mb-2">{claimingSalon.name}</h3>
+                <p className="text-sm text-gray-600">
+                  {claimingSalon.address}, {claimingSalon.city}, {claimingSalon.state}
+                </p>
+              </div>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    // Store claim info and redirect to vendor registration
+                    localStorage.setItem('claimingSpecificSalon', JSON.stringify(claimingSalon))
+                    localStorage.removeItem('claimingSalon') // Clean up
+                    window.location.href = '/vendor/register?claiming=true'
+                  }}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 flex items-center space-x-2"
+                >
+                  <CheckCircle className="w-5 h-5" />
+                  <span>Yes, This is My Business</span>
+                </button>
+                
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('claimingSalon')
+                    setClaimingSalon(null)
+                    setUserAddress('')
+                  }}
+                  className="px-6 py-3 bg-gray-500 text-white rounded-lg font-medium hover:bg-gray-600"
+                >
+                  Search for Different Business
+                </button>
+              </div>
+            </motion.div>
+          )}
+
           {/* Search Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white rounded-lg shadow-lg p-6 mb-8"
-          >
+          {!claimingSalon && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white rounded-lg shadow-lg p-6 mb-8"
+            >
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
               Search for Your Business
             </h2>
@@ -183,6 +244,7 @@ export default function VendorClaimPage() {
               </div>
             )}
           </motion.div>
+          )}
 
           {/* Browse All Listings */}
           <motion.div

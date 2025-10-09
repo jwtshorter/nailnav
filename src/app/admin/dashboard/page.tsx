@@ -17,7 +17,13 @@ import {
   Phone,
   MapPin,
   Calendar,
-  Trash2
+  Trash2,
+  BarChart3,
+  DollarSign,
+  MousePointer,
+  Crown,
+  Ban,
+  TrendingUp
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
@@ -46,12 +52,66 @@ export default function AdminDashboard() {
   const [adminNotes, setAdminNotes] = useState('')
   const [processing, setProcessing] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
+  const [activeTab, setActiveTab] = useState<'applications' | 'analytics'>('applications')
 
   useEffect(() => {
     checkAdminAccess()
   }, [])
 
   const checkAdminAccess = async () => {
+    // Check for demo mode first
+    const isDemoMode = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder') || 
+                       !process.env.NEXT_PUBLIC_SUPABASE_URL || 
+                       process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co'
+    
+    if (isDemoMode) {
+      // Demo mode - check localStorage for demo session
+      const demoSession = localStorage.getItem('demo_user_session')
+      if (!demoSession) {
+        console.log('No demo session found, redirecting to login')
+        window.location.href = '/vendor/login'
+        return
+      }
+      
+      try {
+        const session = JSON.parse(demoSession)
+        if (session.expires_at < Date.now()) {
+          console.log('Demo session expired, redirecting to login')
+          localStorage.removeItem('demo_user_session')
+          window.location.href = '/vendor/login'
+          return
+        }
+        
+        // Check if this is an admin user (demo)
+        const isAdmin = session.user.email.toLowerCase().includes('admin') || 
+                       session.user.email.toLowerCase().includes('support')
+        
+        if (!isAdmin) {
+          console.log('Demo user not admin, redirecting to vendor dashboard')
+          window.location.href = '/vendor/dashboard'
+          return
+        }
+        
+        // Create demo current user for admin
+        const demoUser = {
+          ...session.user,
+          salon_name: 'Admin Panel',
+          status: 'approved',
+          role: 'admin'
+        }
+        
+        console.log('Demo mode: Admin access granted')
+        setCurrentUser(demoUser)
+        loadDemoApplications()
+        return
+      } catch (error) {
+        console.error('Error parsing demo session:', error)
+        window.location.href = '/vendor/login'
+        return
+      }
+    }
+    
+    // Real Supabase mode
     const { data: { session } } = await supabase.auth.getSession()
     
     if (!session) {
@@ -155,8 +215,78 @@ export default function AdminDashboard() {
     }
   }
 
+  const loadDemoApplications = () => {
+    // Create some demo vendor applications for the admin to manage
+    const demoApplications = [
+      {
+        id: 'demo-app-1',
+        salon_name: 'Bella Nails Studio',
+        business_address: '123 Fashion Ave',
+        city: 'New York',
+        state: 'NY',
+        country: 'USA',
+        postal_code: '10001',
+        owner_name: 'Maria Garcia',
+        phone: '(555) 123-4567',
+        email: 'maria@bellanails.com',
+        website: 'https://bellanails.com',
+        status: 'pending' as const,
+        admin_notes: '',
+        created_at: '2024-01-15',
+        updated_at: '2024-01-15'
+      },
+      {
+        id: 'demo-app-2',
+        salon_name: 'Luxe Nail Bar',
+        business_address: '456 Trendy St',
+        city: 'Los Angeles',
+        state: 'CA',
+        country: 'USA',
+        postal_code: '90210',
+        owner_name: 'Sarah Chen',
+        phone: '(555) 987-6543',
+        email: 'sarah@luxenailbar.com',
+        website: 'https://luxenailbar.com',
+        status: 'approved' as const,
+        admin_notes: 'Great application with complete documentation.',
+        created_at: '2024-01-10',
+        updated_at: '2024-01-12'
+      },
+      {
+        id: 'demo-app-3',
+        salon_name: 'Nail Art Express',
+        business_address: '789 Creative Blvd',
+        city: 'Miami',
+        state: 'FL',
+        country: 'USA',
+        postal_code: '33101',
+        owner_name: 'Jessica Rodriguez',
+        phone: '(555) 456-7890',
+        email: 'jessica@nailartexpress.com',
+        website: 'https://nailartexpress.com',
+        status: 'rejected' as const,
+        admin_notes: 'Application needs more documentation.',
+        created_at: '2024-01-08',
+        updated_at: '2024-01-09'
+      }
+    ]
+    
+    setApplications(demoApplications)
+    setLoading(false)
+  }
+
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
+    // Check if demo mode
+    const isDemoMode = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder') || 
+                       !process.env.NEXT_PUBLIC_SUPABASE_URL || 
+                       process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co'
+    
+    if (isDemoMode) {
+      localStorage.removeItem('demo_user_session')
+    } else {
+      await supabase.auth.signOut()
+    }
+    
     window.location.href = '/vendor/login'
   }
 
@@ -289,8 +419,41 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Applications List */}
-        <div className="bg-white rounded-lg shadow">
+        {/* Navigation Tabs */}
+        <div className="mb-8">
+          <nav className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('applications')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'applications'
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <FileText className="w-5 h-5" />
+                <span>Vendor Applications</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'analytics'
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <BarChart3 className="w-5 h-5" />
+                <span>Vendor Analytics</span>
+              </div>
+            </button>
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'applications' && (
+          <div className="bg-white rounded-lg shadow">
           <div className="px-6 py-4 border-b border-gray-200">
             <h3 className="text-lg font-medium text-gray-900">Vendor Applications</h3>
           </div>
@@ -501,6 +664,205 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+        )}
+
+        {/* Vendor Analytics Tab */}
+        {activeTab === 'analytics' && (
+          <div className="space-y-6">
+            {/* Analytics Overview Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <Crown className="w-8 h-8 text-purple-600" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Featured Vendors</p>
+                    <p className="text-2xl font-semibold text-gray-900">12</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <DollarSign className="w-8 h-8 text-green-600" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
+                    <p className="text-2xl font-semibold text-gray-900">$2,450</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <Eye className="w-8 h-8 text-blue-600" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Total Views (90d)</p>
+                    <p className="text-2xl font-semibold text-gray-900">24,890</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex items-center">
+                  <MousePointer className="w-8 h-8 text-orange-600" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Bookings (90d)</p>
+                    <p className="text-2xl font-semibold text-gray-900">1,245</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Vendor Analytics Table */}
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-medium text-gray-900">Vendor Performance Analytics</h3>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Salon Name
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Featured Status
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Monthly Revenue
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Views (90d)
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Bookings (90d)
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Website Clicks (90d)
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {/* Demo Analytics Data */}
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">Luxe Nail Bar</div>
+                            <div className="text-sm text-gray-500">Los Angeles, CA</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                          <Crown className="w-3 h-3 mr-1" />
+                          Featured
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$450</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3,245</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">89</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">156</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button className="text-red-600 hover:text-red-900">
+                            <Ban className="w-4 h-4" title="Suspend Account" />
+                          </button>
+                          <a
+                            href="/salon/luxe-nail-bar"
+                            target="_blank"
+                            className="text-blue-600 hover:text-blue-900"
+                          >
+                            <Eye className="w-4 h-4" title="View Salon" />
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">Bella Nails Studio</div>
+                            <div className="text-sm text-gray-500">New York, NY</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          Standard
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,892</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">45</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">78</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button className="text-red-600 hover:text-red-900">
+                            <Ban className="w-4 h-4" title="Suspend Account" />
+                          </button>
+                          <a
+                            href="/salon/bella-nails-studio"
+                            target="_blank"
+                            className="text-blue-600 hover:text-blue-900"
+                          >
+                            <Eye className="w-4 h-4" title="View Salon" />
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">Nail Art Express</div>
+                            <div className="text-sm text-gray-500">Miami, FL</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                          <Crown className="w-3 h-3 mr-1" />
+                          Featured
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$280</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2,156</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">67</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">92</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
+                          <button 
+                            className="text-red-600 hover:text-red-900"
+                            onClick={() => {
+                              if (confirm('Are you sure you want to suspend this account? They will not be able to access their dashboard or receive new bookings.')) {
+                                alert('Account suspended successfully. The vendor will be notified via email.')
+                              }
+                            }}
+                          >
+                            <Ban className="w-4 h-4" title="Suspend Account" />
+                          </button>
+                          <a
+                            href="/salon/nail-art-express"
+                            target="_blank"
+                            className="text-blue-600 hover:text-blue-900"
+                          >
+                            <Eye className="w-4 h-4" title="View Salon" />
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
     </div>
   )
 }
