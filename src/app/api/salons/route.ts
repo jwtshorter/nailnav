@@ -9,21 +9,26 @@ export async function GET(request: NextRequest) {
       .select(`
         id,
         name,
-        slug,
-        city,
-        state,
         address,
+        phone,
         website,
-        specialties,
-        is_verified,
-        is_featured,
-        price_from,
-        currency,
         latitude,
-        longitude
+        longitude,
+        manicure,
+        pedicure,
+        gel_nails,
+        acrylic_nails,
+        nail_art,
+        cities (
+          id,
+          name,
+          states (
+            id,
+            name,
+            code
+          )
+        )
       `)
-      .eq('is_published', true)
-      .order('is_featured', { ascending: false })
       .order('name', { ascending: true })
       .limit(20)
 
