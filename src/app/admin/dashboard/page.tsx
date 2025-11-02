@@ -419,450 +419,213 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="mb-8">
-          <nav className="flex space-x-8">
-            <button
-              onClick={() => setActiveTab('applications')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'applications'
-                  ? 'border-primary-500 text-primary-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <div className="flex items-center space-x-2">
-                <FileText className="w-5 h-5" />
-                <span>Vendor Applications</span>
+        {/* Applications Table */}
+        <div className="bg-white shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <div className="sm:flex sm:items-center">
+              <div className="sm:flex-auto">
+                <h2 className="text-xl font-semibold text-gray-900">Vendor Applications</h2>
+                <p className="mt-2 text-sm text-gray-700">
+                  Review and manage vendor applications for the NailNav platform.
+                </p>
               </div>
-            </button>
-            <button
-              onClick={() => setActiveTab('analytics')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'analytics'
-                  ? 'border-primary-500 text-primary-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <div className="flex items-center space-x-2">
-                <BarChart3 className="w-5 h-5" />
-                <span>Vendor Analytics</span>
+            </div>
+            
+            <div className="mt-8 flow-root">
+              <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <table className="min-w-full divide-y divide-gray-300">
+                    <thead>
+                      <tr>
+                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                          Salon
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Owner
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Location
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Status
+                        </th>
+                        <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                          Applied
+                        </th>
+                        <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                          <span className="sr-only">Actions</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {applications.map((application) => (
+                        <tr key={application.id} className="hover:bg-gray-50">
+                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-0">
+                            <div className="flex items-center">
+                              <div>
+                                <div className="font-medium text-gray-900">{application.salon_name}</div>
+                                <div className="text-gray-500">{application.email}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <div>
+                              <div className="text-gray-900">{application.owner_name}</div>
+                              <div className="text-gray-500">{application.phone}</div>
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <div>
+                              <div className="text-gray-900">{application.city}, {application.state}</div>
+                              <div className="text-gray-500">{application.country}</div>
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {getStatusBadge(application.status)}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            {new Date(application.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <button
+                              onClick={() => setSelectedApplication(application)}
+                              className="text-primary-600 hover:text-primary-900"
+                            >
+                              Review
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </button>
-          </nav>
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === 'applications' && (
-          <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">Vendor Applications</h3>
-          </div>
-          
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Salon Details
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Contact
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Applied
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {applications.map((application) => (
-                  <tr key={application.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">{application.salon_name}</div>
-                        <div className="text-sm text-gray-500">{application.city}, {application.state}</div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm text-gray-900">{application.owner_name}</div>
-                        <div className="text-sm text-gray-500">{application.email}</div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(application.status)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(application.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => setSelectedApplication(application)}
-                        className="text-primary-600 hover:text-primary-900 flex items-center space-x-1"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>Review</span>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Application Review Modal */}
+      {/* Application Detail Modal */}
       {selectedApplication && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-medium text-gray-900">Review Application</h3>
-                <button
-                  onClick={() => {setSelectedApplication(null); setAdminNotes('')}}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <XCircle className="w-6 h-6" />
-                </button>
-              </div>
+        <div className="fixed inset-0 z-10 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen px-4 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 transition-opacity">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
 
-              <div className="space-y-6">
-                {/* Basic Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Salon Name</label>
-                    <p className="mt-1 text-sm text-gray-900">{selectedApplication.salon_name}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Owner Name</label>
-                    <p className="mt-1 text-sm text-gray-900">{selectedApplication.owner_name}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Email</label>
-                    <p className="mt-1 text-sm text-gray-900">{selectedApplication.email}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Phone</label>
-                    <p className="mt-1 text-sm text-gray-900">{selectedApplication.phone || 'Not provided'}</p>
-                  </div>
-                </div>
-
-                {/* Address */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Address</label>
-                  <p className="mt-1 text-sm text-gray-900">
-                    {selectedApplication.business_address}<br />
-                    {selectedApplication.city}, {selectedApplication.state} {selectedApplication.postal_code}<br />
-                    {selectedApplication.country}
-                  </p>
-                </div>
-
-                {/* Website */}
-                {selectedApplication.website && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Website</label>
-                    <a 
-                      href={selectedApplication.website} 
-                      target="_blank" 
-                      className="mt-1 text-sm text-primary-600 hover:underline"
-                    >
-                      {selectedApplication.website}
-                    </a>
-                  </div>
-                )}
-
-                {/* Current Status */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Current Status</label>
-                  <div className="mt-1">{getStatusBadge(selectedApplication.status)}</div>
-                </div>
-
-                {/* Admin Notes */}
-                {selectedApplication.admin_notes && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Previous Admin Notes</label>
-                    <p className="mt-1 text-sm text-gray-900 bg-gray-50 p-3 rounded">{selectedApplication.admin_notes}</p>
-                  </div>
-                )}
-
-                {/* New Admin Notes */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Admin Notes</label>
-                  <textarea
-                    value={adminNotes}
-                    onChange={(e) => setAdminNotes(e.target.value)}
-                    rows={3}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="Add notes about your decision..."
-                  />
-                </div>
-
-                {/* View Salon Post Link */}
-                <div className="flex justify-between items-center pt-4 border-t">
-                  <div className="flex space-x-3">
-                    <a
-                      href={`/salon/${selectedApplication.salon_name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"
-                    >
-                      <Eye className="w-4 h-4 mr-2" />
-                      View Salon Post
-                    </a>
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                      Review Application: {selectedApplication.salon_name}
+                    </h3>
                     
-                    <button
-                      onClick={() => deleteApplication(selectedApplication.id)}
-                      disabled={processing}
-                      className="inline-flex items-center px-4 py-2 bg-red-700 text-white text-sm font-medium rounded-lg hover:bg-red-800 disabled:opacity-50"
-                      title="Permanently delete this application"
-                    >
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      {processing ? 'Deleting...' : 'Delete'}
-                    </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Salon Name</label>
+                        <p className="mt-1 text-sm text-gray-900">{selectedApplication.salon_name}</p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Owner</label>
+                        <p className="mt-1 text-sm text-gray-900">{selectedApplication.owner_name}</p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <p className="mt-1 text-sm text-gray-900">{selectedApplication.email}</p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Phone</label>
+                        <p className="mt-1 text-sm text-gray-900">{selectedApplication.phone}</p>
+                      </div>
+                      
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700">Business Address</label>
+                        <p className="mt-1 text-sm text-gray-900">
+                          {selectedApplication.business_address}, {selectedApplication.city}, {selectedApplication.state} {selectedApplication.postal_code}, {selectedApplication.country}
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Website</label>
+                        <p className="mt-1 text-sm text-gray-900">{selectedApplication.website || 'Not provided'}</p>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Current Status</label>
+                        <div className="mt-1">{getStatusBadge(selectedApplication.status)}</div>
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <label htmlFor="adminNotes" className="block text-sm font-medium text-gray-700">
+                        Admin Notes
+                      </label>
+                      <textarea
+                        id="adminNotes"
+                        rows={3}
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                        placeholder="Enter notes about this application..."
+                        value={adminNotes}
+                        onChange={(e) => setAdminNotes(e.target.value)}
+                      />
+                      {selectedApplication.admin_notes && (
+                        <p className="mt-2 text-sm text-gray-600">
+                          Previous notes: {selectedApplication.admin_notes}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-
-                {/* Actions */}
-                <div className="flex justify-end space-x-3 pt-4">
-                  {selectedApplication.status !== 'approved' && (
-                    <button
-                      onClick={() => updateApplicationStatus(selectedApplication.id, 'approved', adminNotes)}
-                      disabled={processing}
-                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 disabled:opacity-50"
-                    >
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                      {processing ? 'Processing...' : 'Approve'}
-                    </button>
-                  )}
-                  
-                  {selectedApplication.status !== 'rejected' && (
-                    <button
-                      onClick={() => updateApplicationStatus(selectedApplication.id, 'rejected', adminNotes)}
-                      disabled={processing}
-                      className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 disabled:opacity-50"
-                    >
-                      <XCircle className="w-4 h-4 mr-2" />
-                      {processing ? 'Processing...' : 'Reject'}
-                    </button>
-                  )}
-                  
-                  <button
-                    onClick={() => {setSelectedApplication(null); setAdminNotes('')}}
-                    className="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700"
-                  >
-                    Cancel
-                  </button>
-                </div>
+              </div>
+              
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  disabled={processing}
+                  onClick={() => updateApplicationStatus(selectedApplication.id, 'approved', adminNotes)}
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                >
+                  {processing ? 'Processing...' : 'Approve'}
+                </button>
+                
+                <button
+                  type="button"
+                  disabled={processing}
+                  onClick={() => updateApplicationStatus(selectedApplication.id, 'rejected', adminNotes)}
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                >
+                  {processing ? 'Processing...' : 'Reject'}
+                </button>
+                
+                <button
+                  type="button"
+                  disabled={processing}
+                  onClick={() => deleteApplication(selectedApplication.id)}
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-50 text-base font-medium text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                >
+                  <Trash2 className="w-4 h-4 mr-1" />
+                  Delete
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedApplication(null)
+                    setAdminNotes('')
+                  }}
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:w-auto sm:text-sm"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
         </div>
       )}
-        )}
-
-        {/* Vendor Analytics Tab */}
-        {activeTab === 'analytics' && (
-          <div className="space-y-6">
-            {/* Analytics Overview Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <Crown className="w-8 h-8 text-purple-600" />
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Featured Vendors</p>
-                    <p className="text-2xl font-semibold text-gray-900">12</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <DollarSign className="w-8 h-8 text-green-600" />
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
-                    <p className="text-2xl font-semibold text-gray-900">$2,450</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <Eye className="w-8 h-8 text-blue-600" />
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Total Views (90d)</p>
-                    <p className="text-2xl font-semibold text-gray-900">24,890</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center">
-                  <MousePointer className="w-8 h-8 text-orange-600" />
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Bookings (90d)</p>
-                    <p className="text-2xl font-semibold text-gray-900">1,245</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Vendor Analytics Table */}
-            <div className="bg-white rounded-lg shadow">
-              <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-medium text-gray-900">Vendor Performance Analytics</h3>
-              </div>
-              
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Salon Name
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Featured Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Monthly Revenue
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Views (90d)
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Bookings (90d)
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Website Clicks (90d)
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {/* Demo Analytics Data */}
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">Luxe Nail Bar</div>
-                            <div className="text-sm text-gray-500">Los Angeles, CA</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                          <Crown className="w-3 h-3 mr-1" />
-                          Featured
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$450</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3,245</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">89</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">156</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button className="text-red-600 hover:text-red-900">
-                            <Ban className="w-4 h-4" title="Suspend Account" />
-                          </button>
-                          <a
-                            href="/salon/luxe-nail-bar"
-                            target="_blank"
-                            className="text-blue-600 hover:text-blue-900"
-                          >
-                            <Eye className="w-4 h-4" title="View Salon" />
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">Bella Nails Studio</div>
-                            <div className="text-sm text-gray-500">New York, NY</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                          Standard
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1,892</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">45</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">78</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button className="text-red-600 hover:text-red-900">
-                            <Ban className="w-4 h-4" title="Suspend Account" />
-                          </button>
-                          <a
-                            href="/salon/bella-nails-studio"
-                            target="_blank"
-                            className="text-blue-600 hover:text-blue-900"
-                          >
-                            <Eye className="w-4 h-4" title="View Salon" />
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">Nail Art Express</div>
-                            <div className="text-sm text-gray-500">Miami, FL</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                          <Crown className="w-3 h-3 mr-1" />
-                          Featured
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$280</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2,156</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">67</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">92</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button 
-                            className="text-red-600 hover:text-red-900"
-                            onClick={() => {
-                              if (confirm('Are you sure you want to suspend this account? They will not be able to access their dashboard or receive new bookings.')) {
-                                alert('Account suspended successfully. The vendor will be notified via email.')
-                              }
-                            }}
-                          >
-                            <Ban className="w-4 h-4" title="Suspend Account" />
-                          </button>
-                          <a
-                            href="/salon/nail-art-express"
-                            target="_blank"
-                            className="text-blue-600 hover:text-blue-900"
-                          >
-                            <Eye className="w-4 h-4" title="View Salon" />
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
     </div>
   )
 }
