@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const limit = parseInt(searchParams.get('limit') || '8')
 
-    // Fetch featured salons
+    // Fetch featured salons (top rated salons since is_featured isn't set yet)
     const { data: salons, error } = await supabase
       .from('salons')
       .select(`
@@ -34,10 +34,12 @@ export async function GET(request: NextRequest) {
         certified_technicians,
         experienced_staff,
         cover_image_url,
-        gallery_images
+        gallery_images,
+        state,
+        country,
+        postal_code
       `)
       .eq('is_published', true)
-      .eq('is_featured', true)
       .order('rating', { ascending: false })
       .order('name', { ascending: true })
       .limit(limit)

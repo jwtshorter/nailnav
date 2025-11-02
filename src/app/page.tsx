@@ -59,25 +59,34 @@ export default function HomePage() {
   }, [])
 
   const loadFeaturedSalons = async () => {
-    // Mock data for demo
-    const mockSalons: SalonWithDetails[] = [
-      {
-        id: '1',
-        name: 'Elegant Nails Spa',
-        slug: 'elegant-nails-spa',
-        address: '123 Main Street',
-        city: 'Los Angeles',
-        state: 'CA',
-        website: 'https://elegantnailsspa.com',
-        price_from: 35,
-        currency: 'USD',
-        specialties: ['Gel Manicures', 'Nail Art', 'Spa Pedicures'],
-        is_verified: true,
-        average_rating: 4.8,
-        review_count: 127
+    try {
+      const response = await fetch('/api/salons/featured?limit=12')
+      const data = await response.json()
+      
+      if (data.success && data.salons) {
+        setFeaturedSalons(data.salons.map((salon: any) => ({
+          id: salon.id.toString(),
+          name: salon.name,
+          slug: salon.slug,
+          address: salon.address,
+          city: salon.city,
+          state: salon.state || 'VIC',
+          website: salon.website,
+          price_from: salon.price_from || 35,
+          currency: salon.currency || 'AUD',
+          specialties: salon.specialties || [],
+          is_verified: salon.is_verified,
+          average_rating: salon.average_rating || salon.rating,
+          review_count: salon.review_count || 0
+        })))
+      } else {
+        console.error('Failed to load featured salons:', data)
+        setFeaturedSalons([])
       }
-    ]
-    setFeaturedSalons(mockSalons)
+    } catch (error) {
+      console.error('Error loading featured salons:', error)
+      setFeaturedSalons([])
+    }
   }
 
   const loadPopularSalons = async () => {
