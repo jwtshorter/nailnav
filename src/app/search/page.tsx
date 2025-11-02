@@ -194,8 +194,7 @@ export default function SearchPage() {
           maxZoom: 19,
         }).addTo(leafletMapRef.current)
 
-        // Add salon markers
-        addSalonMarkers(mockSalons)
+        // Salon markers will be added after search
       } catch (error) {
         console.error('Error initializing map:', error)
       }
@@ -364,26 +363,58 @@ export default function SearchPage() {
     }
   }
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     setLoading(true)
-    // Simulate search
-    setTimeout(() => {
-      const filteredSalons = mockSalons.filter(salon => {
-        const serviceMatch = serviceQuery === '' || 
-          salon.name.toLowerCase().includes(serviceQuery.toLowerCase()) ||
-          salon.specialties?.some(spec => spec.toLowerCase().includes(serviceQuery.toLowerCase()))
+    
+    try {
+      // Build API query
+      const params = new URLSearchParams()
+      if (locationQuery) params.append('city', locationQuery)
+      params.append('limit', '50')
+      
+      const response = await fetch(`/api/salons?${params.toString()}`)
+      const data = await response.json()
+      
+      if (data.success && data.salons) {
+        const transformedSalons = data.salons.map((salon: any) => ({
+          id: salon.id.toString(),
+          name: salon.name,
+          slug: salon.slug,
+          address: salon.address,
+          city: salon.city,
+          state: salon.state || 'VIC',
+          phone: salon.phone,
+          price_from: salon.price_from || 35,
+          currency: salon.currency || 'AUD',
+          specialties: salon.specialties || salon.services_offered || [],
+          is_verified: salon.is_verified,
+          average_rating: salon.average_rating || salon.rating,
+          review_count: salon.review_count || 0,
+          lat: salon.latitude || -37.8136,
+          lng: salon.longitude || 144.9631,
+          hours: 'Mon-Fri: 9AM-6PM',
+          image: salon.cover_image_url
+        }))
         
-        const locationMatch = locationQuery === '' ||
-          salon.city.toLowerCase().includes(locationQuery.toLowerCase()) ||
-          salon.address.toLowerCase().includes(locationQuery.toLowerCase()) ||
-          salon.state.toLowerCase().includes(locationQuery.toLowerCase())
+        // Filter by service if provided
+        const filtered = serviceQuery
+          ? transformedSalons.filter((salon: Salon) =>
+              salon.name.toLowerCase().includes(serviceQuery.toLowerCase()) ||
+              salon.specialties?.some(spec => spec.toLowerCase().includes(serviceQuery.toLowerCase()))
+            )
+          : transformedSalons
         
-        return serviceMatch && locationMatch
-      })
-      setSalons(filteredSalons)
-      addSalonMarkers(filteredSalons)
+        setSalons(filtered)
+        addSalonMarkers(filtered)
+      } else {
+        setSalons([])
+      }
+    } catch (error) {
+      console.error('Error searching salons:', error)
+      setSalons([])
+    } finally {
       setLoading(false)
-    }, 500)
+    }
   }
 
   const handleSalonClick = (salon: Salon) => {

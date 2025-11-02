@@ -87,56 +87,61 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
   const loadSalonDetails = async (slug: string) => {
     setLoading(true)
     
-    // First check localStorage for auto-created salons
-    const salonListings = JSON.parse(localStorage.getItem('salonListings') || '[]')
-    const autoCreatedSalon = salonListings.find((salon: any) => salon.slug === slug)
-    
-    if (autoCreatedSalon) {
-      // Convert auto-created salon to SalonDetails format
+    try {
+      // Fetch salon from API
+      const response = await fetch(`/api/salons/${slug}`)
+      const data = await response.json()
+      
+      if (!response.ok || !data.success) {
+        console.error('Salon not found')
+        setLoading(false)
+        return
+      }
+      
+      const salonData = data.salon
+      
+      // Convert API salon to SalonDetails format
       const convertedSalon: SalonDetails = {
-        id: autoCreatedSalon.id.toString(),
-        name: autoCreatedSalon.name,
-        slug: autoCreatedSalon.slug,
-        description: autoCreatedSalon.description,
-        address: autoCreatedSalon.address.street,
-        city: autoCreatedSalon.address.city,
-        state: autoCreatedSalon.address.state,
-        phone: '(555) 000-0000', // Default phone
-        email: autoCreatedSalon.contact.email,
-        website: `https://${autoCreatedSalon.slug}.com`,
-        price_range: 'mid-range',
-        price_from: 25,
-        currency: 'USD',
-        specialties: autoCreatedSalon.services || ['Manicure', 'Pedicure', 'Gel Polish'],
-        languages_spoken: ['en'],
-        is_verified: autoCreatedSalon.verified || true,
-        is_featured: false,
-        accepts_walk_ins: true,
-        parking_available: true,
-        operating_hours: {
-          monday: { open: '09:00', close: '19:00' },
-          tuesday: { open: '09:00', close: '19:00' },
-          wednesday: { open: '09:00', close: '19:00' },
-          thursday: { open: '09:00', close: '19:00' },
-          friday: { open: '09:00', close: '20:00' },
-          saturday: { open: '08:00', close: '20:00' },
-          sunday: { open: '10:00', close: '18:00' }
+        id: salonData.id.toString(),
+        name: salonData.name,
+        slug: salonData.slug,
+        description: salonData.description || 'Quality nail care services',
+        address: salonData.address,
+        city: salonData.city,
+        state: salonData.state || 'VIC',
+        phone: salonData.phone,
+        email: salonData.email,
+        website: salonData.website,
+        price_range: salonData.price_range || 'mid-range',
+        price_from: salonData.price_from || 35,
+        currency: salonData.currency || 'AUD',
+        specialties: salonData.specialties || [],
+        languages_spoken: salonData.languages_spoken || ['English'],
+        is_verified: salonData.is_verified || false,
+        is_featured: salonData.is_featured || false,
+        accepts_walk_ins: salonData.accepts_walk_ins || true,
+        parking_available: salonData.parking || false,
+        operating_hours: salonData.opening_hours || {
+          monday: { open: '09:00', close: '18:00' },
+          tuesday: { open: '09:00', close: '18:00' },
+          wednesday: { open: '09:00', close: '18:00' },
+          thursday: { open: '09:00', close: '18:00' },
+          friday: { open: '09:00', close: '18:00' },
+          saturday: { open: '09:00', close: '17:00' },
+          sunday: { open: '10:00', close: '16:00' }
         },
-        cover_image_url: autoCreatedSalon.images?.[0] || '/api/placeholder/600/400',
-        gallery_images: autoCreatedSalon.images || [
-          '/api/placeholder/600/400',
-          '/api/placeholder/600/400',
-          '/api/placeholder/600/400'
-        ],
-        latitude: 34.0522,
-        longitude: -118.2437,
-        average_rating: autoCreatedSalon.rating || 4.5,
-        review_count: autoCreatedSalon.reviewCount || 0,
-        services: [
+        logo_url: undefined,
+        cover_image_url: salonData.cover_image_url || '/api/placeholder/800/400',
+        gallery_images: salonData.gallery_images || ['/api/placeholder/600/400'],
+        latitude: salonData.latitude || -37.8136,
+        longitude: salonData.longitude || 144.9631,
+        average_rating: salonData.average_rating || salonData.rating || 4.5,
+        review_count: salonData.review_count || 0,
+        services: salonData.services || [
           {
             id: '1',
-            name: 'Classic Manicure',
-            description: 'Traditional nail care with cuticle treatment and polish',
+            name: 'Manicure',
+            description: 'Professional nail care service',
             price: 35,
             duration: 45,
             category: 'Manicures',
@@ -144,11 +149,11 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
           },
           {
             id: '2', 
-            name: 'Gel Manicure',
-            description: 'Long-lasting gel polish application',
+            name: 'Pedicure',
+            description: 'Complete foot and nail care',
             price: 45,
             duration: 60,
-            category: 'Manicures', 
+            category: 'Pedicures', 
             available: true
           },
           {
@@ -161,37 +166,16 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
             available: true
           }
         ],
-        reviews: autoCreatedSalon.reviewCount > 0 ? [] : [ // Start with no reviews for new salons
-          {
-            id: '1',
-            customerName: 'Welcome Customer',
-            rating: 5,
-            comment: `Just opened! Looking forward to trying ${autoCreatedSalon.name}. The salon looks great!`,
-            serviceType: 'New Listing',
-            date: autoCreatedSalon.createdAt?.split('T')[0] || new Date().toISOString().split('T')[0],
-            verified: false
-          }
-        ]
+        reviews: salonData.reviews || []
       }
       
       setSalon(convertedSalon)
+    } catch (error) {
+      console.error('Error loading salon:', error)
+    } finally {
       setLoading(false)
-      return
     }
-    
-    // Fallback to mock data based on the slug
-    const mockSalons: Record<string, SalonDetails> = {
-      'elegant-nails-spa': {
-        id: '1',
-        name: 'Elegant Nails Spa',
-        slug: 'elegant-nails-spa',
-        description: 'Full-service nail salon offering premium manicures, pedicures, and nail art in a relaxing spa environment. We pride ourselves on cleanliness, professionalism, and using only the highest quality products.',
-        address: '123 Main Street',
-        city: 'Los Angeles',
-        state: 'CA',
-        phone: '(555) 123-4567',
-        email: 'info@elegantnails.com',
-        website: 'https://elegantnails.com',
+  }
         price_range: 'mid-range',
         price_from: 35,
         currency: 'USD',

@@ -4,15 +4,10 @@ import { supabase } from '@/lib/supabase'
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
-    const featured = searchParams.get('featured') === 'true'
-    const city = searchParams.get('city')
-    const state = searchParams.get('state')
-    const verified = searchParams.get('verified') === 'true'
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const offset = parseInt(searchParams.get('offset') || '0')
-    
-    // Build query
-    let query = supabase
+    const limit = parseInt(searchParams.get('limit') || '8')
+
+    // Fetch featured salons
+    const { data: salons, error } = await supabase
       .from('salons')
       .select(`
         id,
@@ -26,10 +21,8 @@ export async function GET(request: NextRequest) {
         rating,
         is_verified,
         is_featured,
-        is_published,
         parking,
         accepts_walk_ins,
-        opening_hours,
         latitude,
         longitude,
         manicure,
@@ -41,52 +34,28 @@ export async function GET(request: NextRequest) {
         certified_technicians,
         experienced_staff,
         cover_image_url,
-        gallery_images,
-        created_at
-      `, { count: 'exact' })
+        gallery_images
+      `)
       .eq('is_published', true)
-    
-    // Apply filters
-    if (featured) {
-      query = query.eq('is_featured', true)
-    }
-    
-    if (city) {
-      query = query.ilike('city', `%${city}%`)
-    }
-    
-    if (state) {
-      query = query.ilike('state', `%${state}%`)
-    }
-    
-    if (verified) {
-      query = query.eq('is_verified', true)
-    }
-    
-    // Order and pagination
-    query = query
-      .order('is_featured', { ascending: false })
+      .eq('is_featured', true)
       .order('rating', { ascending: false })
       .order('name', { ascending: true })
-      .range(offset, offset + limit - 1)
-
-    const { data: salons, error, count } = await query
+      .limit(limit)
 
     if (error) {
       console.error('Supabase error:', error)
       return NextResponse.json(
-        { 
+        {
           error: 'Database query failed',
-          details: error.message 
+          details: error.message
         },
         { status: 500 }
       )
     }
 
-    // Transform data to include service arrays from boolean flags
+    // Transform salons
     const transformedSalons = (salons || []).map(salon => ({
       ...salon,
-      // Build services_offered array from boolean flags
       services_offered: [
         salon.manicure && 'Manicure',
         salon.pedicure && 'Pedicure',
@@ -94,33 +63,30 @@ export async function GET(request: NextRequest) {
         salon.acrylic_nails && 'Acrylic Nails',
         salon.nail_art && 'Nail Art'
       ].filter(Boolean),
-      // Build specialties array from boolean flags
       specialties: [
         salon.master_artist && 'Master Nail Artist',
         salon.certified_technicians && 'Certified Technicians',
         salon.experienced_staff && 'Experienced Team'
       ].filter(Boolean),
-      // Add default values
       currency: 'AUD',
       country: 'Australia',
+      state: 'VIC', // Will be updated from cities table
       languages_spoken: ['English'],
       price_range: 'mid-range',
+      price_from: 35,
       average_rating: salon.rating,
       review_count: 0
     }))
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       salons: transformedSalons,
-      count: count || 0,
-      total: count || 0,
-      limit,
-      offset,
+      count: transformedSalons.length,
       success: true
     })
   } catch (error) {
     console.error('API error:', error)
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         details: error instanceof Error ? error.message : 'Unknown error'
       },

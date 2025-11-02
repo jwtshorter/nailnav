@@ -60,13 +60,13 @@ export default function VendorClaimPage() {
 
     setLoading(true)
     try {
-      // Simple address matching - in real app you'd use geocoding
+      // Simple address matching
       const searchTerms = userAddress.toLowerCase()
       const filtered = allListings.filter(listing => 
         listing.address.toLowerCase().includes(searchTerms) ||
         listing.city.toLowerCase().includes(searchTerms) ||
-        listing.postal_code?.includes(searchTerms) ||
-        listing.business_name.toLowerCase().includes(searchTerms)
+        listing.postal_code?.toLowerCase().includes(searchTerms) ||
+        listing.name.toLowerCase().includes(searchTerms)
       )
       
       // Put exact matches first
@@ -85,10 +85,10 @@ export default function VendorClaimPage() {
     }
   }
 
-  const claimListing = async (listingId: string) => {
+  const claimListing = async (listingId: number) => {
     try {
-      // In real app, this would create a claim request for admin approval
-      setSelectedListing(listingId)
+      // Create a claim request for admin approval
+      setSelectedListing(listingId.toString())
       alert('Claim request submitted! You will be redirected to complete your business details.')
       
       // Redirect to vendor dashboard with claimed listing info

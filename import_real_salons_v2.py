@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""
+Import real nail salon data from Excel file to Supabase
+This script matches the actual database schema found in the project
+"""
+
+import pandas as pd
+import sys
+import os
+import json
+from dotenv import load_dotenv
+import re
+import unicodedata
+
+# Load environment variables
+load_dotenv('.env.local')
+
+# Get Supabase credentials
+SUPABASE_URL = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
+SUPABASE_SERVICE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+
+if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
+    print("❌ Error: Supabase credentials not found in .env.local")
+    sys.exit(1)
+
+from supabase import create_client, Client
+
+def slugify(text):
+    """Convert text to URL-friendly slug"""
+    if pd.isna(text):
+        return ""
+    text = str(text).lower()
+    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8')
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = re.sub(r'[-\s]+', '-', text).strip('-')
+    return text
+
+def clean_phone(phone):
+    """Clean and format phone number"""
+    if pd.isna(phone):
+        return None
+    phone = str(phone).strip()
+    if not phone or phone == 'nan':
+        return None
+    return phone
+
+def clean_website(website):
+    """Clean and format website URL"""
+    if pd.isna(website):
+        return None
+    website = str(website).strip()
+    if not website or website == 'nan':
+        return None
+    if not website.startswith('http'):
+        website = 'https://' + website
+    return website
+
+def parse_hours(hours_str, closed_on_str=None):
+    """Parse operating hours into JSON format"""
+    if pd.isna(hours_str):
+        return {
+            "monday": "9:00 AM - 6:00 PM",
+            "tuesday": "9:00 AM - 6:00 PM",
+            "wednesday": "9:00 AM - 6:00 PM",
+            "thursday": "9:00 AM - 6:00 PM",
+            "friday": "9:00 AM - 6:00 PM",
+            "saturday": "9:00 AM - 5:00 PM",
+            "sunday": "10:00 AM - 4:00 PM"
+        }
+    
+    # Simple default for now
+    return {
+        "monday": str(hours_str),
+        "tuesday": str(hours_str),
+        "wednesday": str(hours_str),
+        "thursday": str(hours_str),
+        "friday": str(hours_str),
+        "saturday": str(hours_str),
+        "sunday": "Closed" if closed_on_str and 'sunday' in str(closed_on_str).lower() else str(hours_str)
+    }
+
+def bool_value(value):
+    """Convert Excel value to boolean"""
+    if pd.isna(value):
+        return False
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value > 0
+    if isinstance(value, str):
+        return value.strip().lower() in ['yes', 'true', '1', 'x']
+    return False
+
+def main():
+    print("=" * 80)
+    print("🚀 NAIL SALON DATA IMPORT TOOL V2")
+    print("=" * 80)
+    
+    # Initialize Supabase client
+    print("\n📡 Connecting to Supabase...")
+    try:
+        supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+        print("✅ Connected to Supabase")
+    except Exception as e:
+        print(f"❌ Failed to connect to Supabase: {e}")
+        sys.exit(1)
+    
+    # Check current salon count
+    print("\n📊 Checking current database state...")
+    try:
+        current = supabase.table('salons').select('*', count='exact').execute()
+        current_count = current.count if hasattr(current, 'count') else len(current.data)
+        print(f"   Current salons in database: {current_count}")
+    except Exception as e:
+        print(f"   Warning: Could not count salons: {e}")
+        current_count = 0
+    
+    # Read Excel file
+    print("\n📂 Reading Excel file: Nail_Salons_Aus_250.xlsx")
+    try:
+        df = pd.read_excel('Nail_Salons_Aus_250.xlsx', sheet_name=0)
+        print(f"✅ Loaded {len(df)} rows from Excel")
+    except Exception as e:
+        print(f"❌ Failed to read Excel file: {e}")
+        sys.exit(1)
+    
+    # Ask user confirmation before deletion
+    if current_count > 0:
+        print(f"\n⚠️  WARNING: This will delete {current_count} existing salons!")
+        response = input("   Do you want to continue? (yes/no): ")
+        if response.lower() != 'yes':
+            print("❌ Import cancelled by user")
+            sys.exit(0)
+    
+    # Delete existing salon data
+    print("\n🗑️  Deleting existing fake salon data...")
+    try:
+        result = supabase.table('salons').delete().neq('id', 0).execute()
+        print(f"✅ Deleted existing salon data")
+    except Exception as e:
+        print(f"⚠️  Warning: Could not delete existing data: {e}")
+        print("   Continuing anyway...")
+    
+    # Process and import salons
+    print(f"\n📥 Importing {len(df)} salons...")
+    success_count = 0
+    error_count = 0
+    errors = []
+    
+    for idx, row in df.iterrows():
+        try:
+            # Extract basic information
+            name = str(row['name']) if not pd.isna(row['name']) else f"Salon {idx+1}"
+            
+            # Create unique slug
+            base_slug = slugify(name)
+            slug = f"{base_slug}-{idx+1}"
+            
+            # Parse address components
+            address = str(row['address']) if not pd.isna(row['address']) else ""
+            city = str(row['City']) if not pd.isna(row['City']) else ""
+            
+            # Description
+            description = str(row['Description']) if 'Description' in row and not pd.isna(row['Description']) else ""
+            if not description:
+                description = str(row['description']) if not pd.isna(row['description']) else ""
+            
+            # Detailed description from review summary
+            detailed_desc = str(row['Reveiw summarry']) if 'Reveiw summarry' in row and not pd.isna(row['Reveiw summarry']) else description
+            
+            # Rating
+            rating = float(row['rating']) if not pd.isna(row['rating']) else 4.5
+            
+            # Create salon object matching the actual schema
+            salon_data = {
+                'name': name,
+                'slug': slug,
+                'address': address,
+                'city_id': 1,  # Default city ID - you may need to adjust this
+                'phone': clean_phone(row['phone']) if 'phone' in row else None,
+                'website': clean_website(row['website']) if 'website' in row else None,
+                'latitude': None,  # Will need geocoding
+                'longitude': None,  # Will need geocoding
+                'description': description[:500] if description else None,
+                'detailed_description': detailed_desc if detailed_desc else None,
+                'rating': rating,
+                'opening_hours': parse_hours(
+                    row['workday_timing'] if 'workday_timing' in row else None,
+                    row['closed_on'] if 'closed_on' in row else None
+                ),
+                
+                # Amenities
+                'kid_friendly': bool_value(row.get('Kid friendly')),
+                'parking': bool_value(row.get('Parking')),
+                'wheelchair_accessible': bool_value(row.get('Wheel chair accessable')),
+                'accepts_walk_ins': bool_value(row.get('Walk-ins Welcome')),
+                'appointment_only': bool_value(row.get('Appointment Required')),
+                'credit_cards_accepted': True,  # Default
+                'cash_only': False,
+                'gift_cards_available': False,
+                'loyalty_program': False,
+                'online_booking': bool_value(row.get('Appointment Required')),
+                
+                # Services
+                'manicure': bool_value(row.get('Gel Manicure')),
+                'pedicure': bool_value(row.get('Pedicure')) or bool_value(row.get('Gel Pedicure')),
+                'gel_nails': bool_value(row.get('Gel Manicure')) or bool_value(row.get('Gel X')),
+                'acrylic_nails': bool_value(row.get('Acrylic Nails')),
+                'nail_art': bool_value(row.get('Nail Art')),
+                'dip_powder': bool_value(row.get('Dip Powder')),
+                'shellac': bool_value(row.get('Gel Manicure')),
+                'nail_extensions': bool_value(row.get('Gel Extensions')),
+                'nail_repair': bool_value(row.get('Hand and Foot Treatment')),
+                'cuticle_care': True,  # Default for all salons
+                
+                # Features
+                'master_artist': bool_value(row.get('Master Nail Artist')),
+                'certified_technicians': bool_value(row.get('Qualified technicians')),
+                'experienced_staff': bool_value(row.get('Experienced Team')),
+                'luxury_experience': 'luxury' in description.lower() or 'spa' in description.lower(),
+                'relaxing_atmosphere': 'relax' in description.lower() or bool_value(row.get('Massage')),
+                'modern_facilities': bool_value(row.get('LED curing')),
+                'clean_hygienic': bool_value(row.get('Autoclave sterlisation')),
+                'friendly_service': True,  # Default
+                'quick_service': bool_value(row.get('Quick Service')),
+                'premium_products': bool_value(row.get('Eco-friendly products')) or bool_value(row.get('Non-toxic treatments')),
+                
+                # Publication status
+                'is_published': True,
+                'is_verified': False,
+                'is_featured': False,
+            }
+            
+            # Insert salon
+            result = supabase.table('salons').insert(salon_data).execute()
+            
+            if result.data:
+                success_count += 1
+                if success_count % 25 == 0:
+                    print(f"  ✅ Imported {success_count} salons...")
+            else:
+                error_count += 1
+                errors.append(f"{name}: No data returned")
+                
+        except Exception as e:
+            error_count += 1
+            error_msg = f"Salon {idx+1} ({name if 'name' in locals() else 'unknown'}): {str(e)[:100]}"
+            errors.append(error_msg)
+            if error_count <= 5:  # Only print first 5 errors
+                print(f"  ❌ Error: {error_msg}")
+            continue
+    
+    # Final summary
+    print("\n" + "=" * 80)
+    print("📊 IMPORT SUMMARY")
+    print("=" * 80)
+    print(f"✅ Successfully imported: {success_count} salons")
+    print(f"❌ Failed to import: {error_count} salons")
+    print(f"📝 Total processed: {len(df)} salons")
+    
+    if errors and error_count > 5:
+        print(f"\n⚠️  Showing first 5 errors (total: {len(errors)})")
+    
+    print("=" * 80)
+    
+    if success_count > 0:
+        print("\n🎉 Import complete!")
+        print("\n📋 Next steps:")
+        print("   1. Visit your Supabase dashboard to verify the data")
+        print("   2. Update city_id values if you have a cities table")
+        print("   3. Add latitude/longitude using a geocoding service")
+        print("   4. Upload salon photos to gallery_images")
+    else:
+        print("\n❌ Import failed. Please check the errors above.")
+
+if __name__ == "__main__":
+    main()

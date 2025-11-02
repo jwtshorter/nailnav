@@ -81,54 +81,78 @@ export default function HomePage() {
   }
 
   const loadPopularSalons = async () => {
-    // Mock data for demo
-    const mockSalons: SalonWithDetails[] = [
-      {
-        id: '2',
-        name: 'Luxe Nail Lounge',
-        slug: 'luxe-nail-lounge',
-        address: '456 Beverly Drive',
-        city: 'Beverly Hills',
-        state: 'CA',
-        website: 'https://luxenaillounge.com',
-        price_from: 65,
-        currency: 'USD',
-        specialties: ['Premium Gel Services', 'Luxury Treatments'],
-        is_verified: true,
-        average_rating: 4.9,
-        review_count: 89
+    try {
+      const response = await fetch('/api/salons?limit=10&verified=true')
+      const data = await response.json()
+      
+      if (data.success && data.salons) {
+        // Sort by rating and take top 10
+        const sorted = data.salons
+          .sort((a: any, b: any) => (b.rating || 0) - (a.rating || 0))
+          .slice(0, 10)
+        
+        setPopularSalons(sorted.map((salon: any) => ({
+          id: salon.id.toString(),
+          name: salon.name,
+          slug: salon.slug,
+          address: salon.address,
+          city: salon.city,
+          state: salon.state || 'VIC',
+          website: salon.website,
+          price_from: salon.price_from || 35,
+          currency: salon.currency || 'AUD',
+          specialties: salon.specialties || [],
+          is_verified: salon.is_verified,
+          average_rating: salon.average_rating || salon.rating,
+          review_count: salon.review_count || 0
+        })))
       }
-    ]
-    setPopularSalons(mockSalons)
+    } catch (error) {
+      console.error('Error loading popular salons:', error)
+      // Keep empty array on error
+      setPopularSalons([])
+    }
   }
 
   const handleSearch = async (filters: SalonSearchFilters) => {
     setLoading(true)
     setSearchPerformed(true)
     
-    // Mock search results
-    setTimeout(() => {
-      const mockResults: SalonWithDetails[] = [
-        {
-          id: '3',
-          name: 'Quick Nails Express',
-          slug: 'quick-nails-express',
-          address: '789 Downtown Blvd',
-          city: 'Miami',
-          state: 'FL',
-          website: 'https://quicknailsexpress.com',
-          price_from: 20,
-          currency: 'USD',
-          specialties: ['Quick Service', 'Walk-ins Welcome'],
-          is_verified: false,
-          average_rating: 4.2,
-          review_count: 45,
-          distance_meters: 1200
-        }
-      ]
-      setSearchResults(mockResults)
+    try {
+      // Build query parameters
+      const params = new URLSearchParams()
+      if (filters.city) params.append('city', filters.city)
+      if (filters.isVerified) params.append('verified', 'true')
+      params.append('limit', '20')
+      
+      const response = await fetch(`/api/salons?${params.toString()}`)
+      const data = await response.json()
+      
+      if (data.success && data.salons) {
+        setSearchResults(data.salons.map((salon: any) => ({
+          id: salon.id.toString(),
+          name: salon.name,
+          slug: salon.slug,
+          address: salon.address,
+          city: salon.city,
+          state: salon.state || 'VIC',
+          website: salon.website,
+          price_from: salon.price_from || 35,
+          currency: salon.currency || 'AUD',
+          specialties: salon.specialties || [],
+          is_verified: salon.is_verified,
+          average_rating: salon.average_rating || salon.rating,
+          review_count: salon.review_count || 0
+        })))
+      } else {
+        setSearchResults([])
+      }
+    } catch (error) {
+      console.error('Error searching salons:', error)
+      setSearchResults([])
+    } finally {
       setLoading(false)
-    }, 1000)
+    }
   }
 
   const handleSalonClick = (salon: SalonWithDetails) => {
