@@ -77,7 +77,6 @@ interface SalonDetails {
 export default function SalonDetailPage({ params }: { params: { slug: string } }) {
   const [salon, setSalon] = useState<SalonDetails | null>(null)
   const [loading, setLoading] = useState(true)
-  const [selectedTab, setSelectedTab] = useState<'overview' | 'services' | 'reviews'>('overview')
   const [showAllReviews, setShowAllReviews] = useState(false)
 
   useEffect(() => {
@@ -1181,40 +1180,18 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
           )}
         </motion.div>
 
-        {/* Navigation Tabs - Recentred after removing Contact tab */}
-        <div className="bg-white rounded-lg shadow-card mb-6 overflow-hidden">
-          <div className="flex border-b border-gray-200">
-            {[
-              { key: 'overview', label: 'Overview', icon: null },
-              { key: 'services', label: 'Services', icon: null },
-              { key: 'reviews', label: 'Reviews', icon: MessageSquare }
-            ].map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setSelectedTab(tab.key as any)}
-                className={`flex-1 px-4 py-3 text-center font-medium transition-colors ${
-                  selectedTab === tab.key
-                    ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                    : 'text-gray-600 hover:text-primary-600'
-                }`}
-                style={{ minHeight: '44px' }}
-              >
-                <div className="flex items-center justify-center space-x-1">
-                  {tab.icon && <tab.icon className="w-4 h-4" />}
-                  <span className="hidden sm:inline">{tab.label}</span>
-                  <span className="sm:hidden">{tab.label.substring(0, 3)}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* Tab Content */}
+        {/* Overview Section */}
+        <motion.div 
+          className="bg-white rounded-lg shadow-card mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <div className="p-6">
-            {selectedTab === 'overview' && (
-              <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">About {salon.name}</h2>
+            <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">About {salon.name}</h3>
-                  <p className="text-gray-600 leading-relaxed">{salon.description}</p>
+                  <p className="text-gray-600 leading-relaxed mb-6">{salon.description}</p>
                 </div>
 
                 <div>
@@ -1315,11 +1292,19 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
                   </div>
                 )}
               </div>
-            )}
+          </div>
+        </motion.div>
 
-            {selectedTab === 'services' && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold mb-4">Services & Pricing</h3>
+        {/* Services Section */}
+        <motion.div 
+          className="bg-white rounded-lg shadow-card mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Services & Pricing</h2>
+            <div className="space-y-4">
                 
                 {/* Check for real menu items from vendor application */}
                 {salon?.services && salon.services.length > 0 ? (
@@ -1398,14 +1383,22 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
                   ))
                 )}
               </div>
-            )}
+          </div>
+        </motion.div>
 
-            {selectedTab === 'reviews' && (
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold">Customer Reviews</h3>
-                  <button className="text-primary-600 font-medium">Write Review</button>
-                </div>
+        {/* Reviews Section */}
+        <motion.div 
+          className="bg-white rounded-lg shadow-card mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Customer Reviews</h2>
+              <button className="text-primary-600 font-medium hover:text-primary-700">Write Review</button>
+            </div>
+            <div className="space-y-6">
 
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
@@ -1567,11 +1560,8 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
                   </button>
                 )}
               </div>
-            )}
-
-
           </div>
-        </div>
+        </motion.div>
       </div>
       
       {/* Footer */}
