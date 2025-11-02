@@ -13,7 +13,7 @@ async function importAustralianSalons() {
   try {
     // Read the Excel file
     console.log('📖 Reading Australian salons Excel file...');
-    const workbook = XLSX.readFile('australian_salons.xlsx');
+    const workbook = XLSX.readFile('Australian_Salons.xlsx');
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const salonData = XLSX.utils.sheet_to_json(worksheet);
     
