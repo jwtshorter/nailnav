@@ -329,238 +329,26 @@ export default function HomePage() {
               {t('home.featuredVendors.subtitle')}
             </p>
             
-            {/* 2 rows x 4 boxes grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-              {/* Row 1 */}
-              {[
-                {
-                  id: 'vendor-1',
-                  name: 'Elegant Nails Spa',
-                  image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121',
-                  specialties: ['Gel Manicures', 'Nail Art'],
-                  rating: 4.8,
-                  reviewCount: 127,
-                  location: 'Los Angeles, CA',
-                  verified: true
-                },
-                {
-                  id: 'vendor-2', 
-                  name: 'Luxe Nail Lounge',
-                  image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8',
-                  specialties: ['Premium Gel', 'Luxury Treatments'],
-                  rating: 4.9,
-                  reviewCount: 89,
-                  location: 'Beverly Hills, CA',
-                  verified: true
-                },
-                {
-                  id: 'vendor-3',
-                  name: 'Trendy Nails Studio',
-                  image: 'https://page.gensparksite.com/v1/base64_upload/fd5b1d89ee755b0b188cab2569983b82',
-                  specialties: ['Nail Art', 'Acrylic Extensions'],
-                  rating: 4.7,
-                  reviewCount: 156,
-                  location: 'Miami, FL',
-                  verified: true
-                },
-                {
-                  id: 'vendor-4',
-                  name: 'Pure Beauty Nails',
-                  image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121',
-                  specialties: ['French Manicure', 'Spa Pedicure'],
-                  rating: 4.6,
-                  reviewCount: 92,
-                  location: 'San Francisco, CA',
-                  verified: false
-                }
-              ].map((vendor, index) => (
-                <motion.div
-                  key={vendor.id}
-                  className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 cursor-pointer group"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 * index }}
-                  onClick={() => {
-                    const slugMap: Record<string, string> = {
-                      'vendor-1': 'elegant-nails-spa',
-                      'vendor-2': 'luxe-nail-lounge', 
-                      'vendor-3': 'trendy-nails-studio',
-                      'vendor-4': 'pure-beauty-nails',
-                      'vendor-5': 'glamour-nail-bar',
-                      'vendor-6': 'serenity-spa-nails',
-                      'vendor-7': 'modern-nails-boutique',
-                      'vendor-8': 'royal-touch-nails'
-                    }
-                    window.location.href = `/salon/${slugMap[vendor.id] || 'elegant-nails-spa'}`
-                  }}
-                >
-                  {/* Image */}
-                  <div className="aspect-square bg-gray-200 overflow-hidden relative">
-                    <img
-                      src={vendor.image}
-                      alt={vendor.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {vendor.verified && (
-                      <div className="absolute top-2 right-2 bg-primary-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
-                        <Shield className="w-3 h-3" />
-                        <span>Verified</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="p-3">
-                    <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors line-clamp-2">
-                      {vendor.name}
-                    </h3>
-                    
-                    {/* Location */}
-                    <p className="text-xs text-accent-600 mb-2 flex items-center">
-                      <MapPin className="w-3 h-3 mr-1" />
-                      {vendor.location}
-                    </p>
-                    
-                    {/* Rating */}
-                    <div className="flex items-center mb-2">
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                        <span className="text-xs font-medium text-gray-700">{vendor.rating}</span>
-                        <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
-                      </div>
-                    </div>
-                    
-                    {/* Specialties */}
-                    <div className="flex flex-wrap gap-1">
-                      {vendor.specialties.slice(0, 2).map((specialty) => (
-                        <span 
-                          key={specialty}
-                          className="text-xs bg-secondary-100 text-secondary-700 px-1.5 py-0.5 rounded-full"
-                        >
-                          {specialty}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
+            {/* Real salons from database */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredSalons.map((salon, index) => (
+                <SalonCard
+                  key={salon.id}
+                  salon={salon}
+                  onClick={() => handleSalonClick(salon)}
+                  onDirections={() => handleDirections(salon)}
+                  onContact={() => handleContact(salon)}
+                  showDistance={false}
+                  showActionButtons={false}
+                />
               ))}
             </div>
             
-            {/* Row 2 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  id: 'vendor-5',
-                  name: 'Glamour Nail Bar',
-                  image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8',
-                  specialties: ['Dip Powder', 'Nail Extensions'],
-                  rating: 4.5,
-                  reviewCount: 78,
-                  location: 'New York, NY',
-                  verified: true
-                },
-                {
-                  id: 'vendor-6',
-                  name: 'Serenity Spa Nails',
-                  image: 'https://page.gensparksite.com/v1/base64_upload/fd5b1d89ee755b0b188cab2569983b82',
-                  specialties: ['Organic Treatments', 'Wellness'],
-                  rating: 4.7,
-                  reviewCount: 134,
-                  location: 'Austin, TX',
-                  verified: true
-                },
-                {
-                  id: 'vendor-7',
-                  name: 'Modern Nails Boutique',
-                  image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121',
-                  specialties: ['Contemporary Art', 'Gel Polish'],
-                  rating: 4.4,
-                  reviewCount: 67,
-                  location: 'Seattle, WA',
-                  verified: false
-                },
-                {
-                  id: 'vendor-8',
-                  name: 'Royal Touch Nails',
-                  image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8',
-                  specialties: ['Luxury Service', 'VIP Experience'],
-                  rating: 4.8,
-                  reviewCount: 203,
-                  location: 'Las Vegas, NV',
-                  verified: true
-                }
-              ].map((vendor, index) => (
-                <motion.div
-                  key={vendor.id}
-                  className="bg-white rounded-lg shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 cursor-pointer group"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6 + 0.1 * index }}
-                  onClick={() => {
-                    const slugMap: Record<string, string> = {
-                      'vendor-1': 'elegant-nails-spa',
-                      'vendor-2': 'luxe-nail-lounge', 
-                      'vendor-3': 'trendy-nails-studio',
-                      'vendor-4': 'pure-beauty-nails',
-                      'vendor-5': 'glamour-nail-bar',
-                      'vendor-6': 'serenity-spa-nails',
-                      'vendor-7': 'modern-nails-boutique',
-                      'vendor-8': 'royal-touch-nails'
-                    }
-                    window.location.href = `/salon/${slugMap[vendor.id] || 'elegant-nails-spa'}`
-                  }}
-                >
-                  {/* Image */}
-                  <div className="aspect-square bg-gray-200 overflow-hidden relative">
-                    <img
-                      src={vendor.image}
-                      alt={vendor.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {vendor.verified && (
-                      <div className="absolute top-2 right-2 bg-primary-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
-                        <Shield className="w-3 h-3" />
-                        <span>Verified</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="p-3">
-                    <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors line-clamp-2">
-                      {vendor.name}
-                    </h3>
-                    
-                    {/* Location */}
-                    <p className="text-xs text-accent-600 mb-2 flex items-center">
-                      <MapPin className="w-3 h-3 mr-1" />
-                      {vendor.location}
-                    </p>
-                    
-                    {/* Rating */}
-                    <div className="flex items-center mb-2">
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                        <span className="text-xs font-medium text-gray-700">{vendor.rating}</span>
-                        <span className="text-xs text-gray-500">({vendor.reviewCount})</span>
-                      </div>
-                    </div>
-                    
-                    {/* Specialties */}
-                    <div className="flex flex-wrap gap-1">
-                      {vendor.specialties.slice(0, 2).map((specialty) => (
-                        <span 
-                          key={specialty}
-                          className="text-xs bg-secondary-100 text-secondary-700 px-1.5 py-0.5 rounded-full"
-                        >
-                          {specialty}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            {featuredSalons.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                <p>Loading featured salons...</p>
+              </div>
+            )}
           </motion.section>
         )}
 
