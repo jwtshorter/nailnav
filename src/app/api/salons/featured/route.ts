@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
         cities (
           name
         ),
+        state,
         address,
         phone,
         website,
@@ -65,13 +66,27 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Transform salons
+    // Transform salons - ONLY RETURN REAL DATA FROM DATABASE
     const transformedSalons = (salons || []).map((salon: any) => ({
-      ...salon,
-      city: salon.cities?.name || 'Unknown',
-      state: 'VIC', // Default to VIC for now
-      country: 'Australia',
-      postal_code: '3000',
+      id: salon.id,
+      name: salon.name,
+      slug: salon.slug,
+      city: salon.cities?.name || null,
+      state: salon.state,
+      address: salon.address,
+      phone: salon.phone,
+      website: salon.website,
+      description: salon.description,
+      rating: salon.rating,
+      is_verified: salon.is_verified,
+      is_featured: salon.is_featured,
+      parking: salon.parking,
+      accepts_walk_ins: salon.accepts_walk_ins,
+      latitude: salon.latitude,
+      longitude: salon.longitude,
+      cover_image_url: salon.cover_image_url,
+      gallery_images: salon.gallery_images,
+      // Build service arrays from actual database flags
       services_offered: [
         salon.manicure && 'Manicure',
         salon.pedicure && 'Pedicure',
@@ -83,13 +98,7 @@ export async function GET(request: NextRequest) {
         salon.master_artist && 'Master Nail Artist',
         salon.certified_technicians && 'Certified Technicians',
         salon.experienced_staff && 'Experienced Team'
-      ].filter(Boolean),
-      currency: 'AUD',
-      languages_spoken: ['English'],
-      price_range: 'mid-range',
-      price_from: 35,
-      average_rating: salon.rating,
-      review_count: 0
+      ].filter(Boolean)
     }))
 
     return NextResponse.json({

@@ -11,24 +11,30 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = parseInt(searchParams.get('offset') || '0')
     
-    // Build query
+    // Build query with city join
     let query = supabase
       .from('salons')
       .select(`
         id,
         name,
         slug,
-        city,
+        city_id,
+        cities (
+          name
+        ),
+        state,
         address,
         phone,
         website,
         description,
         rating,
+        review_count,
         is_verified,
         is_featured,
         is_published,
         parking,
         accepts_walk_ins,
+        appointment_only,
         opening_hours,
         latitude,
         longitude,
@@ -52,7 +58,16 @@ export async function GET(request: NextRequest) {
     }
     
     if (city) {
-      query = query.ilike('city', `%${city}%`)
+      // Search by city name - need to join with cities table
+      const cityResult = await supabase
+        .from('cities')
+        .select('id')
+        .ilike('name', `%${city}%`)
+      
+      if (cityResult.data && cityResult.data.length > 0) {
+        const cityIds = cityResult.data.map(c => c.id)
+        query = query.in('city_id', cityIds)
+      }
     }
     
     if (state) {
@@ -83,10 +98,30 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Transform data to include service arrays from boolean flags
-    const transformedSalons = (salons || []).map(salon => ({
-      ...salon,
-      // Build services_offered array from boolean flags
+    // Transform data - ONLY REAL DATA FROM DATABASE
+    const transformedSalons = (salons || []).map((salon: any) => ({
+      id: salon.id,
+      name: salon.name,
+      slug: salon.slug,
+      city: salon.cities?.name || null,
+      state: salon.state,
+      address: salon.address,
+      phone: salon.phone,
+      website: salon.website,
+      description: salon.description,
+      rating: salon.rating,
+      review_count: salon.review_count || 0,
+      is_verified: salon.is_verified,
+      is_featured: salon.is_featured,
+      parking: salon.parking,
+      accepts_walk_ins: salon.accepts_walk_ins,
+      appointment_only: salon.appointment_only,
+      opening_hours: salon.opening_hours,
+      latitude: salon.latitude,
+      longitude: salon.longitude,
+      cover_image_url: salon.cover_image_url,
+      gallery_images: salon.gallery_images,
+      // Build services from actual database
       services_offered: [
         salon.manicure && 'Manicure',
         salon.pedicure && 'Pedicure',
@@ -94,19 +129,11 @@ export async function GET(request: NextRequest) {
         salon.acrylic_nails && 'Acrylic Nails',
         salon.nail_art && 'Nail Art'
       ].filter(Boolean),
-      // Build specialties array from boolean flags
       specialties: [
         salon.master_artist && 'Master Nail Artist',
         salon.certified_technicians && 'Certified Technicians',
         salon.experienced_staff && 'Experienced Team'
-      ].filter(Boolean),
-      // Add default values
-      currency: 'AUD',
-      country: 'Australia',
-      languages_spoken: ['English'],
-      price_range: 'mid-range',
-      average_rating: salon.rating,
-      review_count: 0
+      ].filter(Boolean)
     }))
 
     return NextResponse.json({ 

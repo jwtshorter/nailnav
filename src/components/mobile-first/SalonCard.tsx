@@ -9,7 +9,7 @@ interface Salon {
   slug: string
   address: string
   city: string
-  state: string
+  state?: string | null  // State can be null/undefined
   website?: string
   price_from?: number
   currency?: string
@@ -120,7 +120,7 @@ export const SalonCard = ({
           {/* Location */}
           <div className="flex items-center justify-center text-gray-600 text-sm mb-2">
             <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
-            <span className="truncate">{salon.city}, {salon.state}</span>
+            <span className="truncate">{salon.city}{salon.state ? `, ${salon.state}` : ''}</span>
           </div>
 
           {/* Rating */}
@@ -222,7 +222,7 @@ export const SalonCard = ({
           {/* Location */}
           <div className="flex items-center text-gray-600 text-sm mb-2">
             <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span className="truncate">{salon.city}, {salon.state}</span>
+            <span className="truncate">{salon.city}{salon.state ? `, ${salon.state}` : ''}</span>
           </div>
 
           {/* Rating */}

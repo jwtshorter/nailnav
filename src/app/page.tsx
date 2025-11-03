@@ -60,31 +60,33 @@ export default function HomePage() {
 
   const loadFeaturedSalons = async () => {
     try {
-      const response = await fetch('/api/salons/featured?limit=12')
+      // Load ALL salons (not just featured), with higher limit
+      const response = await fetch('/api/salons?limit=50')
       const data = await response.json()
       
       if (data.success && data.salons) {
+        // Map salons WITHOUT adding fake data
         setFeaturedSalons(data.salons.map((salon: any) => ({
           id: salon.id.toString(),
           name: salon.name,
           slug: salon.slug,
           address: salon.address,
           city: salon.city,
-          state: salon.state || 'VIC',
+          state: salon.state,  // Real from DB or null
           website: salon.website,
-          price_from: salon.price_from || 35,
-          currency: salon.currency || 'AUD',
+          price_from: salon.price_from,  // Real from DB or undefined
+          currency: salon.currency,  // Real from DB or undefined
           specialties: salon.specialties || [],
           is_verified: salon.is_verified,
           average_rating: salon.average_rating || salon.rating,
-          review_count: salon.review_count || 0
+          review_count: salon.review_count  // Real from DB
         })))
       } else {
-        console.error('Failed to load featured salons:', data)
+        console.error('Failed to load salons:', data)
         setFeaturedSalons([])
       }
     } catch (error) {
-      console.error('Error loading featured salons:', error)
+      console.error('Error loading salons:', error)
       setFeaturedSalons([])
     }
   }
@@ -100,20 +102,21 @@ export default function HomePage() {
           .sort((a: any, b: any) => (b.rating || 0) - (a.rating || 0))
           .slice(0, 10)
         
+        // Map salons WITHOUT adding fake data
         setPopularSalons(sorted.map((salon: any) => ({
           id: salon.id.toString(),
           name: salon.name,
           slug: salon.slug,
           address: salon.address,
           city: salon.city,
-          state: salon.state || 'VIC',
+          state: salon.state,  // Real from DB or null
           website: salon.website,
-          price_from: salon.price_from || 35,
-          currency: salon.currency || 'AUD',
+          price_from: salon.price_from,  // Real from DB or undefined
+          currency: salon.currency,  // Real from DB or undefined
           specialties: salon.specialties || [],
           is_verified: salon.is_verified,
           average_rating: salon.average_rating || salon.rating,
-          review_count: salon.review_count || 0
+          review_count: salon.review_count  // Real from DB
         })))
       }
     } catch (error) {
@@ -138,20 +141,21 @@ export default function HomePage() {
       const data = await response.json()
       
       if (data.success && data.salons) {
+        // Map search results WITHOUT adding fake data
         setSearchResults(data.salons.map((salon: any) => ({
           id: salon.id.toString(),
           name: salon.name,
           slug: salon.slug,
           address: salon.address,
           city: salon.city,
-          state: salon.state || 'VIC',
+          state: salon.state,  // Real from DB or null
           website: salon.website,
-          price_from: salon.price_from || 35,
-          currency: salon.currency || 'AUD',
+          price_from: salon.price_from,  // Real from DB or undefined
+          currency: salon.currency,  // Real from DB or undefined
           specialties: salon.specialties || [],
           is_verified: salon.is_verified,
           average_rating: salon.average_rating || salon.rating,
-          review_count: salon.review_count || 0
+          review_count: salon.review_count  // Real from DB
         })))
       } else {
         setSearchResults([])
@@ -323,10 +327,10 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              {t('home.featuredVendors.title')}
+              All Nail Salons
             </h2>
             <p className="text-gray-600 text-center mb-8">
-              {t('home.featuredVendors.subtitle')}
+              Browse all {featuredSalons.length} salons in Australia
             </p>
             
             {/* Real salons from database */}
