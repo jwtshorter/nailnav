@@ -6,6 +6,20 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const limit = parseInt(searchParams.get('limit') || '8')
 
+    // Check if Supabase is properly configured
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+    
+    if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder')) {
+      console.log('Supabase not configured, returning mock data')
+      return NextResponse.json({
+        salons: getMockFeaturedSalons(limit),
+        count: limit,
+        success: true,
+        mock: true
+      })
+    }
+
     // Fetch featured salons (top rated salons since is_featured isn't set yet)
     const { data: salons, error } = await supabase
       .from('salons')
