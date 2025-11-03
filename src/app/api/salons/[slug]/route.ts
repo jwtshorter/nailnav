@@ -15,7 +15,7 @@ export async function GET(
       )
     }
 
-    // Fetch salon by slug
+    // Fetch salon by slug with city join
     const { data: salon, error } = await supabase
       .from('salons')
       .select(`
@@ -23,7 +23,10 @@ export async function GET(
         name,
         slug,
         address,
-        city,
+        city_id,
+        cities (
+          name
+        ),
         phone,
         website,
         email,
@@ -95,6 +98,7 @@ export async function GET(
     // Transform salon data
     const transformedSalon = {
       ...salon,
+      city: (salon as any).cities?.name || 'Unknown',
       // Build services array from boolean flags
       services: [
         { name: 'Manicure', available: salon.manicure, category: 'Manicures' },

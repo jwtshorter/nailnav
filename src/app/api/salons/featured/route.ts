@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const limit = parseInt(searchParams.get('limit') || '8')
 
-    // Fetch featured salons (top rated salons)
+    // Fetch featured salons (top rated salons) with city join
     const { data: salons, error } = await supabase
       .from('salons')
       .select(`
@@ -14,6 +14,9 @@ export async function GET(request: NextRequest) {
         name,
         slug,
         city_id,
+        cities (
+          name
+        ),
         address,
         phone,
         website,
@@ -63,10 +66,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform salons
-    const transformedSalons = (salons || []).map(salon => ({
+    const transformedSalons = (salons || []).map((salon: any) => ({
       ...salon,
-      city: 'Melbourne', // Will be joined from cities table
-      state: 'VIC',
+      city: salon.cities?.name || 'Unknown',
+      state: 'VIC', // Default to VIC for now
       country: 'Australia',
       postal_code: '3000',
       services_offered: [
