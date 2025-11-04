@@ -663,11 +663,11 @@ export default function SearchPage() {
               exit={{ height: 0, opacity: 0 }}
               className="mt-4 bg-gray-50 rounded-lg border border-gray-200 p-4 max-h-96 overflow-y-auto"
             >
-              {/* Services */}
+              {/* Services - ONLY database columns */}
               <div className="mb-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Services</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">Nail Services</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Manicure', 'Pedicure', 'Gel Nails', 'Acrylic Nails', 'Nail Art', 'Nail Extensions', 'Dip Powder', 'Shellac'].map(service => (
+                  {['Manicure', 'Pedicure', 'Gel Nails', 'Acrylic Nails', 'Nail Art', 'Nail Extensions', 'Dip Powder', 'Nail Repair'].map(service => (
                     <button
                       key={service}
                       onClick={() => {
@@ -721,11 +721,11 @@ export default function SearchPage() {
                 </div>
               </div>
 
-              {/* Specialties */}
+              {/* Specialties - ONLY database columns */}
               <div className="mb-4">
                 <h3 className="font-semibold text-gray-900 mb-2">Specialties</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Master Artist', 'Certified Technicians', 'Experienced Staff', 'Luxury Experience', 'Quick Service', 'Clean & Hygienic'].map(specialty => (
+                  {['Master Artist', 'Certified Technicians', 'Experienced Staff', 'Quick Service'].map(specialty => (
                     <button
                       key={specialty}
                       onClick={() => {
@@ -748,19 +748,15 @@ export default function SearchPage() {
                 </div>
               </div>
 
-              {/* Amenities */}
+              {/* Amenities - ONLY database columns */}
               <div className="mb-4">
                 <h3 className="font-semibold text-gray-900 mb-2">Amenities</h3>
                 <div className="flex flex-wrap gap-2">
                   {[
-                    { value: 'Online Booking', key: 'amenities' },
                     { value: 'Kid Friendly', key: 'amenities' },
                     { value: 'Wheelchair Accessible', key: 'amenities' },
-                    { value: 'Gift Cards', key: 'amenities' },
-                    { value: 'Loyalty Program', key: 'amenities' },
-                    { value: 'Verified Only', key: 'verified' },
                     { value: 'Walk-ins Welcome', key: 'walkIns' },
-                    { value: 'Parking Available', key: 'parking' }
+                    { value: 'Parking', key: 'parking' }
                   ].map(item => {
                     const isSelected = item.key === 'amenities' 
                       ? filters.amenities.includes(item.value)

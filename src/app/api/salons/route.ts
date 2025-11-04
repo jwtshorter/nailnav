@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
         'Nail Art': 'nail_art',
         'Nail Extensions': 'nail_extensions',
         'Dip Powder': 'dip_powder',
-        'Shellac': 'shellac'
+        'Nail Repair': 'nail_repair'
       }
       
       // For multiple services, we want salons that have ANY of them (OR logic)
@@ -149,11 +149,8 @@ export async function GET(request: NextRequest) {
     if (amenities) {
       const amenityList = amenities.split(',')
       const amenityMap: Record<string, string> = {
-        'Online Booking': 'online_booking',
         'Kid Friendly': 'kid_friendly',
-        'Wheelchair Accessible': 'wheelchair_accessible',
-        'Gift Cards': 'gift_cards_available',
-        'Loyalty Program': 'loyalty_program'
+        'Wheelchair Accessible': 'wheelchair_accessible'
       }
       
       // Apply each amenity filter
@@ -210,7 +207,7 @@ export async function GET(request: NextRequest) {
         'Nail Art': 'nail_art',
         'Nail Extensions': 'nail_extensions',
         'Dip Powder': 'dip_powder',
-        'Shellac': 'shellac'
+        'Nail Repair': 'nail_repair'
       }
       
       filteredSalons = filteredSalons.filter((salon: any) => {
@@ -227,9 +224,7 @@ export async function GET(request: NextRequest) {
         'Master Artist': 'master_artist',
         'Certified Technicians': 'certified_technicians',
         'Experienced Staff': 'experienced_staff',
-        'Luxury Experience': 'luxury_experience',
-        'Quick Service': 'quick_service',
-        'Clean & Hygienic': 'clean_hygienic'
+        'Quick Service': 'quick_service'
       }
       
       filteredSalons = filteredSalons.filter((salon: any) => {
@@ -264,7 +259,7 @@ export async function GET(request: NextRequest) {
       cover_image_url: salon.cover_image_url,
       gallery_images: salon.gallery_images,
       price_range: salon.price_range,
-      // Build services from actual database
+      // Build services from actual database columns only
       services_offered: [
         salon.manicure && 'Manicure',
         salon.pedicure && 'Pedicure',
@@ -273,7 +268,7 @@ export async function GET(request: NextRequest) {
         salon.nail_art && 'Nail Art',
         salon.nail_extensions && 'Nail Extensions',
         salon.dip_powder && 'Dip Powder',
-        salon.shellac && 'Shellac'
+        salon.nail_repair && 'Nail Repair'
       ].filter(Boolean),
       specialties: [
         salon.master_artist && 'Master Nail Artist',
