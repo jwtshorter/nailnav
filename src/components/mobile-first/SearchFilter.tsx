@@ -10,11 +10,6 @@ interface SalonSearchFilters {
   services?: string[]
   priceRange?: string[]
   specialties?: string[]
-  languages?: string[]
-  expertise?: string[]
-  hours?: string[]
-  booking?: string[]
-  isVerified?: boolean
   acceptsWalkIns?: boolean
   hasParking?: boolean
   location?: {
@@ -36,61 +31,32 @@ const priceRanges = [
   { value: 'premium', label: 'Premium ($$$)', color: 'purple' }
 ]
 
+// Real database service columns only
 const popularServices = [
-  'Gel Manicure',
-  'Classic Manicure', 
-  'Gel Pedicure',
+  'Manicure',
+  'Pedicure',
+  'Gel Nails',
   'Acrylic Nails',
+  'Nail Art',
+  'Nail Extensions',
   'Dip Powder',
-  'Nail Art',
-  'Classic Pedicure',
-  'Gel Extensions'
+  'Nail Repair'
 ]
 
+// Real database specialty columns only
 const popularSpecialties = [
-  'Gel Services',
-  'Nail Art',
-  'Acrylic Extensions',
-  'Quick Service',
-  'Luxury Treatments',
-  'Spa Pedicures',
+  'Master Artist',
+  'Certified Technicians',
+  'Experienced Staff',
+  'Quick Service'
+]
+
+// Real database amenity columns only
+const amenityFilters = [
+  'Kid Friendly',
+  'Wheelchair Accessible',
   'Walk-ins Welcome',
-  'Premium Brands'
-]
-
-const expertiseFilters = [
-  'Certified Nail Technicians',
-  'Licensed Professionals',
-  'Award-Winning Staff',
-  'Experienced Team',
-  'Qualified Technicians',
-  'Specialty Certified',
-  'Advanced Training',
-  'Master Technicians'
-]
-
-const hoursFilters = [
-  'Open Monday',
-  'Open Tuesday',
-  'Open Wednesday', 
-  'Open Thursday',
-  'Open Friday',
-  'Open Saturday',
-  'Open Sunday',
-  'Extended Hours',
-  'Late Night',
-  'Early Morning'
-]
-
-const bookingFilters = [
-  'Online Booking',
-  'Phone Booking',
-  'Walk-ins Welcome',
-  'Appointment Required',
-  'Same Day Booking',
-  'Mobile Nails',
-  'Group Bookings',
-  'Advance Booking'
+  'Parking'
 ]
 
 const languages = [

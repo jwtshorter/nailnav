@@ -16,8 +16,6 @@ interface SalonSearchFilters {
   services?: string[]
   priceRange?: string[]
   specialties?: string[]
-  languages?: string[]
-  isVerified?: boolean
   acceptsWalkIns?: boolean
   hasParking?: boolean
   location?: {
@@ -148,7 +146,6 @@ export default function HomePage() {
     if (filters.specialties && filters.specialties.length > 0) {
       params.append('specialties', filters.specialties.join(','))
     }
-    if (filters.isVerified) params.append('verified', 'true')
     if (filters.acceptsWalkIns) params.append('walkIns', 'true')
     if (filters.hasParking) params.append('parking', 'true')
     
