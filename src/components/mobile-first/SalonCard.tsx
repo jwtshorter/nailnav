@@ -51,10 +51,10 @@ export const SalonCard = ({
     return `${(meters / 1000).toFixed(1)}km`
   }
 
-  const formatPrice = (price?: number, currency = 'USD'): string => {
-    if (!price) return 'Prices vary'
-    const symbol = currency === 'USD' ? '$' : currency
-    return `From ${symbol}${price}`
+  const formatPriceRange = (priceRange?: string): string => {
+    if (!priceRange) return ''
+    // Price range comes as $, $$, or $$$
+    return priceRange
   }
 
   const renderStars = (rating: number, count: number) => {
@@ -146,10 +146,12 @@ export const SalonCard = ({
             </div>
           )}
 
-          {/* Price */}
-          <div className="text-sm text-primary-600 font-medium mb-2">
-            {formatPrice(salon.price_from, salon.currency)}
-          </div>
+          {/* Price Range */}
+          {salon.price_range && (
+            <div className="text-lg text-gray-700 font-semibold mb-2">
+              {formatPriceRange(salon.price_range)}
+            </div>
+          )}
 
           {/* Distance (if shown) */}
           {showDistance && salon.distance_meters && (
@@ -232,23 +234,20 @@ export const SalonCard = ({
             </div>
           )}
 
-          {/* Price */}
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-600">
-              {formatPrice(salon.price_from, salon.currency)}
-            </span>
-            {salon.price_range && (
-              <span className={`text-xs px-2 py-1 rounded-full ${
-                salon.price_range === 'budget' 
+          {/* Price Range */}
+          {salon.price_range && (
+            <div className="mb-3">
+              <span className={`text-base font-semibold px-3 py-1 rounded-full ${
+                salon.price_range === '$' 
                   ? 'bg-green-100 text-green-800'
-                  : salon.price_range === 'mid-range'
+                  : salon.price_range === '$$'
                   ? 'bg-yellow-100 text-yellow-800'
                   : 'bg-purple-100 text-purple-800'
               }`}>
-                {salon.price_range.replace('-', ' ')}
+                {formatPriceRange(salon.price_range)}
               </span>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Specialties */}
           {salon.specialties && salon.specialties.length > 0 && (

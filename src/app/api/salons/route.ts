@@ -48,6 +48,7 @@ export async function GET(request: NextRequest) {
         experienced_staff,
         cover_image_url,
         gallery_images,
+        price_range,
         created_at
       `, { count: 'exact' })
       .eq('is_published', true)
@@ -121,6 +122,7 @@ export async function GET(request: NextRequest) {
       longitude: salon.longitude,
       cover_image_url: salon.cover_image_url,
       gallery_images: salon.gallery_images,
+      price_range: salon.price_range,
       // Build services from actual database
       services_offered: [
         salon.manicure && 'Manicure',

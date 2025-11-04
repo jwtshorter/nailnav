@@ -38,7 +38,9 @@ export async function GET(request: NextRequest) {
         certified_technicians,
         experienced_staff,
         cover_image_url,
-        gallery_images
+        gallery_images,
+        price_range,
+        review_count
       `)
       .eq('is_published', true)
       .order('rating', { ascending: false })
@@ -86,6 +88,8 @@ export async function GET(request: NextRequest) {
       longitude: salon.longitude,
       cover_image_url: salon.cover_image_url,
       gallery_images: salon.gallery_images,
+      price_range: salon.price_range,
+      review_count: salon.review_count,
       // Build service arrays from actual database flags
       services_offered: [
         salon.manicure && 'Manicure',
