@@ -7,7 +7,6 @@ export async function GET(request: NextRequest) {
     const featured = searchParams.get('featured') === 'true'
     const city = searchParams.get('city')
     const state = searchParams.get('state')
-    const verified = searchParams.get('verified') === 'true'
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = parseInt(searchParams.get('offset') || '0')
     
@@ -64,10 +63,13 @@ export async function GET(request: NextRequest) {
         nail_art,
         nail_extensions,
         dip_powder,
-        shellac,
+        nail_repair,
         master_artist,
         certified_technicians,
         experienced_staff,
+        quick_service,
+        kid_friendly,
+        wheelchair_accessible,
         cover_image_url,
         gallery_images,
         price_range,
@@ -100,10 +102,6 @@ export async function GET(request: NextRequest) {
     
     if (state) {
       query = query.ilike('state', `%${state}%`)
-    }
-    
-    if (verified) {
-      query = query.eq('is_verified', true)
     }
     
     // Service filters - map service names to database boolean columns

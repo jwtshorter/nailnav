@@ -43,13 +43,12 @@ export default function SearchPage() {
   const [mapBounds, setMapBounds] = useState<any>(null)
   const [autoSearchEnabled, setAutoSearchEnabled] = useState(false)
   
-  // Filter state
+  // Filter state - ONLY real database columns
   const [filters, setFilters] = useState<{
     services: string[]
     priceRange: string[]
     specialties: string[]
     amenities: string[]
-    verified: boolean
     walkIns: boolean
     parking: boolean
   }>({
@@ -57,7 +56,6 @@ export default function SearchPage() {
     priceRange: [],
     specialties: [],
     amenities: [],
-    verified: false,
     walkIns: false,
     parking: false
   })
@@ -70,9 +68,10 @@ export default function SearchPage() {
     const services = urlParams.get('services')
     const priceRange = urlParams.get('priceRange')
     const specialties = urlParams.get('specialties')
-    const verified = urlParams.get('verified') === 'true'
     const walkIns = urlParams.get('walkIns') === 'true'
     const parking = urlParams.get('parking') === 'true'
+    
+    console.log('URL params:', { location, services, priceRange, specialties, walkIns, parking })
     
     if (service) {
       setServiceQuery(decodeURIComponent(service))
@@ -89,13 +88,14 @@ export default function SearchPage() {
       priceRange: priceRange ? priceRange.split(',') : [],
       specialties: specialties ? specialties.split(',') : [],
       amenities: [],
-      verified,
       walkIns,
       parking
     }
     
+    console.log('Built urlFilters:', urlFilters)
+    
     // Set filters from URL params
-    if (services || priceRange || specialties || verified || walkIns || parking) {
+    if (services || priceRange || specialties || walkIns || parking) {
       setFilters(urlFilters)
     }
     
@@ -440,7 +440,6 @@ export default function SearchPage() {
       if (searchFilters.priceRange.length > 0) {
         params.append('priceRange', searchFilters.priceRange.join(','))
       }
-      if (searchFilters.verified) params.append('verified', 'true')
       if (searchFilters.walkIns) params.append('walkIns', 'true')
       if (searchFilters.parking) params.append('parking', 'true')
       
@@ -802,7 +801,6 @@ export default function SearchPage() {
                       priceRange: [],
                       specialties: [],
                       amenities: [],
-                      verified: false,
                       walkIns: false,
                       parking: false
                     })
