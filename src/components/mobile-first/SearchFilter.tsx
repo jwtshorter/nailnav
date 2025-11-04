@@ -154,8 +154,8 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
   const activeFilterCount = Object.values(filters).filter(Boolean).length
 
   const quickFilters = [
-    { label: 'Manicure', type: 'service', value: 'Classic Manicure' },
-    { label: 'Pedicure', type: 'service', value: 'Gel Pedicure' },
+    { label: 'Manicure', type: 'service', value: 'Manicure' },
+    { label: 'Pedicure', type: 'service', value: 'Pedicure' },
     { label: 'Acrylic Nails', type: 'service', value: 'Acrylic Nails' },
     { label: 'Gel Extensions', type: 'service', value: 'Gel Extensions' },
     { label: 'Gel X', type: 'service', value: 'Gel X' },
