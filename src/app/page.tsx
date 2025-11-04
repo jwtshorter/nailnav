@@ -135,49 +135,25 @@ export default function HomePage() {
   }
 
   const handleSearch = async (filters: SalonSearchFilters) => {
-    setLoading(true)
-    setSearchPerformed(true)
+    // Redirect to search page with filters as query parameters
+    const params = new URLSearchParams()
     
-    try {
-      // Build query parameters
-      const params = new URLSearchParams()
-      if (filters.city) params.append('city', filters.city)
-      if (filters.isVerified) params.append('verified', 'true')
-      params.append('limit', '20')
-      
-      const response = await fetch(`/api/salons?${params.toString()}`)
-      const data = await response.json()
-      
-      if (data.success && data.salons) {
-        // Map search results WITHOUT adding fake data
-        setSearchResults(data.salons.map((salon: any) => ({
-          id: salon.id.toString(),
-          name: salon.name,
-          slug: salon.slug,
-          address: salon.address,
-          city: salon.city,
-          state: salon.state,
-          website: salon.website,
-          price_from: salon.price_from,
-          currency: salon.currency,
-          specialties: salon.specialties || [],
-          is_verified: salon.is_verified,
-          average_rating: salon.average_rating || salon.rating,
-          review_count: salon.review_count,
-          logo_url: salon.cover_image_url,
-          price_range: salon.price_range,
-          appointment_only: salon.appointment_only,
-          accepts_walk_ins: salon.accepts_walk_ins
-        })))
-      } else {
-        setSearchResults([])
-      }
-    } catch (error) {
-      console.error('Error searching salons:', error)
-      setSearchResults([])
-    } finally {
-      setLoading(false)
+    if (filters.city) params.append('location', filters.city)
+    if (filters.services && filters.services.length > 0) {
+      params.append('services', filters.services.join(','))
     }
+    if (filters.priceRange && filters.priceRange.length > 0) {
+      params.append('priceRange', filters.priceRange.join(','))
+    }
+    if (filters.specialties && filters.specialties.length > 0) {
+      params.append('specialties', filters.specialties.join(','))
+    }
+    if (filters.isVerified) params.append('verified', 'true')
+    if (filters.acceptsWalkIns) params.append('walkIns', 'true')
+    if (filters.hasParking) params.append('parking', 'true')
+    
+    // Redirect to search page
+    window.location.href = `/search?${params.toString()}`
   }
 
   const handleSalonClick = (salon: SalonWithDetails) => {
