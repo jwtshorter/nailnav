@@ -129,17 +129,18 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
   }, [])
 
   const handleSearch = () => {
-    // Redirect to search page with parameters
-    const params = new URLSearchParams()
-    
-    if (searchQuery.trim()) {
-      // Parse the search query - for now treat as service search
-      // TODO: Implement smart parsing to detect location vs service
-      params.set('service', encodeURIComponent(searchQuery.trim()))
+    // Call the onSearch prop with filters
+    const searchFilters: SalonSearchFilters = {
+      ...filters
     }
     
-    // Redirect to search page
-    window.location.href = `/search?${params.toString()}`
+    // Parse search query - treat as city search for now
+    if (searchQuery.trim()) {
+      searchFilters.city = searchQuery.trim()
+    }
+    
+    // Call parent's search handler
+    onSearch(searchFilters)
   }
 
   const toggleFilter = (type: keyof SalonSearchFilters, value: string) => {

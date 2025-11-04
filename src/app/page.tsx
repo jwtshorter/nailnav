@@ -79,7 +79,11 @@ export default function HomePage() {
           specialties: salon.specialties || [],
           is_verified: salon.is_verified,
           average_rating: salon.average_rating || salon.rating,
-          review_count: salon.review_count  // Real from DB
+          review_count: salon.review_count,  // Real from DB
+          logo_url: salon.cover_image_url,  // Map cover_image to logo for card display
+          price_range: salon.price_range,  // Add price range
+          appointment_only: salon.appointment_only,  // Add appointment flag
+          accepts_walk_ins: salon.accepts_walk_ins  // Add walk-ins flag
         })))
       } else {
         console.error('Failed to load featured salons:', data)
@@ -109,14 +113,18 @@ export default function HomePage() {
           slug: salon.slug,
           address: salon.address,
           city: salon.city,
-          state: salon.state,  // Real from DB or null
+          state: salon.state,
           website: salon.website,
-          price_from: salon.price_from,  // Real from DB or undefined
-          currency: salon.currency,  // Real from DB or undefined
+          price_from: salon.price_from,
+          currency: salon.currency,
           specialties: salon.specialties || [],
           is_verified: salon.is_verified,
           average_rating: salon.average_rating || salon.rating,
-          review_count: salon.review_count  // Real from DB
+          review_count: salon.review_count,
+          logo_url: salon.cover_image_url,
+          price_range: salon.price_range,
+          appointment_only: salon.appointment_only,
+          accepts_walk_ins: salon.accepts_walk_ins
         })))
       }
     } catch (error) {
@@ -148,14 +156,18 @@ export default function HomePage() {
           slug: salon.slug,
           address: salon.address,
           city: salon.city,
-          state: salon.state,  // Real from DB or null
+          state: salon.state,
           website: salon.website,
-          price_from: salon.price_from,  // Real from DB or undefined
-          currency: salon.currency,  // Real from DB or undefined
+          price_from: salon.price_from,
+          currency: salon.currency,
           specialties: salon.specialties || [],
           is_verified: salon.is_verified,
           average_rating: salon.average_rating || salon.rating,
-          review_count: salon.review_count  // Real from DB
+          review_count: salon.review_count,
+          logo_url: salon.cover_image_url,
+          price_range: salon.price_range,
+          appointment_only: salon.appointment_only,
+          accepts_walk_ins: salon.accepts_walk_ins
         })))
       } else {
         setSearchResults([])
