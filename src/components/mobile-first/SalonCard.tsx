@@ -89,13 +89,12 @@ export const SalonCard = ({
     // Compact vertical layout for grid view (4 across on desktop)
     return (
       <motion.div 
-        className="bg-white rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 p-4 border border-gray-100 cursor-pointer"
+        className="bg-white rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 border border-gray-100 cursor-pointer overflow-hidden flex flex-col h-full"
         whileTap={{ scale: 0.98 }}
         onClick={onClick}
-        style={{ minHeight: '44px' }}
       >
-        {/* Salon Image */}
-        <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-200 mb-3">
+        {/* Salon Image - SMALLER */}
+        <div className="w-full h-32 rounded-t-lg overflow-hidden bg-gray-200 flex-shrink-0">
           {salon.logo_url && !imageError ? (
             <img
               src={salon.logo_url}
@@ -105,72 +104,65 @@ export const SalonCard = ({
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-primary-100">
-              <span className="text-primary-600 font-semibold text-xl">
+              <span className="text-primary-600 font-semibold text-3xl">
                 {salon.name.charAt(0)}
               </span>
             </div>
           )}
         </div>
 
-        {/* Salon Information */}
-        <div className="text-center">
-          <div className="flex items-center justify-center mb-1">
-            <h3 className="font-semibold text-base text-gray-900 truncate max-w-full">
-              {salon.name}
-            </h3>
+        {/* Salon Information - MORE SPACE */}
+        <div className="p-4 flex flex-col flex-grow">
+          {/* Name - 2 lines max */}
+          <h3 className="font-bold text-base text-gray-900 mb-2 line-clamp-2 min-h-[2.5rem]">
+            {salon.name}
             {salon.is_verified && (
-              <CheckCircle className="w-4 h-4 text-green-500 ml-1 flex-shrink-0" />
+              <CheckCircle className="w-4 h-4 text-green-500 inline-block ml-1" />
             )}
-          </div>
+          </h3>
 
           {/* Location */}
-          <div className="flex items-center justify-center text-gray-600 text-sm mb-2">
+          <div className="flex items-center text-gray-600 text-sm mb-2">
             <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
-            <span className="truncate">{salon.city}{salon.state ? `, ${salon.state}` : ''}</span>
+            <span className="truncate text-xs">{salon.city}{salon.state ? `, ${salon.state}` : ''}</span>
           </div>
 
           {/* Rating */}
-          {salon.average_rating && salon.review_count && (
-            <div className="flex justify-center mb-2">
-              <div className="flex items-center space-x-1">
-                <div className="flex">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`w-3 h-3 ${
-                        star <= salon.average_rating! 
-                          ? 'text-yellow-400 fill-current' 
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-xs text-gray-600">
-                  {salon.average_rating.toFixed(1)} ({salon.review_count})
-                </span>
+          {salon.average_rating && salon.review_count ? (
+            <div className="flex items-center space-x-1 mb-2">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`w-3 h-3 ${
+                      star <= salon.average_rating! 
+                        ? 'text-yellow-400 fill-current' 
+                        : 'text-gray-300'
+                    }`}
+                  />
+                ))}
               </div>
+              <span className="text-xs text-gray-600">
+                {salon.average_rating.toFixed(1)} ({salon.review_count})
+              </span>
             </div>
-          )}
+          ) : null}
 
           {/* Price Range */}
           {salon.price_range && (
-            <div className="text-lg text-gray-700 font-semibold mb-2">
+            <div className="text-xl text-primary-600 font-bold mb-2">
               {formatPriceRange(salon.price_range)}
             </div>
           )}
 
-          {/* Distance (if shown) */}
-          {showDistance && salon.distance_meters && (
-            <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full inline-block mb-2">
-              {formatDistance(salon.distance_meters)}
-            </div>
-          )}
-
-          {/* Top Specialty */}
-          {salon.specialties && salon.specialties.length > 0 && (
-            <div className="text-xs text-gray-500 truncate">
-              {salon.specialties[0]}
-              {salon.specialties.length > 1 && ` +${salon.specialties.length - 1} more`}
+          {/* Operating Status */}
+          {(salon.accepts_walk_ins || salon.appointment_only) && (
+            <div className="flex items-center text-xs text-gray-500 mt-auto">
+              <Clock className="w-3 h-3 mr-1" />
+              <span>
+                {salon.accepts_walk_ins && 'Walk-ins welcome'}
+                {salon.appointment_only && 'By appointment'}
+              </span>
             </div>
           )}
         </div>

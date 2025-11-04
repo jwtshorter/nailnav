@@ -334,7 +334,7 @@ export default function HomePage() {
             </p>
             
             {/* Real salons from database */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {featuredSalons.map((salon, index) => (
                 <SalonCard
                   key={salon.id}
@@ -344,6 +344,7 @@ export default function HomePage() {
                   onContact={() => handleContact(salon)}
                   showDistance={false}
                   showActionButtons={false}
+                  isCompact={true}
                 />
               ))}
             </div>
