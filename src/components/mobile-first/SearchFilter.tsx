@@ -32,29 +32,63 @@ const priceRanges = [
 ]
 
 // Real database service columns only
-const popularServices = [
+const nailServices = [
   'Manicure',
+  'Gel Manicure',
   'Pedicure',
+  'Gel Pedicure',
   'Gel Nails',
+  'Gel X',
+  'Gel Extensions',
   'Acrylic Nails',
   'Nail Art',
   'Nail Extensions',
   'Dip Powder',
+  'Builders Gel',
   'Nail Repair'
 ]
 
-// Real database specialty columns only
-const popularSpecialties = [
+const otherServices = [
+  'Massage',
+  'Facials',
+  'Eyelashes',
+  'Brows',
+  'Waxing',
+  'Hair Cuts'
+]
+
+const specialties = [
   'Master Artist',
   'Certified Technicians',
   'Experienced Staff',
-  'Quick Service'
+  'Quick Service',
+  'Award Winning Staff',
+  'Bridal Nails'
 ]
 
-// Real database amenity columns only
-const amenityFilters = [
+const languages = [
+  'Spanish',
+  'Vietnamese',
+  'Chinese',
+  'Korean'
+]
+
+const amenities = [
   'Kid Friendly',
+  'Pet Friendly',
+  'LGBTQI+ Friendly',
   'Wheelchair Accessible',
+  'Female Owned',
+  'Minority Owned',
+  'Vegan Polish',
+  'Eco-Friendly Products',
+  'Cruelty-Free Products',
+  'Non-Toxic Treatments',
+  'Free WiFi',
+  'Heated Massage Chairs',
+  'Foot Spas',
+  'Group Bookings',
+  'Mobile Nails',
   'Walk-ins Welcome',
   'Parking'
 ]
