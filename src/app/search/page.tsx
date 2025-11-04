@@ -241,6 +241,37 @@ export default function SearchPage() {
     }
   }, []) // Empty dependency array to run only once
 
+  // City coordinates map for Australia and USA
+  const cityCoordinates: Record<string, {lat: number, lng: number, country: string}> = {
+    // Australia
+    'Sydney': { lat: -33.8688, lng: 151.2093, country: 'AU' },
+    'Melbourne': { lat: -37.8136, lng: 144.9631, country: 'AU' },
+    'Brisbane': { lat: -27.4698, lng: 153.0251, country: 'AU' },
+    'Perth': { lat: -31.9505, lng: 115.8605, country: 'AU' },
+    'Adelaide': { lat: -34.9285, lng: 138.6007, country: 'AU' },
+    'Gold Coast': { lat: -28.0167, lng: 153.4000, country: 'AU' },
+    'Canberra': { lat: -35.2809, lng: 149.1300, country: 'AU' },
+    'Newcastle': { lat: -32.9283, lng: 151.7817, country: 'AU' },
+    'Darwin': { lat: -12.4634, lng: 130.8456, country: 'AU' },
+    'Hobart': { lat: -42.8821, lng: 147.3272, country: 'AU' },
+    // USA
+    'New York': { lat: 40.7128, lng: -74.0060, country: 'US' },
+    'Los Angeles': { lat: 34.0522, lng: -118.2437, country: 'US' },
+    'Chicago': { lat: 41.8781, lng: -87.6298, country: 'US' },
+    'Houston': { lat: 29.7604, lng: -95.3698, country: 'US' },
+    'Phoenix': { lat: 33.4484, lng: -112.0740, country: 'US' },
+    'Philadelphia': { lat: 39.9526, lng: -75.1652, country: 'US' },
+    'San Antonio': { lat: 29.4241, lng: -98.4936, country: 'US' },
+    'San Diego': { lat: 32.7157, lng: -117.1611, country: 'US' },
+    'Dallas': { lat: 32.7767, lng: -96.7970, country: 'US' },
+    'San Jose': { lat: 37.3382, lng: -121.8863, country: 'US' },
+    'Austin': { lat: 30.2672, lng: -97.7431, country: 'US' },
+    'Miami': { lat: 25.7617, lng: -80.1918, country: 'US' },
+    'Seattle': { lat: 47.6062, lng: -122.3321, country: 'US' },
+    'Boston': { lat: 42.3601, lng: -71.0589, country: 'US' },
+    'Las Vegas': { lat: 36.1699, lng: -115.1398, country: 'US' }
+  }
+
   const addSalonMarkers = async (salonsData: Salon[]) => {
     if (!leafletMapRef.current || !salonsData.length) return
 
@@ -258,6 +289,15 @@ export default function SearchPage() {
         }
       })
       markersRef.current = []
+      
+      // Center map on the first salon's city or searched city
+      if (salonsData.length > 0) {
+        const firstCity = salonsData[0].city
+        const cityCoords = cityCoordinates[firstCity]
+        if (cityCoords && leafletMapRef.current) {
+          leafletMapRef.current.setView([cityCoords.lat, cityCoords.lng], 12)
+        }
+      }
 
       // Create custom nail salon icon
       const nailIcon = L.divIcon({
@@ -286,9 +326,27 @@ export default function SearchPage() {
         iconAnchor: [12, 24]
       })
 
-      salonsData.forEach(salon => {
+      // Add markers for salons with coordinates, geocode others
+      for (const salon of salonsData) {
         try {
-          const marker = L.marker([salon.lat, salon.lng], { icon: nailIcon })
+          let lat = salon.lat
+          let lng = salon.lng
+          
+          // If no coordinates, try to use city center or geocode address
+          if (!lat || !lng || lat === 0 || lng === 0) {
+            const cityCoords = cityCoordinates[salon.city]
+            if (cityCoords) {
+              // Use city center + small random offset to spread markers
+              lat = cityCoords.lat + (Math.random() - 0.5) * 0.05
+              lng = cityCoords.lng + (Math.random() - 0.5) * 0.05
+            } else {
+              // Skip if no city coords available
+              console.log(`No coordinates for ${salon.name} in ${salon.city}`)
+              continue
+            }
+          }
+          
+          const marker = L.marker([lat, lng], { icon: nailIcon })
             .addTo(leafletMapRef.current)
             .bindPopup(`
               <div style="min-width: 200px;">
@@ -337,7 +395,7 @@ export default function SearchPage() {
         } catch (error) {
           console.error('Error adding marker for salon:', salon.name, error)
         }
-      })
+      }
     } catch (error) {
       console.error('Error adding salon markers:', error)
     }
