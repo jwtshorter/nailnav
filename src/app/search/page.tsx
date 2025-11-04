@@ -33,115 +33,106 @@ export default function SearchPage() {
   const { t } = useTranslation()
   const [serviceQuery, setServiceQuery] = useState('')
   const [locationQuery, setLocationQuery] = useState('')
+  const locationQueryRef = useRef('')  // Track location with ref to avoid closure issues
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map')
   const [selectedSalon, setSelectedSalon] = useState<Salon | null>(null)
   const [salons, setSalons] = useState<Salon[]>([])
   const [loading, setLoading] = useState(false)
+  const [showSearchThisArea, setShowSearchThisArea] = useState(false)
+  const [mapBounds, setMapBounds] = useState<any>(null)
+  const [autoSearchEnabled, setAutoSearchEnabled] = useState(false)
+  
+  // Filter state
+  const [filters, setFilters] = useState<{
+    services: string[]
+    priceRange: string[]
+    specialties: string[]
+    amenities: string[]
+    verified: boolean
+    walkIns: boolean
+    parking: boolean
+  }>({
+    services: [],
+    priceRange: [],
+    specialties: [],
+    amenities: [],
+    verified: false,
+    walkIns: false,
+    parking: false
+  })
   
   // Handle URL search parameters and auto-search
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
     const service = urlParams.get('service') || ''
     const location = urlParams.get('location') || ''
+    const services = urlParams.get('services')
+    const priceRange = urlParams.get('priceRange')
+    const specialties = urlParams.get('specialties')
+    const verified = urlParams.get('verified') === 'true'
+    const walkIns = urlParams.get('walkIns') === 'true'
+    const parking = urlParams.get('parking') === 'true'
     
     if (service) {
       setServiceQuery(decodeURIComponent(service))
     }
-    if (location) {
-      setLocationQuery(decodeURIComponent(location))
+    const locationValue = location ? decodeURIComponent(location) : ''
+    if (locationValue) {
+      setLocationQuery(locationValue)
+      locationQueryRef.current = locationValue
     }
     
-    // Auto-search if parameters are provided
-    if (service || location) {
+    // Build filters object from URL params
+    const urlFilters = {
+      services: services ? services.split(',') : [],
+      priceRange: priceRange ? priceRange.split(',') : [],
+      specialties: specialties ? specialties.split(',') : [],
+      amenities: [],
+      verified,
+      walkIns,
+      parking
+    }
+    
+    // Set filters from URL params
+    if (services || priceRange || specialties || verified || walkIns || parking) {
+      setFilters(urlFilters)
+    }
+    
+    // Auto-search if parameters are provided - pass values directly to avoid stale state
+    if (service || locationValue || services || priceRange) {
+      console.log('Initial URL search with location:', locationValue)
       setTimeout(() => {
-        setLoading(true)
-        setTimeout(() => {
-          const filteredSalons = mockSalons.filter(salon => {
-            const serviceMatch = service === '' || 
-              salon.name.toLowerCase().includes(service.toLowerCase()) ||
-              salon.specialties?.some(spec => spec.toLowerCase().includes(service.toLowerCase()))
-            
-            const locationMatch = location === '' ||
-              salon.city.toLowerCase().includes(location.toLowerCase()) ||
-              salon.address.toLowerCase().includes(location.toLowerCase()) ||
-              salon.state.toLowerCase().includes(location.toLowerCase())
-            
-            return serviceMatch && locationMatch
-          })
-          setSalons(filteredSalons)
-          if (leafletMapRef.current) {
-            addSalonMarkers(filteredSalons)
-          }
-          setLoading(false)
-        }, 500)
-      }, 1500) // Delay to ensure map is loaded
+        handleSearch(false, locationValue, urlFilters)
+      }, 500) // Reduced delay since we're passing values directly
     }
   }, [])
+  
+  // Auto-search when filters change (but not on initial mount or initial URL param load)
+  const [initialLoad, setInitialLoad] = useState(true)
+  const [hasSearched, setHasSearched] = useState(false)
+  
+  useEffect(() => {
+    if (initialLoad) {
+      setInitialLoad(false)
+      return
+    }
+    // Only auto-search if user has done at least one search (has location context)
+    if (!hasSearched) {
+      console.log('No initial search yet, not auto-searching on filter change')
+      return
+    }
+    
+    console.log('Filter changed, auto-searching with locationQuery:', locationQuery)
+    const timer = setTimeout(() => {
+      handleSearch(false)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [filters])
   
   const mapRef = useRef<HTMLDivElement>(null)
   const leafletMapRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
-
-  // Mock salon data
-  const mockSalons: Salon[] = [
-    {
-      id: '1',
-      name: 'Elegant Nails Spa',
-      slug: 'elegant-nails-spa',
-      address: '123 Collins Street',
-      city: 'Melbourne',
-      state: 'VIC',
-      phone: '+61 3 9123 4567',
-      price_from: 35,
-      currency: 'AUD',
-      specialties: ['Gel Manicures', 'Nail Art', 'Spa Pedicures'],
-      is_verified: true,
-      average_rating: 4.8,
-      review_count: 127,
-      lat: -37.8136,
-      lng: 144.9631,
-      hours: 'Mon-Fri: 9AM-7PM, Sat: 9AM-6PM, Sun: 10AM-5PM',
-      image: 'https://page.gensparksite.com/v1/base64_upload/a523c8b6623589eb5a6f0ff95c026121'
-    },
-    {
-      id: '2',
-      name: 'Luxe Nail Lounge',
-      slug: 'luxe-nail-lounge',
-      address: '456 Chapel Street',
-      city: 'South Yarra',
-      state: 'VIC',
-      phone: '+61 3 9876 5432',
-      price_from: 65,
-      currency: 'AUD',
-      specialties: ['Premium Gel Services', 'Luxury Treatments'],
-      is_verified: true,
-      average_rating: 4.9,
-      review_count: 89,
-      lat: -37.8467,
-      lng: 144.9908,
-      hours: 'Mon-Sun: 9AM-8PM',
-      image: 'https://page.gensparksite.com/v1/base64_upload/f0d79c3ccca1056b496e94f623f0a9f8'
-    },
-    {
-      id: '3',
-      name: 'Quick Nails Express',
-      slug: 'quick-nails-express',
-      address: '789 Burke Street',
-      city: 'Melbourne',
-      state: 'VIC',
-      phone: '+61 3 9456 7890',
-      price_from: 20,
-      currency: 'AUD',
-      specialties: ['Quick Service', 'Walk-ins Welcome'],
-      is_verified: false,
-      average_rating: 4.2,
-      review_count: 45,
-      lat: -37.8118,
-      lng: 144.9648,
-      hours: 'Mon-Sat: 8AM-6PM, Sun: 10AM-4PM'
-    }
-  ]
 
   // Initialize OpenStreetMap with Leaflet
   useEffect(() => {
@@ -194,6 +185,27 @@ export default function SearchPage() {
           maxZoom: 19,
         }).addTo(leafletMapRef.current)
 
+        // Add map movement listeners to show "Search this area" button
+        leafletMapRef.current.on('moveend', () => {
+          if (leafletMapRef.current) {
+            const bounds = leafletMapRef.current.getBounds()
+            setMapBounds(bounds)
+            
+            // Show "Search this area" button when map is moved
+            // Only show if there's already been a search (salons exist)
+            if (salons.length > 0) {
+              setShowSearchThisArea(true)
+            }
+            
+            // If auto-search is enabled, automatically search on map move
+            if (autoSearchEnabled) {
+              setTimeout(() => {
+                handleSearch(true)
+              }, 500) // Debounce by 500ms
+            }
+          }
+        })
+
         // Salon markers will be added after search
       } catch (error) {
         console.error('Error initializing map:', error)
@@ -210,10 +222,6 @@ export default function SearchPage() {
 
     // Initialize map after a small delay to ensure DOM is ready
     const timeoutId = setTimeout(initializeMap, 100)
-
-    // REMOVED GEOLOCATION - NOT NEEDED
-
-    setSalons(mockSalons)
 
     // Cleanup function
     return () => {
@@ -273,12 +281,12 @@ export default function SearchPage() {
   }
 
   const addSalonMarkers = async (salonsData: Salon[]) => {
-    if (!leafletMapRef.current || !salonsData.length) return
+    if (!leafletMapRef.current) return
 
     try {
       const L = (await import('leaflet')).default
 
-      // Clear existing markers safely
+      // Clear existing markers safely (ALWAYS, even if no new salons)
       markersRef.current.forEach(marker => {
         try {
           if (leafletMapRef.current && marker) {
@@ -289,6 +297,12 @@ export default function SearchPage() {
         }
       })
       markersRef.current = []
+      
+      // If no salons, just clear and return
+      if (!salonsData.length) {
+        console.log('No salons to show on map, markers cleared')
+        return
+      }
       
       // Center map on the first salon's city or searched city
       if (salonsData.length > 0) {
@@ -401,17 +415,72 @@ export default function SearchPage() {
     }
   }
 
-  const handleSearch = async () => {
+  const handleSearch = async (useBounds = false, overrideLocation?: string, overrideFilters?: typeof filters) => {
+    // Use ref to get current location value, avoiding stale closure
+    const searchLocation = overrideLocation !== undefined ? overrideLocation : (locationQueryRef.current || locationQuery)
+    const searchFilters = overrideFilters !== undefined ? overrideFilters : filters
+    
+    console.log('=== handleSearch called ===')
+    console.log('searchLocation:', searchLocation)
+    console.log('searchFilters:', searchFilters)
     setLoading(true)
     
     try {
       // Build API query
       const params = new URLSearchParams()
-      if (locationQuery) params.append('city', locationQuery)
-      params.append('limit', '50')
+      if (searchLocation) {
+        params.append('city', searchLocation)
+        console.log('Added city filter:', searchLocation)
+      } else {
+        console.warn('NO LOCATION QUERY - will return all salons!')
+      }
+      params.append('limit', '500') // Increased limit to show all results in metro area
       
-      const response = await fetch(`/api/salons?${params.toString()}`)
+      // Add filter parameters
+      if (searchFilters.priceRange.length > 0) {
+        params.append('priceRange', searchFilters.priceRange.join(','))
+      }
+      if (searchFilters.verified) params.append('verified', 'true')
+      if (searchFilters.walkIns) params.append('walkIns', 'true')
+      if (searchFilters.parking) params.append('parking', 'true')
+      
+      // Add service filters as comma-separated
+      if (searchFilters.services.length > 0) {
+        params.append('services', searchFilters.services.join(','))
+      }
+      
+      // Add specialty filters
+      if (searchFilters.specialties.length > 0) {
+        params.append('specialties', searchFilters.specialties.join(','))
+      }
+      
+      // Add amenity filters
+      if (searchFilters.amenities.length > 0) {
+        params.append('amenities', searchFilters.amenities.join(','))
+      }
+      
+      // Add bounding box if searching by map area
+      if (useBounds && mapBounds && leafletMapRef.current) {
+        const bounds = leafletMapRef.current.getBounds()
+        const boundsObj = {
+          north: bounds.getNorth(),
+          south: bounds.getSouth(),
+          east: bounds.getEast(),
+          west: bounds.getWest()
+        }
+        params.append('bounds', JSON.stringify(boundsObj))
+      }
+      
+      const apiUrl = `/api/salons?${params.toString()}`
+      console.log('API URL:', apiUrl)
+      const response = await fetch(apiUrl)
       const data = await response.json()
+      
+      console.log('API returned', data.salons?.length, 'salons')
+      if (data.salons && data.salons.length > 0) {
+        console.log('First salon city:', data.salons[0].city)
+        console.log('Last salon city:', data.salons[data.salons.length - 1].city)
+      }
       
       if (data.success && data.salons) {
         const transformedSalons = data.salons.map((salon: any) => ({
@@ -447,6 +516,8 @@ export default function SearchPage() {
         
         setSalons(filtered)
         addSalonMarkers(filtered)
+        setShowSearchThisArea(false) // Hide button after search
+        setHasSearched(true) // Mark that we've done at least one search
       } else {
         setSalons([])
       }
@@ -456,6 +527,11 @@ export default function SearchPage() {
     } finally {
       setLoading(false)
     }
+  }
+  
+  // Search by current map area
+  const handleSearchThisArea = () => {
+    handleSearch(true)
   }
 
   const handleSalonClick = (salon: Salon) => {
@@ -505,7 +581,10 @@ export default function SearchPage() {
                 type="text"
                 placeholder="Location (city, suburb, postcode)"
                 value={locationQuery}
-                onChange={(e) => setLocationQuery(e.target.value)}
+                onChange={(e) => {
+                  setLocationQuery(e.target.value)
+                  locationQueryRef.current = e.target.value
+                }}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
@@ -530,11 +609,22 @@ export default function SearchPage() {
               </span>
               <motion.button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="flex items-center space-x-2 px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
+                className={`flex items-center space-x-2 px-3 py-1 text-sm border rounded-lg ${
+                  isFilterOpen 
+                    ? 'bg-primary-500 text-white border-primary-500' 
+                    : 'border-gray-300 hover:bg-gray-50'
+                }`}
                 whileTap={{ scale: 0.95 }}
               >
                 <Filter className="w-4 h-4" />
                 <span>{t('common.filter')}</span>
+                {(filters.services.length + filters.priceRange.length + filters.specialties.length + filters.amenities.length + 
+                  (filters.verified ? 1 : 0) + (filters.walkIns ? 1 : 0) + (filters.parking ? 1 : 0)) > 0 && (
+                  <span className="ml-1 bg-white text-primary-600 rounded-full px-2 py-0.5 text-xs font-bold">
+                    {filters.services.length + filters.priceRange.length + filters.specialties.length + filters.amenities.length + 
+                     (filters.verified ? 1 : 0) + (filters.walkIns ? 1 : 0) + (filters.parking ? 1 : 0)}
+                  </span>
+                )}
               </motion.button>
             </div>
             
@@ -564,6 +654,176 @@ export default function SearchPage() {
               </motion.button>
             </div>
           </div>
+
+          {/* Filter Panel */}
+          {isFilterOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="mt-4 bg-gray-50 rounded-lg border border-gray-200 p-4 max-h-96 overflow-y-auto"
+            >
+              {/* Services */}
+              <div className="mb-4">
+                <h3 className="font-semibold text-gray-900 mb-2">Services</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['Manicure', 'Pedicure', 'Gel Nails', 'Acrylic Nails', 'Nail Art', 'Nail Extensions', 'Dip Powder', 'Shellac'].map(service => (
+                    <button
+                      key={service}
+                      onClick={() => {
+                        setFilters(prev => ({
+                          ...prev,
+                          services: prev.services.includes(service)
+                            ? prev.services.filter(s => s !== service)
+                            : [...prev.services, service]
+                        }))
+                      }}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        filters.services.includes(service)
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-gray-700 border border-gray-300'
+                      }`}
+                    >
+                      {service}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Range */}
+              <div className="mb-4">
+                <h3 className="font-semibold text-gray-900 mb-2">Price Range</h3>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { value: 'budget', label: 'Budget ($)' },
+                    { value: 'mid-range', label: 'Mid-range ($$)' },
+                    { value: 'luxury', label: 'Luxury ($$$)' }
+                  ].map(range => (
+                    <button
+                      key={range.value}
+                      onClick={() => {
+                        setFilters(prev => ({
+                          ...prev,
+                          priceRange: prev.priceRange.includes(range.value)
+                            ? prev.priceRange.filter(p => p !== range.value)
+                            : [...prev.priceRange, range.value]
+                        }))
+                      }}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        filters.priceRange.includes(range.value)
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-gray-700 border border-gray-300'
+                      }`}
+                    >
+                      {range.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Specialties */}
+              <div className="mb-4">
+                <h3 className="font-semibold text-gray-900 mb-2">Specialties</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['Master Artist', 'Certified Technicians', 'Experienced Staff', 'Luxury Experience', 'Quick Service', 'Clean & Hygienic'].map(specialty => (
+                    <button
+                      key={specialty}
+                      onClick={() => {
+                        setFilters(prev => ({
+                          ...prev,
+                          specialties: prev.specialties.includes(specialty)
+                            ? prev.specialties.filter(s => s !== specialty)
+                            : [...prev.specialties, specialty]
+                        }))
+                      }}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        filters.specialties.includes(specialty)
+                          ? 'bg-accent-500 text-white'
+                          : 'bg-white text-gray-700 border border-gray-300'
+                      }`}
+                    >
+                      {specialty}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Amenities */}
+              <div className="mb-4">
+                <h3 className="font-semibold text-gray-900 mb-2">Amenities</h3>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { value: 'Online Booking', key: 'amenities' },
+                    { value: 'Kid Friendly', key: 'amenities' },
+                    { value: 'Wheelchair Accessible', key: 'amenities' },
+                    { value: 'Gift Cards', key: 'amenities' },
+                    { value: 'Loyalty Program', key: 'amenities' },
+                    { value: 'Verified Only', key: 'verified' },
+                    { value: 'Walk-ins Welcome', key: 'walkIns' },
+                    { value: 'Parking Available', key: 'parking' }
+                  ].map(item => {
+                    const isSelected = item.key === 'amenities' 
+                      ? filters.amenities.includes(item.value)
+                      : filters[item.key as keyof typeof filters] === true
+                    
+                    return (
+                      <button
+                        key={item.value}
+                        onClick={() => {
+                          if (item.key === 'amenities') {
+                            setFilters(prev => ({
+                              ...prev,
+                              amenities: prev.amenities.includes(item.value)
+                                ? prev.amenities.filter(a => a !== item.value)
+                                : [...prev.amenities, item.value]
+                            }))
+                          } else {
+                            setFilters(prev => ({
+                              ...prev,
+                              [item.key]: !prev[item.key as keyof typeof prev]
+                            }))
+                          }
+                        }}
+                        className={`px-3 py-1 rounded-full text-sm ${
+                          isSelected
+                            ? 'bg-green-500 text-white'
+                            : 'bg-white text-gray-700 border border-gray-300'
+                        }`}
+                      >
+                        {item.value}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Filter Actions */}
+              <div className="flex space-x-2 mt-4 pt-4 border-t border-gray-200">
+                <button
+                  onClick={() => {
+                    setFilters({
+                      services: [],
+                      priceRange: [],
+                      specialties: [],
+                      amenities: [],
+                      verified: false,
+                      walkIns: false,
+                      parking: false
+                    })
+                  }}
+                  className="flex-1 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  Clear All Filters
+                </button>
+                <button
+                  onClick={() => setIsFilterOpen(false)}
+                  className="flex-1 px-4 py-2 text-white bg-primary-500 rounded-lg hover:bg-primary-600"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
 
@@ -576,6 +836,49 @@ export default function SearchPage() {
             : 'hidden md:block md:w-1/2'
         } relative z-10`}>
           <div ref={mapRef} className="w-full h-full" />
+          
+          {/* Search This Area Button */}
+          {showSearchThisArea && !loading && (
+            <motion.div 
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -100, opacity: 0 }}
+              className="absolute top-4 left-1/2 transform -translate-x-1/2 z-30"
+            >
+              <motion.button
+                onClick={handleSearchThisArea}
+                className="bg-white shadow-lg rounded-full px-6 py-3 flex items-center space-x-2 border border-gray-200 hover:bg-gray-50 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Search className="w-4 h-4 text-primary-600" />
+                <span className="font-medium text-gray-900">Search this area</span>
+              </motion.button>
+            </motion.div>
+          )}
+          
+          {/* Auto-Search Toggle */}
+          <div className="absolute top-4 right-4 z-30">
+            <motion.button
+              onClick={() => {
+                const newValue = !autoSearchEnabled
+                setAutoSearchEnabled(newValue)
+                if (newValue) {
+                  // Immediately search when enabled
+                  handleSearch(true)
+                }
+              }}
+              className={`${
+                autoSearchEnabled 
+                  ? 'bg-primary-500 text-white' 
+                  : 'bg-white text-gray-700 border border-gray-200'
+              } shadow-md rounded-lg px-4 py-2 text-sm font-medium transition-colors`}
+              whileTap={{ scale: 0.95 }}
+              title={autoSearchEnabled ? 'Auto-search enabled' : 'Enable auto-search on map move'}
+            >
+              {autoSearchEnabled ? '✓ Auto-search' : 'Auto-search'}
+            </motion.button>
+          </div>
           
           {/* Map Loading Overlay */}
           {loading && (

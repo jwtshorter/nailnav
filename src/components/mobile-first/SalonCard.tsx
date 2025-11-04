@@ -19,6 +19,15 @@ interface Salon {
   accepts_walk_ins?: boolean
   appointment_only?: boolean
   price_range?: string
+  opening_hours?: {
+    monday?: string
+    tuesday?: string
+    wednesday?: string
+    thursday?: string
+    friday?: string
+    saturday?: string
+    sunday?: string
+  }
 }
 
 interface SalonCardProps {
@@ -61,6 +70,57 @@ export const SalonCard = ({
       'luxury': '$$$'
     }
     return priceMap[priceRange] || priceRange
+  }
+
+  const getOpeningStatus = (openingHours?: Record<string, string>): string => {
+    if (!openingHours) return ''
+    
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+    const now = new Date()
+    const currentDay = days[now.getDay()]
+    const currentTime = now.getHours() * 60 + now.getMinutes()
+    
+    const todayHours = openingHours[currentDay]
+    if (!todayHours || todayHours.toLowerCase() === 'closed') {
+      // Check next open day
+      for (let i = 1; i <= 7; i++) {
+        const nextDayIndex = (now.getDay() + i) % 7
+        const nextDay = days[nextDayIndex]
+        const nextDayHours = openingHours[nextDay]
+        if (nextDayHours && nextDayHours.toLowerCase() !== 'closed') {
+          const match = nextDayHours.match(/(\d+):?(\d*)\s*(am|pm)/i)
+          if (match) {
+            const dayName = nextDay.charAt(0).toUpperCase() + nextDay.slice(1)
+            return i === 1 ? `Opens tomorrow ${nextDayHours.split('-')[0].trim()}` : `Opens ${dayName} ${nextDayHours.split('-')[0].trim()}`
+          }
+        }
+      }
+      return 'Closed'
+    }
+    
+    // Parse hours like "9 am-7 pm" or "9:30 am-6 pm"
+    const hoursMatch = todayHours.match(/(\d+):?(\d*)\s*(am|pm)\s*-\s*(\d+):?(\d*)\s*(am|pm)/i)
+    if (!hoursMatch) return todayHours
+    
+    const [, openHour, openMin = '0', openPeriod, closeHour, closeMin = '0', closePeriod] = hoursMatch
+    
+    const openTime = (openPeriod.toLowerCase() === 'pm' && parseInt(openHour) !== 12 ? parseInt(openHour) + 12 : parseInt(openHour)) * 60 + parseInt(openMin)
+    const closeTime = (closePeriod.toLowerCase() === 'pm' && parseInt(closeHour) !== 12 ? parseInt(closeHour) + 12 : parseInt(closeHour)) * 60 + parseInt(closeMin)
+    
+    if (currentTime >= openTime && currentTime < closeTime) {
+      return 'Open now'
+    } else if (currentTime < openTime) {
+      return `Opens ${openHour}${openMin !== '0' ? ':' + openMin : ''} ${openPeriod.toLowerCase()}`
+    } else {
+      // Check tomorrow's hours
+      const tomorrowIndex = (now.getDay() + 1) % 7
+      const tomorrowDay = days[tomorrowIndex]
+      const tomorrowHours = openingHours[tomorrowDay]
+      if (tomorrowHours && tomorrowHours.toLowerCase() !== 'closed') {
+        return `Opens tomorrow ${tomorrowHours.split('-')[0].trim()}`
+      }
+      return 'Closed'
+    }
   }
 
   const renderStars = (rating: number, count: number) => {
@@ -121,11 +181,25 @@ export const SalonCard = ({
             )}
           </h3>
 
-          {/* Location */}
-          <div className="flex items-center text-gray-600 text-sm mb-2">
-            <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
-            <span className="truncate text-xs">{salon.city}{salon.state ? `, ${salon.state}` : ''}</span>
+          {/* Address */}
+          <div className="flex items-start text-gray-600 text-xs mb-2">
+            <MapPin className="w-3 h-3 mr-1 flex-shrink-0 mt-0.5" />
+            <span className="line-clamp-2">{salon.address}</span>
           </div>
+
+          {/* Opening Hours Status */}
+          {salon.opening_hours && getOpeningStatus(salon.opening_hours) && (
+            <div className="flex items-center text-xs mb-2">
+              <Clock className="w-3 h-3 mr-1 flex-shrink-0" />
+              <span className={`${
+                getOpeningStatus(salon.opening_hours) === 'Open now' 
+                  ? 'text-green-600 font-medium' 
+                  : 'text-gray-600'
+              }`}>
+                {getOpeningStatus(salon.opening_hours)}
+              </span>
+            </div>
+          )}
 
           {/* Rating */}
           {salon.average_rating && salon.review_count ? (
@@ -219,11 +293,25 @@ export const SalonCard = ({
             )}
           </div>
 
-          {/* Location */}
-          <div className="flex items-center text-gray-600 text-sm mb-2">
-            <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
-            <span className="truncate">{salon.city}{salon.state ? `, ${salon.state}` : ''}</span>
+          {/* Address */}
+          <div className="flex items-start text-gray-600 text-sm mb-2">
+            <MapPin className="w-4 h-4 mr-1 flex-shrink-0 mt-0.5" />
+            <span className="line-clamp-1">{salon.address}</span>
           </div>
+
+          {/* Opening Hours Status */}
+          {salon.opening_hours && getOpeningStatus(salon.opening_hours) && (
+            <div className="flex items-center text-sm mb-2">
+              <Clock className="w-4 h-4 mr-1 flex-shrink-0" />
+              <span className={`${
+                getOpeningStatus(salon.opening_hours) === 'Open now' 
+                  ? 'text-green-600 font-semibold' 
+                  : 'text-gray-600'
+              }`}>
+                {getOpeningStatus(salon.opening_hours)}
+              </span>
+            </div>
+          )}
 
           {/* Rating */}
           {salon.average_rating && salon.review_count && (
