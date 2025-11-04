@@ -7,7 +7,6 @@ export async function GET(request: NextRequest) {
     const featured = searchParams.get('featured') === 'true'
     const city = searchParams.get('city')
     const state = searchParams.get('state')
-    const verified = searchParams.get('verified') === 'true'
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = parseInt(searchParams.get('offset') || '0')
     
@@ -26,6 +25,7 @@ export async function GET(request: NextRequest) {
     const services = searchParams.get('services')
     const specialties = searchParams.get('specialties')
     const amenities = searchParams.get('amenities')
+    const languages = searchParams.get('languages')
     const priceRange = searchParams.get('priceRange')
     const walkIns = searchParams.get('walkIns') === 'true'
     const parking = searchParams.get('parking') === 'true'
@@ -58,16 +58,58 @@ export async function GET(request: NextRequest) {
         latitude,
         longitude,
         manicure,
+        gel_manicure,
         pedicure,
+        gel_pedicure,
         gel_nails,
+        gel_x,
+        gel_extensions,
         acrylic_nails,
         nail_art,
         nail_extensions,
         dip_powder,
-        shellac,
+        builders_gel,
+        nail_repair,
+        massage,
+        facials,
+        eyelashes,
+        brows,
+        waxing,
+        hair_cuts,
+        hand_foot_treatment,
+        basic_english,
+        fluent_english,
+        spanish,
+        vietnamese,
+        chinese,
+        korean,
         master_artist,
         certified_technicians,
         experienced_staff,
+        quick_service,
+        award_winning_staff,
+        bridal_nails,
+        appointment_only,
+        group_bookings,
+        mobile_nails,
+        kid_friendly,
+        child_play_area,
+        adult_only,
+        pet_friendly,
+        lgbtqi_friendly,
+        wheelchair_accessible,
+        female_owned,
+        minority_owned,
+        complimentary_drink,
+        heated_massage_chairs,
+        foot_spas,
+        free_wifi,
+        autoclave_sterilisation,
+        led_curing,
+        non_toxic_treatments,
+        eco_friendly_products,
+        cruelty_free_products,
+        vegan_polish,
         cover_image_url,
         gallery_images,
         price_range,
@@ -102,22 +144,29 @@ export async function GET(request: NextRequest) {
       query = query.ilike('state', `%${state}%`)
     }
     
-    if (verified) {
-      query = query.eq('is_verified', true)
-    }
-    
     // Service filters - map service names to database boolean columns
     if (services) {
       const serviceList = services.split(',')
       const serviceMap: Record<string, string> = {
         'Manicure': 'manicure',
+        'Gel Manicure': 'gel_manicure',
         'Pedicure': 'pedicure',
+        'Gel Pedicure': 'gel_pedicure',
         'Gel Nails': 'gel_nails',
+        'Gel X': 'gel_x',
+        'Gel Extensions': 'gel_extensions',
         'Acrylic Nails': 'acrylic_nails',
         'Nail Art': 'nail_art',
         'Nail Extensions': 'nail_extensions',
         'Dip Powder': 'dip_powder',
-        'Nail Repair': 'nail_repair'
+        'Builders Gel': 'builders_gel',
+        'Nail Repair': 'nail_repair',
+        'Massage': 'massage',
+        'Facials': 'facials',
+        'Eyelashes': 'eyelashes',
+        'Brows': 'brows',
+        'Waxing': 'waxing',
+        'Hair Cuts': 'hair_cuts'
       }
       
       // For multiple services, we want salons that have ANY of them (OR logic)
@@ -150,7 +199,25 @@ export async function GET(request: NextRequest) {
       const amenityList = amenities.split(',')
       const amenityMap: Record<string, string> = {
         'Kid Friendly': 'kid_friendly',
-        'Wheelchair Accessible': 'wheelchair_accessible'
+        'Child Play Area': 'child_play_area',
+        'Adult Only': 'adult_only',
+        'Pet Friendly': 'pet_friendly',
+        'LGBTQI+ Friendly': 'lgbtqi_friendly',
+        'Wheelchair Accessible': 'wheelchair_accessible',
+        'Female Owned': 'female_owned',
+        'Minority Owned': 'minority_owned',
+        'Complimentary Drink': 'complimentary_drink',
+        'Heated Massage Chairs': 'heated_massage_chairs',
+        'Foot Spas': 'foot_spas',
+        'Free WiFi': 'free_wifi',
+        'Autoclave Sterilisation': 'autoclave_sterilisation',
+        'LED Curing': 'led_curing',
+        'Non-Toxic Treatments': 'non_toxic_treatments',
+        'Eco-Friendly Products': 'eco_friendly_products',
+        'Cruelty-Free Products': 'cruelty_free_products',
+        'Vegan Polish': 'vegan_polish',
+        'Group Bookings': 'group_bookings',
+        'Mobile Nails': 'mobile_nails'
       }
       
       // Apply each amenity filter
@@ -201,13 +268,24 @@ export async function GET(request: NextRequest) {
       const serviceList = services.split(',')
       const serviceMap: Record<string, string> = {
         'Manicure': 'manicure',
+        'Gel Manicure': 'gel_manicure',
         'Pedicure': 'pedicure',
+        'Gel Pedicure': 'gel_pedicure',
         'Gel Nails': 'gel_nails',
+        'Gel X': 'gel_x',
+        'Gel Extensions': 'gel_extensions',
         'Acrylic Nails': 'acrylic_nails',
         'Nail Art': 'nail_art',
         'Nail Extensions': 'nail_extensions',
         'Dip Powder': 'dip_powder',
-        'Nail Repair': 'nail_repair'
+        'Builders Gel': 'builders_gel',
+        'Nail Repair': 'nail_repair',
+        'Massage': 'massage',
+        'Facials': 'facials',
+        'Eyelashes': 'eyelashes',
+        'Brows': 'brows',
+        'Waxing': 'waxing',
+        'Hair Cuts': 'hair_cuts'
       }
       
       filteredSalons = filteredSalons.filter((salon: any) => {
@@ -224,12 +302,31 @@ export async function GET(request: NextRequest) {
         'Master Artist': 'master_artist',
         'Certified Technicians': 'certified_technicians',
         'Experienced Staff': 'experienced_staff',
-        'Quick Service': 'quick_service'
+        'Quick Service': 'quick_service',
+        'Award Winning Staff': 'award_winning_staff',
+        'Bridal Nails': 'bridal_nails'
       }
       
       filteredSalons = filteredSalons.filter((salon: any) => {
         return specialtyList.some(specialty => {
           const dbColumn = specialtyMap[specialty]
+          return dbColumn && salon[dbColumn] === true
+        })
+      })
+    }
+    
+    if (languages) {
+      const languageList = languages.split(',')
+      const languageMap: Record<string, string> = {
+        'Spanish': 'spanish',
+        'Vietnamese': 'vietnamese',
+        'Chinese': 'chinese',
+        'Korean': 'korean'
+      }
+      
+      filteredSalons = filteredSalons.filter((salon: any) => {
+        return languageList.some(language => {
+          const dbColumn = languageMap[language]
           return dbColumn && salon[dbColumn] === true
         })
       })

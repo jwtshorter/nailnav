@@ -43,13 +43,12 @@ export default function SearchPage() {
   const [mapBounds, setMapBounds] = useState<any>(null)
   const [autoSearchEnabled, setAutoSearchEnabled] = useState(false)
   
-  // Filter state
+  // Filter state - ONLY real database columns
   const [filters, setFilters] = useState<{
     services: string[]
     priceRange: string[]
     specialties: string[]
     amenities: string[]
-    verified: boolean
     walkIns: boolean
     parking: boolean
   }>({
@@ -57,7 +56,6 @@ export default function SearchPage() {
     priceRange: [],
     specialties: [],
     amenities: [],
-    verified: false,
     walkIns: false,
     parking: false
   })
@@ -70,9 +68,10 @@ export default function SearchPage() {
     const services = urlParams.get('services')
     const priceRange = urlParams.get('priceRange')
     const specialties = urlParams.get('specialties')
-    const verified = urlParams.get('verified') === 'true'
     const walkIns = urlParams.get('walkIns') === 'true'
     const parking = urlParams.get('parking') === 'true'
+    
+    console.log('URL params:', { location, services, priceRange, specialties, walkIns, parking })
     
     if (service) {
       setServiceQuery(decodeURIComponent(service))
@@ -89,13 +88,14 @@ export default function SearchPage() {
       priceRange: priceRange ? priceRange.split(',') : [],
       specialties: specialties ? specialties.split(',') : [],
       amenities: [],
-      verified,
       walkIns,
       parking
     }
     
+    console.log('Built urlFilters:', urlFilters)
+    
     // Set filters from URL params
-    if (services || priceRange || specialties || verified || walkIns || parking) {
+    if (services || priceRange || specialties || walkIns || parking) {
       setFilters(urlFilters)
     }
     
@@ -440,7 +440,6 @@ export default function SearchPage() {
       if (searchFilters.priceRange.length > 0) {
         params.append('priceRange', searchFilters.priceRange.join(','))
       }
-      if (searchFilters.verified) params.append('verified', 'true')
       if (searchFilters.walkIns) params.append('walkIns', 'true')
       if (searchFilters.parking) params.append('parking', 'true')
       
@@ -663,11 +662,11 @@ export default function SearchPage() {
               exit={{ height: 0, opacity: 0 }}
               className="mt-4 bg-gray-50 rounded-lg border border-gray-200 p-4 max-h-96 overflow-y-auto"
             >
-              {/* Services - ONLY database columns */}
+              {/* Nail Services */}
               <div className="mb-4">
                 <h3 className="font-semibold text-gray-900 mb-2">Nail Services</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Manicure', 'Pedicure', 'Gel Nails', 'Acrylic Nails', 'Nail Art', 'Nail Extensions', 'Dip Powder', 'Nail Repair'].map(service => (
+                  {['Manicure', 'Gel Manicure', 'Pedicure', 'Gel Pedicure', 'Gel Nails', 'Gel X', 'Gel Extensions', 'Acrylic Nails', 'Nail Art', 'Nail Extensions', 'Dip Powder', 'Builders Gel', 'Nail Repair'].map(service => (
                     <button
                       key={service}
                       onClick={() => {
@@ -721,11 +720,38 @@ export default function SearchPage() {
                 </div>
               </div>
 
-              {/* Specialties - ONLY database columns */}
+              {/* Other Services */}
+              <div className="mb-4">
+                <h3 className="font-semibold text-gray-900 mb-2">Other Services</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['Massage', 'Facials', 'Eyelashes', 'Brows', 'Waxing', 'Hair Cuts'].map(service => (
+                    <button
+                      key={service}
+                      onClick={() => {
+                        setFilters(prev => ({
+                          ...prev,
+                          services: prev.services.includes(service)
+                            ? prev.services.filter(s => s !== service)
+                            : [...prev.services, service]
+                        }))
+                      }}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        filters.services.includes(service)
+                          ? 'bg-primary-500 text-white'
+                          : 'bg-white text-gray-700 border border-gray-300'
+                      }`}
+                    >
+                      {service}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Specialties */}
               <div className="mb-4">
                 <h3 className="font-semibold text-gray-900 mb-2">Specialties</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Master Artist', 'Certified Technicians', 'Experienced Staff', 'Quick Service'].map(specialty => (
+                  {['Master Artist', 'Certified Technicians', 'Experienced Staff', 'Quick Service', 'Award Winning Staff', 'Bridal Nails'].map(specialty => (
                     <button
                       key={specialty}
                       onClick={() => {
@@ -748,13 +774,53 @@ export default function SearchPage() {
                 </div>
               </div>
 
-              {/* Amenities - ONLY database columns */}
+              {/* Languages */}
               <div className="mb-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Amenities</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">Languages Spoken</h3>
+                <div className="flex flex-wrap gap-2">
+                  {['Spanish', 'Vietnamese', 'Chinese', 'Korean'].map(language => (
+                    <button
+                      key={language}
+                      onClick={() => {
+                        setFilters(prev => ({
+                          ...prev,
+                          amenities: prev.amenities.includes(language)
+                            ? prev.amenities.filter(a => a !== language)
+                            : [...prev.amenities, language]
+                        }))
+                      }}
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        filters.amenities.includes(language)
+                          ? 'bg-purple-500 text-white'
+                          : 'bg-white text-gray-700 border border-gray-300'
+                      }`}
+                    >
+                      {language}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Amenities */}
+              <div className="mb-4">
+                <h3 className="font-semibold text-gray-900 mb-2">Amenities & Features</h3>
                 <div className="flex flex-wrap gap-2">
                   {[
                     { value: 'Kid Friendly', key: 'amenities' },
+                    { value: 'Pet Friendly', key: 'amenities' },
+                    { value: 'LGBTQI+ Friendly', key: 'amenities' },
                     { value: 'Wheelchair Accessible', key: 'amenities' },
+                    { value: 'Female Owned', key: 'amenities' },
+                    { value: 'Minority Owned', key: 'amenities' },
+                    { value: 'Vegan Polish', key: 'amenities' },
+                    { value: 'Eco-Friendly Products', key: 'amenities' },
+                    { value: 'Cruelty-Free Products', key: 'amenities' },
+                    { value: 'Non-Toxic Treatments', key: 'amenities' },
+                    { value: 'Free WiFi', key: 'amenities' },
+                    { value: 'Heated Massage Chairs', key: 'amenities' },
+                    { value: 'Foot Spas', key: 'amenities' },
+                    { value: 'Group Bookings', key: 'amenities' },
+                    { value: 'Mobile Nails', key: 'amenities' },
                     { value: 'Walk-ins Welcome', key: 'walkIns' },
                     { value: 'Parking', key: 'parking' }
                   ].map(item => {
@@ -802,7 +868,6 @@ export default function SearchPage() {
                       priceRange: [],
                       specialties: [],
                       amenities: [],
-                      verified: false,
                       walkIns: false,
                       parking: false
                     })

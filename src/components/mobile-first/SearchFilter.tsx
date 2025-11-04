@@ -10,11 +10,6 @@ interface SalonSearchFilters {
   services?: string[]
   priceRange?: string[]
   specialties?: string[]
-  languages?: string[]
-  expertise?: string[]
-  hours?: string[]
-  booking?: string[]
-  isVerified?: boolean
   acceptsWalkIns?: boolean
   hasParking?: boolean
   location?: {
@@ -36,61 +31,66 @@ const priceRanges = [
   { value: 'premium', label: 'Premium ($$$)', color: 'purple' }
 ]
 
-const popularServices = [
+// Real database service columns only
+const nailServices = [
+  'Manicure',
   'Gel Manicure',
-  'Classic Manicure', 
+  'Pedicure',
   'Gel Pedicure',
+  'Gel Nails',
+  'Gel X',
+  'Gel Extensions',
   'Acrylic Nails',
+  'Nail Art',
+  'Nail Extensions',
   'Dip Powder',
-  'Nail Art',
-  'Classic Pedicure',
-  'Gel Extensions'
+  'Builders Gel',
+  'Nail Repair'
 ]
 
-const popularSpecialties = [
-  'Gel Services',
-  'Nail Art',
-  'Acrylic Extensions',
+const otherServices = [
+  'Massage',
+  'Facials',
+  'Eyelashes',
+  'Brows',
+  'Waxing',
+  'Hair Cuts'
+]
+
+const specialties = [
+  'Master Artist',
+  'Certified Technicians',
+  'Experienced Staff',
   'Quick Service',
-  'Luxury Treatments',
-  'Spa Pedicures',
-  'Walk-ins Welcome',
-  'Premium Brands'
+  'Award Winning Staff',
+  'Bridal Nails'
 ]
 
-const expertiseFilters = [
-  'Certified Nail Technicians',
-  'Licensed Professionals',
-  'Award-Winning Staff',
-  'Experienced Team',
-  'Qualified Technicians',
-  'Specialty Certified',
-  'Advanced Training',
-  'Master Technicians'
+const languages = [
+  'Spanish',
+  'Vietnamese',
+  'Chinese',
+  'Korean'
 ]
 
-const hoursFilters = [
-  'Open Monday',
-  'Open Tuesday',
-  'Open Wednesday', 
-  'Open Thursday',
-  'Open Friday',
-  'Open Saturday',
-  'Open Sunday',
-  'Extended Hours',
-  'Late Night',
-  'Early Morning'
-]
-
-const bookingFilters = [
-  'Online Booking',
-  'Phone Booking',
-  'Walk-ins Welcome',
-  'Appointment Required',
-  'Same Day Booking',
-  'Mobile Nails',
+const amenities = [
+  'Kid Friendly',
+  'Pet Friendly',
+  'LGBTQI+ Friendly',
+  'Wheelchair Accessible',
+  'Female Owned',
+  'Minority Owned',
+  'Vegan Polish',
+  'Eco-Friendly Products',
+  'Cruelty-Free Products',
+  'Non-Toxic Treatments',
+  'Free WiFi',
+  'Heated Massage Chairs',
+  'Foot Spas',
   'Group Bookings',
-  'Advance Booking'
+  'Mobile Nails',
+  'Walk-ins Welcome',
+  'Parking'
 ]
 
 const languages = [
