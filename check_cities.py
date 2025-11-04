@@ -1,44 +1,24 @@
-#!/usr/bin/env python3
-"""
-Check what cities exist in the database
-"""
 import os
-from dotenv import load_dotenv
-from supabase import create_client, Client
+from supabase import create_client
 
-load_dotenv('.env.local')
+url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+key = os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+supabase = create_client(url, key)
 
-SUPABASE_URL = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
-SUPABASE_SERVICE_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+# Get all cities
+result = supabase.table('cities').select('id, name').limit(100).execute()
+print(f"Total cities: {len(result.data)}")
+for city in sorted(result.data, key=lambda x: x['name']):
+    print(f"  {city['name']}")
 
-print("=" * 80)
-print("🏙️  CHECKING CITIES TABLE")
-print("=" * 80)
+# Get count by city
+print("\nSalons per city:")
+salons_result = supabase.table('salons').select('city_id, cities(name)', count='exact').eq('is_published', True).execute()
+city_counts = {}
+for salon in salons_result.data:
+    city_name = salon.get('cities', {}).get('name') if salon.get('cities') else None
+    if city_name:
+        city_counts[city_name] = city_counts.get(city_name, 0) + 1
 
-try:
-    supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
-    
-    # Try to get cities
-    print("\n📊 Fetching cities from database...")
-    result = supabase.table('cities').select('*').execute()
-    
-    if result.data:
-        print(f"✅ Found {len(result.data)} cities:\n")
-        for city in result.data[:20]:  # Show first 20
-            print(f"   ID: {city.get('id')} - {city.get('name')} ({city.get('state', 'N/A')})")
-        
-        if len(result.data) > 20:
-            print(f"\n   ... and {len(result.data) - 20} more cities")
-    else:
-        print("⚠️  No cities found in database")
-        
-except Exception as e:
-    error_str = str(e)
-    if 'PGRST205' in error_str or 'not find' in error_str:
-        print("❌ Cities table does not exist!")
-        print("\n💡 Solution: We need to either:")
-        print("   1. Create city_id = NULL (if the column allows NULL)")
-        print("   2. Create cities first based on Excel data")
-        print("   3. Disable the foreign key constraint temporarily")
-    else:
-        print(f"❌ Error: {e}")
+for city, count in sorted(city_counts.items(), key=lambda x: -x[1])[:20]:
+    print(f"  {city}: {count} salons")

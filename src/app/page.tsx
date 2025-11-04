@@ -60,8 +60,8 @@ export default function HomePage() {
 
   const loadFeaturedSalons = async () => {
     try {
-      // Load ALL salons (not just featured), with higher limit
-      const response = await fetch('/api/salons?limit=50')
+      // Load FEATURED salons only
+      const response = await fetch('/api/salons/featured?limit=12')
       const data = await response.json()
       
       if (data.success && data.salons) {
@@ -82,11 +82,11 @@ export default function HomePage() {
           review_count: salon.review_count  // Real from DB
         })))
       } else {
-        console.error('Failed to load salons:', data)
+        console.error('Failed to load featured salons:', data)
         setFeaturedSalons([])
       }
     } catch (error) {
-      console.error('Error loading salons:', error)
+      console.error('Error loading featured salons:', error)
       setFeaturedSalons([])
     }
   }
@@ -327,10 +327,10 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              All Nail Salons
+              {t('home.featuredVendors.title')}
             </h2>
             <p className="text-gray-600 text-center mb-8">
-              Browse all {featuredSalons.length} salons in Australia
+              {t('home.featuredVendors.subtitle')}
             </p>
             
             {/* Real salons from database */}
