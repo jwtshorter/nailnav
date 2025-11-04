@@ -38,7 +38,6 @@ export default function SearchPage() {
   const [selectedSalon, setSelectedSalon] = useState<Salon | null>(null)
   const [salons, setSalons] = useState<Salon[]>([])
   const [loading, setLoading] = useState(false)
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null)
   
   // Handle URL search parameters and auto-search
   useEffect(() => {
@@ -173,7 +172,8 @@ export default function SearchPage() {
           shadowUrl: '/leaflet/marker-shadow.png',
         })
 
-        const defaultCenter = userLocation || { lat: -37.8136, lng: 144.9631 } // Melbourne
+        // Center on Sydney where most salons are located
+        const defaultCenter = { lat: -33.8688, lng: 151.2093 }
         
         // Create new map instance
         leafletMapRef.current = L.map(mapRef.current, {
@@ -211,27 +211,7 @@ export default function SearchPage() {
     // Initialize map after a small delay to ensure DOM is ready
     const timeoutId = setTimeout(initializeMap, 100)
 
-    // Get user location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          if (!mounted) return
-          
-          const location = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          }
-          setUserLocation(location)
-          
-          if (leafletMapRef.current) {
-            leafletMapRef.current.setView([location.lat, location.lng], 13)
-          }
-        },
-        (error) => {
-          console.log('Geolocation error:', error)
-        }
-      )
-    }
+    // REMOVED GEOLOCATION - NOT NEEDED
 
     setSalons(mockSalons)
 
@@ -382,18 +362,21 @@ export default function SearchPage() {
           slug: salon.slug,
           address: salon.address,
           city: salon.city,
-          state: salon.state || 'VIC',
+          state: salon.state,  // NO FAKE DATA
           phone: salon.phone,
-          price_from: salon.price_from || 35,
-          currency: salon.currency || 'AUD',
+          price_from: salon.price_from,  // NO FAKE DATA
+          currency: salon.currency,  // NO FAKE DATA
           specialties: salon.specialties || salon.services_offered || [],
           is_verified: salon.is_verified,
           average_rating: salon.average_rating || salon.rating,
-          review_count: salon.review_count || 0,
-          lat: salon.latitude || -37.8136,
-          lng: salon.longitude || 144.9631,
-          hours: 'Mon-Fri: 9AM-6PM',
-          image: salon.cover_image_url
+          review_count: salon.review_count,  // NO FAKE DATA
+          lat: salon.latitude || 0,  // 0 if no coords
+          lng: salon.longitude || 0,  // 0 if no coords
+          hours: salon.opening_hours?.monday || null,  // Real hours
+          image: salon.cover_image_url,
+          price_range: salon.price_range,
+          appointment_only: salon.appointment_only,
+          accepts_walk_ins: salon.accepts_walk_ins
         }))
         
         // Filter by service if provided
@@ -468,15 +451,7 @@ export default function SearchPage() {
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
-              {/* Location Permission Status */}
-              {userLocation && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <div className="flex items-center space-x-1 text-xs text-accent-600 font-medium">
-                    <div className="w-2 h-2 bg-accent-600 rounded-full"></div>
-                    <span>Using your location</span>
-                  </div>
-                </div>
-              )}
+              {/* Location tracking removed */}
             </div>
             
             <motion.button
@@ -623,9 +598,11 @@ export default function SearchPage() {
                             </div>
                           )}
 
-                          <div className="text-xs text-primary-600 font-medium">
-                            From ${salon.price_from || 25} 
-                          </div>
+                          {salon.price_range && (
+                            <div className="text-sm text-primary-600 font-bold">
+                              {salon.price_range === 'budget' ? '$' : salon.price_range === 'mid-range' ? '$$' : '$$$'}
+                            </div>
+                          )}
                         </div>
                       </div>
 

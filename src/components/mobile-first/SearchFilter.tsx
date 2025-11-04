@@ -106,27 +106,7 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [filters, setFilters] = useState<SalonSearchFilters>({})
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
-  const [locationPermission, setLocationPermission] = useState<'pending' | 'granted' | 'denied'>('pending')
-
-  // Get user location on component mount
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const location = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          }
-          setUserLocation(location)
-          setLocationPermission('granted')
-        },
-        () => {
-          setLocationPermission('denied')
-        }
-      )
-    }
-  }, [])
+  // REMOVED GEOLOCATION - NOT NEEDED
 
   const handleSearch = () => {
     // Call the onSearch prop with filters
@@ -183,9 +163,7 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
   ]
 
   const handleQuickFilter = (filter: typeof quickFilters[0]) => {
-    if (filter.type === 'location' && userLocation) {
-      handleSearch()
-    } else if (filter.type === 'service' && filter.value) {
+    if (filter.type === 'service' && filter.value) {
       toggleFilter('services', filter.value)
     } else if (filter.type === 'price' && filter.value) {
       toggleFilter('priceRange', filter.value)

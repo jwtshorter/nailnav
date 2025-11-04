@@ -145,15 +145,8 @@ export async function GET(
         salon.quick_service && 'Quick Service',
         salon.premium_products && 'Premium Products'
       ].filter(Boolean),
-      // Add default values
-      currency: 'AUD',
-      country: 'Australia',
-      state: 'VIC', // Default, will be updated from cities table
-      languages_spoken: ['English'],
-      price_range: 'mid-range',
-      price_from: 35,
+      // NO FAKE DATA - only return what's in database
       average_rating: salon.rating,
-      review_count: 0,
       reviews: []
     }
 
