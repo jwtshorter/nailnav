@@ -1,0 +1,976 @@
+Fetching salons without coordinates from database...
+
+🗺️  Found 248 salons without coordinates
+⏱️  Rate limit: 1 request per second (Nominatim free tier)
+⏱️  Estimated time: ~5 minutes
+
+1/248 📍 Geocoding: Lynn's Nails & Beauty (Sydney)...
+  🔍 Extracted: '396-404 Oxford St, Bondi Junction NSW 2022'
+           → '396-404 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+2/248 📍 Geocoding: Advanced Nails and Beauty (Sydney)...
+  🔍 Extracted: 'Westfield Bondi Junction, 500 Oxford St, Bondi Junction NSW 2022'
+           → '500 Oxford St'
+  ✓ Success: -33.8929, 151.2500
+3/248 📍 Geocoding: PT Nails & Beauty (Sydney)...
+  🔍 Extracted: '135 Redfern St, Redfern NSW 2016'
+           → '135 Redfern St'
+  ✓ Success: -33.8427, 150.9108
+4/248 📍 Geocoding: SK Hair & Beauty Darwin (Darwin)...
+  🔍 Extracted: 'Voyage Arcade, Shop/2B Smith St, Darwin City NT 0800'
+           → '2B Smith St'
+  ✓ Success: -12.4649, 130.8436
+5/248 📍 Geocoding: Gel&t BIAB Nails Sydney (Sydney)...
+  🔍 Extracted: '40 Grosvenor St, Woollahra NSW 2025'
+           → '40 Grosvenor St'
+  ✓ Success: -33.7095, 151.1218
+6/248 📍 Geocoding: That Boi Studio (Sydney)...
+  🔍 Extracted: '29A Albion St, Surry Hills NSW 2010'
+           → '29A Albion St'
+  ✓ Success: -33.9037, 151.2549
+7/248 📍 Geocoding: California Nails (Sydney)...
+  🔍 Extracted: 'Oxford Village, 25/63 Oxford St, Darlinghurst NSW 2010'
+           → '63 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+8/248 📍 Geocoding: Kim Sun Young Liverpool Street (Sydney)...
+  🔍 Extracted: 'Shop 2/116/120 Liverpool St, Sydney NSW 2000'
+           → '120 Liverpool St, Sydney NSW 2000'
+  ✓ Success: -33.8764, 151.2074
+9/248 📍 Geocoding: Le Nails and Beauty Darwin (Darwin)...
+  🔍 Extracted: 'Shop 11 Northlakes Shopping Centre, 1 Links Rd, Marrara NT 0812'
+           → '1 Links Rd'
+  ✓ Success: -12.3959, 130.8952
+10/248 📍 Geocoding: Nail Lovers (Darwin)...
+  🔍 Extracted: 'Shop GD25/247 Trower Rd, Casuarina NT 0810'
+           → '247 Trower Rd, Casuarina NT 0810'
+  ✓ Success: -12.3757, 130.8807
+11/248 📍 Geocoding: Baby Bear Studio - Eyelashes and Nails Mei Jia Mei Jie (Sydney)...
+  🔍 Extracted: 'Suite 1010, Level 10/250 Pitt St, Sydney NSW 2000'
+           → 'Suite 1010, 250 Pitt St, Sydney NSW 2000'
+  ✗ Could not geocode
+12/248 📍 Geocoding: JENNI LASHES, BROWS ART & BEAUTY (Darwin)...
+  🔍 Extracted: 'Oasis shopping village, T30, 15 Temple Terrace, Palmerston City NT 0830'
+           → '15 Temple Terrace'
+  ✗ Could not geocode
+13/248 📍 Geocoding: Golden Nails and Beauty Palmerston (Darwin)...
+  🔍 Extracted: 'Shop 53/10 Temple Terrace, Palmerston City NT 0830'
+           → '10 Temple Terrace, Palmerston City NT 0830'
+  ✗ Could not geocode
+14/248 📍 Geocoding: Nails designed by James and waxing (Sydney)...
+  🔍 Extracted: 'Shopping centre, Shop P2/1 Mannikan Ct, Bakewell NT 0831'
+           → '1 Mannikan Ct, Bakewell NT 0831'
+  ✗ Could not geocode
+15/248 📍 Geocoding: Salon Lane Bondi Junction (Sydney)...
+  🔍 Extracted: '34 Bronte Rd, Bondi Junction NSW 2022'
+           → '34 Bronte Rd'
+  ✓ Success: -33.8995, 151.2527
+16/248 📍 Geocoding: Evoke Hair & Beauty Clinic (Sydney)...
+  🔍 Extracted: 'Level 1/603 Botany Rd, Rosebery NSW 2018'
+           → '603 Botany Rd, Rosebery NSW 2018'
+  ✓ Success: -33.9170, 151.2000
+17/248 📍 Geocoding: Vera Nails Sydney (Sydney)...
+  🔍 Extracted: 'Shop8A/24-30 Springfield Ave, Potts Point NSW 2011'
+           → '24-30 Springfield Ave'
+  ✓ Success: -33.8729, 151.2240
+18/248 📍 Geocoding: Alina Huck Nails (Sydney)...
+  🔍 Extracted: '35/112-122A McEvoy St, Alexandria NSW 2015'
+           → '112-122A McEvoy St'
+  ✗ Could not geocode
+19/248 📍 Geocoding: Y&A nail studio (Sydney)...
+  🔍 Extracted: '730 George St, Haymarket NSW 2000'
+           → '730 George St'
+  ✓ Success: -33.8809, 151.2049
+20/248 📍 Geocoding: SNS Exclusive Salon (Darwin)...
+  🔍 Extracted: '247 Trower Rd, Casuarina NT 0810'
+           → '247 Trower Rd'
+  ✓ Success: -12.3744, 130.8817
+21/248 📍 Geocoding: T-Luxe Spa and Beauty (Sydney)...
+  🔍 Extracted: 'Unit 1/360 Oxford St, Paddington NSW 2021'
+           → '360 Oxford St, Paddington NSW 2021'
+  ✓ Success: -33.8887, 151.2322
+22/248 📍 Geocoding: The Nail Lounge (Sydney)...
+  🔍 Extracted: '37 Belmore St, Surry Hills NSW 2010'
+           → '37 Belmore St'
+  ✓ Success: -33.8010, 151.0145
+23/248 📍 Geocoding: Mikki.M Press-on nails (Sydney)...
+  🔍 Extracted: 'Shop 2/2 Victoria Park Parade, Zetland NSW 2017'
+           → '2 Victoria Park Parade, Zetland NSW 2017'
+  ✓ Success: -33.9077, 151.2096
+24/248 📍 Geocoding: ProfessioNAIL Westfield Sydney (Sydney)...
+  🔍 Extracted: 'Level 2 , Shop 2008/188 Pitt St, Sydney NSW 2000'
+           → 'Level 2 , 188 Pitt St, Sydney NSW 2000'
+  ✗ Could not geocode
+25/248 📍 Geocoding: Angel Nails Mascot (Sydney)...
+  🔍 Extracted: 'Shop 5 mascot arcade, 1205 Botany Rd, Mascot NSW 2020'
+           → '1205 Botany Rd'
+  ✓ Success: -33.9355, 151.1941
+26/248 📍 Geocoding: Chez Grace Beauty Sydney (Sydney)...
+  🔍 Extracted: 'Maestri Towers, Shop 86, LG1/515 Kent St, Sydney NSW 2000'
+           → '515 Kent St'
+  ✓ Success: -34.0240, 150.8482
+27/248 📍 Geocoding: Dezire Nail & Beauty (Sydney)...
+  ✓ Success: -33.8842, 151.1948
+28/248 📍 Geocoding: Bronte Nails & Beauty (Sydney)...
+  🔍 Extracted: '264 Bronte Rd, Waverley NSW 2024'
+           → '264 Bronte Rd'
+  ✓ Success: -33.8995, 151.2527
+29/248 📍 Geocoding: Nail & Beauty Garden (Sydney)...
+  🔍 Extracted: '24B Gadigal Ave, Zetland NSW 2017'
+           → '24B Gadigal Ave'
+  ✓ Success: -33.9022, 151.2129
+30/248 📍 Geocoding: Sexy Nails (Sydney)...
+  🔍 Extracted: '430 Cleveland St, Surry Hills NSW 2010'
+           → '430 Cleveland St'
+  ✓ Success: -33.8881, 151.1948
+31/248 📍 Geocoding: Tipsy Toes Nail & Eyelash Bar (Sydney)...
+  🔍 Extracted: 'Shop 6/78-86 Harbour St, Haymarket NSW 2000'
+           → '78-86 Harbour St, Haymarket NSW 2000'
+  ✓ Success: -33.8792, 151.2034
+32/248 📍 Geocoding: Paddington Nails & Foot Spa (Sydney)...
+  🔍 Extracted: '290 Oxford St, Paddington NSW 2021'
+           → '290 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+33/248 📍 Geocoding: American Nails (Sydney)...
+  🔍 Extracted: 'Shop 46/73 Belmore Rd, Randwick NSW 2031'
+           → '73 Belmore Rd, Randwick NSW 2031'
+  ✓ Success: -33.9153, 151.2410
+34/248 📍 Geocoding: The Parlour Room (Sydney)...
+  🔍 Extracted: '216 Clovelly Rd, Randwick NSW 2031'
+           → '216 Clovelly Rd'
+  ✓ Success: -33.9128, 151.2636
+35/248 📍 Geocoding: World Nails and Beauty (Sydney)...
+  🔍 Extracted: '275 Bondi Rd, Bondi NSW 2026'
+           → '275 Bondi Rd'
+  ✓ Success: -33.8949, 151.2681
+36/248 📍 Geocoding: La Peche Nails & Academy (Sydney)...
+  🔍 Extracted: '1B/71-77 Oxford St, Bondi Junction NSW 2022'
+           → '71-77 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+37/248 📍 Geocoding: Sugar Hut Hair & Beauty Salon (Sydney)...
+  🔍 Extracted: '120 Brook St, Coogee NSW 2034'
+           → '120 Brook St'
+  ✓ Success: -33.9210, 151.2541
+38/248 📍 Geocoding: PY's Nails & Waxing (Sydney)...
+  🔍 Extracted: 'Shop3/186-188 McElhone St, Woolloomooloo NSW 2011'
+           → '186-188 McElhone St'
+  ✓ Success: -33.8734, 151.2212
+39/248 📍 Geocoding: Bella Luna Beauty (Sydney)...
+  🔍 Extracted: '14/370 Pitt St, Sydney NSW 2000'
+           → '370 Pitt St'
+  ✓ Success: -33.8773, 151.2080
+40/248 📍 Geocoding: The Salon est. (Sydney)...
+  🔍 Extracted: '150 Mount St, Coogee NSW 2034'
+           → '150 Mount St'
+  ✓ Success: -33.7657, 150.6320
+41/248 📍 Geocoding: ProfessioNail Pagewood (Sydney)...
+  ✓ Success: -33.9420, 151.2244
+42/248 📍 Geocoding: Caroline's Nail & Beauty Salon (Darwin)...
+  ✓ Success: -12.4631, 130.8387
+43/248 📍 Geocoding: Ju's Nail Bar (Sydney)...
+  🔍 Extracted: '456-458 Gardeners Rd, Alexandria NSW 2015'
+           → '456-458 Gardeners Rd'
+  ✓ Success: -33.9205, 151.1895
+44/248 📍 Geocoding: Ace Nails & Beauty Redfern (Sydney)...
+  🔍 Extracted: 'opposite Redfern station, Shop 2, 7/9 Gibbons St, Redfern NSW 2016'
+           → '9 Gibbons St'
+  ✓ Success: -33.7876, 151.0338
+45/248 📍 Geocoding: Kristal Nails and Beauty- Mascot (Sydney)...
+  🔍 Extracted: 'Shop 205/8 Jackson Dr, Mascot NSW 2020'
+           → '8 Jackson Dr, Mascot NSW 2020'
+  ✓ Success: -33.9230, 151.1847
+46/248 📍 Geocoding: Chi Chi (Sydney)...
+  🔍 Extracted: 'Shop 1/33 Bronte Rd, Bondi Junction NSW 2022'
+           → '33 Bronte Rd, Bondi Junction NSW 2022'
+  ✓ Success: -33.8949, 151.2504
+47/248 📍 Geocoding: Pearl Nails & Beauty _ Rosebery (Sydney)...
+  🔍 Extracted: '61-71 Mentmore Ave, Rosebery NSW 2018'
+           → '61-71 Mentmore Ave'
+  ✓ Success: -33.9154, 151.2037
+48/248 📍 Geocoding: Kristal Nails and Beauty - Waterloo (Sydney)...
+  🔍 Extracted: 'Shop 8/1 Crystal St, Waterloo NSW 2017'
+           → '1 Crystal St, Waterloo NSW 2017'
+  ✓ Success: -33.8976, 151.2129
+49/248 📍 Geocoding: Cleopatra Body & Nails (Sydney)...
+  🔍 Extracted: '500 George St, Sydney NSW 2000'
+           → '500 George St'
+  ✓ Success: -33.8726, 151.2076
+50/248 📍 Geocoding: THE DEPOT NAIL BAR TRAMSHEDS (Sydney)...
+  ✓ Success: -33.8762, 151.1782
+51/248 📍 Geocoding: Young Beauty & Nails (Sydney)...
+  🔍 Extracted: '474 Oxford St, Paddington NSW 2021'
+           → '474 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+52/248 📍 Geocoding: Fresh Nails (Sydney)...
+  🔍 Extracted: '1006/500 Oxford St, Bondi Junction NSW 2022'
+           → '500 Oxford St'
+  ✓ Success: -33.8929, 151.2500
+53/248 📍 Geocoding: World Nails & Beauty (Sydney)...
+  🔍 Extracted: 'shop 1/1 Short St, Randwick NSW 2031'
+           → '1 Short St, Randwick NSW 2031'
+  ✓ Success: -33.9158, 151.2411
+54/248 📍 Geocoding: Victoria99Beauty & Nails-hair-Tatoo (Sydney)...
+  🔍 Extracted: 'Victoria99beautynails/99 Miller St, Pyrmont NSW 2009'
+           → '99 Miller St'
+  ✓ Success: -33.8700, 151.1934
+55/248 📍 Geocoding: Nail Design (Outside Westfield) (Sydney)...
+  🔍 Extracted: '446 Oxford St, Bondi Junction NSW 2022'
+           → '446 Oxford St'
+  ✓ Success: -33.8918, 151.2491
+56/248 📍 Geocoding: Venus Nails Zetland(East Village) (Sydney)...
+  🔍 Extracted: 'Shop 24 2/4 Defries Ave, Zetland NSW 2017'
+           → '4 Defries Ave'
+  ✓ Success: -33.9053, 151.2131
+57/248 📍 Geocoding: Bondi Classic Nails (Sydney)...
+  ✓ Success: -33.8894, 151.2703
+58/248 📍 Geocoding: The Nail Parlour Spa & Beauty (Sydney)...
+  🔍 Extracted: '9/251 Oxford St, Bondi Junction NSW 2022'
+           → '251 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+59/248 📍 Geocoding: Focus Nails (Sydney)...
+  🔍 Extracted: 'shop 9/175-181 Oxford St, Bondi Junction NSW 2022'
+           → '175-181 Oxford St, Bondi Junction NSW 2022'
+  ✓ Success: -33.8923, 151.2487
+60/248 📍 Geocoding: Pamperina - Nails, Facials, Brows, & Beauty (Sydney)...
+  🔍 Extracted: '224 Edgecliff Rd, Woollahra NSW 2025'
+           → '224 Edgecliff Rd'
+  ✓ Success: -33.8899, 151.2471
+61/248 📍 Geocoding: Salon Lane Surry Hills (Sydney)...
+  🔍 Extracted: 'Suite 7/63 Ann St, Surry Hills NSW 2010'
+           → '63 Ann St, Surry Hills NSW 2010'
+  ✓ Success: -33.8822, 151.2121
+62/248 📍 Geocoding: Elite Nails & Spa Maroubra Beach (Sydney)...
+  🔍 Extracted: '39 McKeon St, Maroubra NSW 2035'
+           → '39 McKeon St'
+  ✓ Success: -33.9459, 151.2560
+63/248 📍 Geocoding: LA COEUR - Alexandria (Sydney)...
+  🔍 Extracted: 'shop 1/15/17 Fountain St, Alexandria NSW 2015'
+           → '17 Fountain St, Alexandria NSW 2015'
+  ✓ Success: -33.9015, 151.1943
+64/248 📍 Geocoding: Diva Nails & Waxing (Sydney)...
+  🔍 Extracted: 'Belmore Rd, 3/135 Belmore Rd, Randwick NSW 2031'
+           → '135 Belmore Rd'
+  ✓ Success: -33.9163, 151.2410
+65/248 📍 Geocoding: Gelbomb (Sydney)...
+  🔍 Extracted: 'Level 2/378 Oxford St, Paddington NSW 2021'
+           → '378 Oxford St, Paddington NSW 2021'
+  ✓ Success: -33.8887, 151.2322
+66/248 📍 Geocoding: WE Ink & Beauty (Darwin)...
+  🔍 Extracted: '16/159 Dick Ward Dr, Nightcliff NT 0820'
+           → '159 Dick Ward Dr'
+  ✓ Success: -12.3902, 130.8508
+67/248 📍 Geocoding: Sydney Professional Nails (Sydney)...
+  🔍 Extracted: '157/159 Curlewis St, Bondi Beach NSW 2026'
+           → '159 Curlewis St'
+  ✓ Success: -33.8850, 151.2682
+68/248 📍 Geocoding: Hello Nails & Spa (Sydney)...
+  🔍 Extracted: 'Shop 4/7-15 Newland St, Bondi Junction NSW 2022'
+           → '7-15 Newland St, Bondi Junction NSW 2022'
+  ✓ Success: -33.8926, 151.2473
+69/248 📍 Geocoding: Venus Nails (Sydney)...
+  🔍 Extracted: '43/737 Anzac Parade, Maroubra NSW 2035'
+           → '737 Anzac Parade'
+  ✓ Success: -33.9413, 151.2389
+70/248 📍 Geocoding: Lux Nails & Beauty (Sydney)...
+  🔍 Extracted: 'Shop 320 Level 3/152 Bunnerong Rd, Eastgardens NSW 2036'
+           → 'Shop 320 152 Bunnerong Rd, Eastgardens NSW 2036'
+  ✗ Could not geocode
+71/248 📍 Geocoding: Embody Beauty and Wellness (Sydney)...
+  ✓ Success: -33.8891, 151.2704
+72/248 📍 Geocoding: Loop Beauty Bondi - Hair, Nails & Beauty (Sydney)...
+  🔍 Extracted: '179 Bondi Rd, Bondi NSW 2026'
+           → '179 Bondi Rd'
+  ✓ Success: -33.8946, 151.2684
+73/248 📍 Geocoding: missluna_nails(Handmade Press-On Nails) (Sydney)...
+  🔍 Extracted: 'Level 1 floor/1 Bay St, Glebe NSW 2037'
+           → '1 Bay St'
+  ✓ Success: -33.8922, 151.2849
+74/248 📍 Geocoding: By Laura Nails (Sydney)...
+  🔍 Extracted: '112 Boyce Rd, Maroubra NSW 2035'
+           → '112 Boyce Rd'
+  ✓ Success: -33.9410, 151.2462
+75/248 📍 Geocoding: Chaba Beauty and Spa Darwin (Darwin)...
+  🔍 Extracted: 'Building T3/21 Knuckey St, Darwin City NT 0800'
+           → 'Building 21 Knuckey St, Darwin City NT 0800'
+  ✓ Success: -12.4640, 130.8407
+76/248 📍 Geocoding: Beautiful Nails (Darwin)...
+  🔍 Extracted: 'Mitchell Centre, 39/55-59 Mitchell St, Darwin City NT 0800'
+           → '55-59 Mitchell St'
+  ✓ Success: -12.4638, 130.8399
+77/248 📍 Geocoding: Cre8tive Nailz and Beauty (Darwin)...
+  🔍 Extracted: 't7/56 Smith St, Darwin City NT 0800'
+           → '56 Smith St'
+  ✓ Success: -12.4627, 130.8415
+78/248 📍 Geocoding: Glossy Nails Alice Springs (Sydney)...
+  🔍 Extracted: '7-8/91 Todd St, Alice Springs NT 0870'
+           → '7-91 Todd St, Alice Springs NT 0870'
+  ✗ Could not geocode
+79/248 📍 Geocoding: Nail (Sydney)...
+  🔍 Extracted: '53 Penkivil St, Bondi NSW 2026'
+           → '53 Penkivil St'
+  ✓ Success: -33.8054, 151.1972
+80/248 📍 Geocoding: Professionail (Sydney)...
+  🔍 Extracted: 'Shop 248 [level 2/152 Bunnerong Rd, Eastgardens NSW 2035'
+           → 'Shop 248 [152 Bunnerong Rd, Eastgardens NSW 2035'
+  ✗ Could not geocode
+81/248 📍 Geocoding: Yanti's Hair & Nails (Sydney)...
+  🔍 Extracted: '830 Anzac Parade, Maroubra NSW 2035'
+           → '830 Anzac Parade'
+  ✓ Success: -33.9760, 151.2428
+82/248 📍 Geocoding: Nails Boulevard Town Hall (Sydney)...
+  ✗ Could not geocode
+83/248 📍 Geocoding: Lady J Beauty (Sydney)...
+  🔍 Extracted: 'Shop3/343 Anzac Parade, Kingsford NSW 2032'
+           → '343 Anzac Parade'
+  ✓ Success: -33.9760, 151.2428
+84/248 📍 Geocoding: Margaret's Nails (Sydney)...
+  🔍 Extracted: 'Mezanine Level, 259 Clarence St, Sydney NSW 2000'
+           → '259 Clarence St'
+  ✓ Success: -33.8718, 151.2054
+85/248 📍 Geocoding: Leah's Wax Works - Mid City Centre (Sydney)...
+  🔍 Extracted: 'mid city centre, Shop 55b/197 Pitt St, Sydney NSW 2000'
+           → '197 Pitt St, Sydney NSW 2000'
+  ✓ Success: -33.8778, 151.2075
+86/248 📍 Geocoding: Zin's Nails (Sydney)...
+  🔍 Extracted: 'Shop 25/1 Dixon St, Haymarket NSW 2000'
+           → '1 Dixon St, Haymarket NSW 2000'
+  ✓ Success: -33.8782, 151.2040
+87/248 📍 Geocoding: Daffodil Nails & Beauty (Sydney)...
+  🔍 Extracted: '95 New South Head Rd, Vaucluse NSW 2030'
+           → '95 New South Head Rd'
+  ✓ Success: -33.8722, 151.2643
+88/248 📍 Geocoding: Float Studio - Nails and Eyelashes (Sydney)...
+  🔍 Extracted: 'Suite 706, Level 7/250 Pitt St, Sydney NSW 2000'
+           → 'Suite 706, 250 Pitt St, Sydney NSW 2000'
+  ✗ Could not geocode
+89/248 📍 Geocoding: Nail and Brow Bar David Jones (Sydney)...
+  🔍 Extracted: 'David Jones Department Store, 86 Castlereagh St, Sydney NSW 2000'
+           → '86 Castlereagh St'
+  ✓ Success: -33.8702, 151.2099
+90/248 📍 Geocoding: Parap Nails (Darwin)...
+  🔍 Extracted: 'Shop 8/2 Parap Pl, Parap NT 0820'
+           → '2 Parap Pl, Parap NT 0820'
+  ✓ Success: -12.4314, 130.8434
+91/248 📍 Geocoding: Susan Hair & Beauty Salon (Sydney)...
+  🔍 Extracted: 'Shop3/500 Elizabeth St, Surry Hills NSW 2010'
+           → '500 Elizabeth St'
+  ✓ Success: -33.8800, 151.2090
+92/248 📍 Geocoding: Polished Atelier (Sydney)...
+  🔍 Extracted: 'Salon Lane Surry Hills, 63/73 Ann Street Inside, Surry Hills NSW 2010'
+           → '73 Ann Street'
+  ✓ Success: -33.8283, 151.1693
+93/248 📍 Geocoding: Polished Paddington (Sydney)...
+  🔍 Extracted: '445 Oxford St, Paddington NSW 2021'
+           → '445 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+94/248 📍 Geocoding: LA COEUR - Waterloo (Sydney)...
+  🔍 Extracted: 'Shop 2/25-33 Allen St, Waterloo NSW 2017'
+           → '25-33 Allen St, Waterloo NSW 2017'
+  ✓ Success: -33.9024, 151.2046
+95/248 📍 Geocoding: Nightcliff Nails (Darwin)...
+  🔍 Extracted: '42 Progress Dr, Nightcliff NT 0810'
+           → '42 Progress Dr'
+  ✓ Success: -12.3879, 130.8542
+96/248 📍 Geocoding: Sensual Beauty (Sydney)...
+  🔍 Extracted: 'Shop 6/126 Garden St, Maroubra NSW 2035'
+           → '126 Garden St, Maroubra NSW 2035'
+  ✓ Success: -33.9397, 151.2420
+97/248 📍 Geocoding: Sejour Spa and Nails (Sydney)...
+  🔍 Extracted: 'Shop 4/11 Oscar Pl, Eastgardens NSW 2036'
+           → '11 Oscar Pl, Eastgardens NSW 2036'
+  ✓ Success: -33.9429, 151.2252
+98/248 📍 Geocoding: D&K Nail Lounge (Sydney)...
+  🔍 Extracted: '466 Bunnerong Rd, Matraville NSW 2036'
+           → '466 Bunnerong Rd'
+  ✓ Success: -33.9567, 151.2302
+99/248 📍 Geocoding: The Palm Nails and Beauty (next to Good Times Bar & Grill) (Darwin)...
+  🔍 Extracted: '11 University Ave, Palmerston City NT 0830'
+           → '11 University Ave'
+  ✗ Could not geocode
+100/248 📍 Geocoding: Flourishing Bodies (Darwin)...
+  🔍 Extracted: '2/42 Toupein Rd, Yarrawonga NT 0830'
+           → '42 Toupein Rd'
+  ✗ Could not geocode
+101/248 📍 Geocoding: Kris and Co (Sydney)...
+  🔍 Extracted: 'Shop 2/112/114 Boyce Rd, Maroubra NSW 2035'
+           → '114 Boyce Rd, Maroubra NSW 2035'
+  ✓ Success: -33.9410, 151.2462
+102/248 📍 Geocoding: Master Colour Nails - Eastgardens (Sydney)...
+  🔍 Extracted: 'Westfield, Shop 234, level 2/152 Bunnerong Rd, Eastgardens NSW 2036'
+           → '152 Bunnerong Rd, Eastgardens NSW 2036'
+  ✓ Success: -33.9448, 151.2243
+103/248 📍 Geocoding: The Joli. (Sydney)...
+  🔍 Extracted: 'Suite 301/661 George St, Haymarket NSW 2000'
+           → '661 George St, Haymarket NSW 2000'
+  ✓ Success: -33.8837, 151.2030
+104/248 📍 Geocoding: AP Nail Care & Beauty (Darwin)...
+  🔍 Extracted: '29/37 Kalymnos Dr, Karama NT 0812'
+           → '37 Kalymnos Dr'
+  ✓ Success: -12.4010, 130.9157
+105/248 📍 Geocoding: Hibiscus Nails (Darwin)...
+  ✓ Success: -12.3722, 130.8985
+106/248 📍 Geocoding: Regal Beauty nails &spa (Darwin)...
+  🔍 Extracted: 'Shop T49/1 Roystonea Ave, Yarrawonga NT 0830'
+           → '1 Roystonea Ave, Yarrawonga NT 0830'
+  ✗ Could not geocode
+107/248 📍 Geocoding: Your Nail Studio (Sydney)...
+  🔍 Extracted: '368 Sussex St, Sydney NSW 2000'
+           → '368 Sussex St'
+  ✓ Success: -33.8763, 151.2047
+108/248 📍 Geocoding: Tia Rouge (Sydney)...
+  🔍 Extracted: '308/147 King St, Sydney NSW 2000'
+           → '147 King St'
+  ✓ Success: -33.8692, 151.2092
+109/248 📍 Geocoding: Amo Japanese Nail Salon (Sydney)...
+  🔍 Extracted: '87-89 worldtower Level 12 number 1216, Sydney NSW 2000'
+           → '87-89 worldtower, Sydney NSW 2000'
+  ✗ Could not geocode
+110/248 📍 Geocoding: Q nails&design (Sydney)...
+  🔍 Extracted: 'level 2/387 George St, Sydney NSW 2000'
+           → '387 George St, Sydney NSW 2000'
+  ✓ Success: -33.8695, 151.2067
+111/248 📍 Geocoding: Misaki's beauty salon (Sydney)...
+  🔍 Extracted: 'Level 3/379 Kent St, Sydney NSW 2000'
+           → '379 Kent St, Sydney NSW 2000'
+  ✓ Success: -33.8698, 151.2044
+112/248 📍 Geocoding: Bling Mee Nail (Sydney)...
+  🔍 Extracted: 'shop 125/75 Bathurst St, Sydney NSW 2000'
+           → '75 Bathurst St, Sydney NSW 2000'
+  ✓ Success: -33.8740, 151.2036
+113/248 📍 Geocoding: Ai Beauty Studio (Sydney)...
+  🔍 Extracted: 'Unit 90, Level1, 515 Kent St, Sydney NSW 2000'
+           → '515 Kent St'
+  ✓ Success: -34.0240, 150.8482
+114/248 📍 Geocoding: Nail Gallery Sydney (Sydney)...
+  🔍 Extracted: 'Shop2/332-336 Pitt St, Sydney NSW 2000'
+           → '332-336 Pitt St'
+  ✓ Success: -33.8787, 151.2072
+115/248 📍 Geocoding: Nail Societe (Sydney)...
+  🔍 Extracted: 'Suite 705 Level 7/250 Pitt St, Sydney NSW 2000'
+           → 'Suite 705 250 Pitt St, Sydney NSW 2000'
+  ✗ Could not geocode
+116/248 📍 Geocoding: Meow Made Nail Art Studio Sydney (Sydney)...
+  🔍 Extracted: '302/27 Abercrombie St, Chippendale NSW 2008'
+           → '27 Abercrombie St'
+  ✓ Success: -33.8861, 151.1986
+117/248 📍 Geocoding: Tiffany Nail Spa (Darwin)...
+  ✗ Could not geocode
+118/248 📍 Geocoding: Orchid Nails and Spa (Darwin)...
+  🔍 Extracted: '18/21 Knuckey St, Darwin City NT 0800'
+           → '21 Knuckey St'
+  ✓ Success: -12.4632, 130.8410
+119/248 📍 Geocoding: Dragon Nails and Waxing (Darwin)...
+  🔍 Extracted: '9/48 Cavenagh St, Darwin City NT 0800'
+           → '48 Cavenagh St'
+  ✓ Success: -12.4612, 130.8420
+120/248 📍 Geocoding: Star's Nail Salon (Darwin)...
+  ✗ Could not geocode
+121/248 📍 Geocoding: Nails & Beauty Palace (Darwin)...
+  🔍 Extracted: '247 Trower Rd, Casuarina NT 0810'
+           → '247 Trower Rd'
+  ✓ Success: -12.3744, 130.8817
+122/248 📍 Geocoding: The Mall Nails & Beauty (Darwin)...
+  🔍 Extracted: 'Unit 1B, 38 Smith St Darwin Mall, Darwin City NT 0800'
+           → '38 Smith St'
+  ✓ Success: -12.4637, 130.8426
+123/248 📍 Geocoding: Nail (Darwin)...
+  🔍 Extracted: '36a/247 Trower Rd, Casuarina NT 0810'
+           → '247 Trower Rd'
+  ✓ Success: -12.3744, 130.8817
+124/248 📍 Geocoding: SHE Nails & Beauty (Darwin)...
+  🔍 Extracted: '356 Bagot Rd T 15 JHV1 Jape Homemaker Village, Millner NT 0810'
+           → '356 Bagot Rd'
+  ✓ Success: -12.3915, 130.8564
+125/248 📍 Geocoding: Anjali Brow Studio Casuarina Square (Darwin)...
+  🔍 Extracted: 'Casuarina Square, Shop GD008/247 Trower Rd, Casuarina NT 0810'
+           → 'Casuarina Square, 247 Trower Rd, Casuarina NT 0810'
+  ✗ Could not geocode
+126/248 📍 Geocoding: Body Sanctuary (Darwin)...
+  🔍 Extracted: '4/51 Yanyula Dr, Anula NT 0812'
+           → '51 Yanyula Dr'
+  ✓ Success: -12.3928, 130.8925
+127/248 📍 Geocoding: Lux Nails and Beauty Darwin (Darwin)...
+  🔍 Extracted: 'Unit 5/54 Bradshaw Terrace, Casuarina NT 0810'
+           → '54 Bradshaw Terrace, Casuarina NT 0810'
+  ✓ Success: -12.3715, 130.8821
+128/248 📍 Geocoding: Tranzformation (Darwin)...
+  🔍 Extracted: '1/27 Winnellie Rd, Winnellie NT 0820'
+           → '27 Winnellie Rd'
+  ✓ Success: -12.4267, 130.8824
+129/248 📍 Geocoding: Cullen Bay Day Spa - LIFE. STYLE. SPA. SKIN. WELLNESS. COACHING (Darwin)...
+  🔍 Extracted: 'Shop 1/64 Marina Blvd, Larrakeyah NT 0820'
+           → '64 Marina Blvd, Larrakeyah NT 0820'
+  ✓ Success: -12.4509, 130.8274
+130/248 📍 Geocoding: Unforgettable Salon (Darwin)...
+  🔍 Extracted: 'Shop 3A 130 University Ave Durack, Palmerston City NT 0830'
+           → '130 University Ave'
+  ✗ Could not geocode
+131/248 📍 Geocoding: Supretty Qi Nail Salon (Sydney)...
+  🔍 Extracted: 'QG12/8 Quay St, Haymarket NSW 2000'
+           → '8 Quay St'
+  ✓ Success: -33.8811, 151.2034
+132/248 📍 Geocoding: Td Nails & Spa (Darwin)...
+  🔍 Extracted: '49 Roystonea Ave, Palmerston City NT 0830'
+           → '49 Roystonea Ave'
+  ✗ Could not geocode
+133/248 📍 Geocoding: LeBeauty (Darwin)...
+  🔍 Extracted: '56 Packard Ave, Durack NT 0830'
+           → '56 Packard Ave'
+  ✗ Could not geocode
+134/248 📍 Geocoding: Charms SPA Nails & Beauty Oasis (Darwin)...
+  🔍 Extracted: 'Shop 23/15 Temple Terrace, Palmerston City NT 0830'
+           → '15 Temple Terrace, Palmerston City NT 0830'
+  ✗ Could not geocode
+135/248 📍 Geocoding: Darwin Nails (Darwin)...
+  🔍 Extracted: 'Shop T34/1 Roystonea Ave, Yarrawonga NT 0830'
+           → '1 Roystonea Ave, Yarrawonga NT 0830'
+  ✗ Could not geocode
+136/248 📍 Geocoding: Hermosa Nails & Eyelashes Salon (Sydney)...
+  🔍 Extracted: '339 Sussex St, Sydney NSW 2000'
+           → '339 Sussex St'
+  ✓ Success: -33.8757, 151.2041
+137/248 📍 Geocoding: Lux Nails Alice Springs (Sydney)...
+  🔍 Extracted: '21B/45 Railway Terrace, Alice Springs NT 0870'
+           → '45 Railway Terrace'
+  ✓ Success: -33.8935, 151.1470
+138/248 📍 Geocoding: Nails By Phuong (Sydney)...
+  🔍 Extracted: 'Shop 7/70 Todd St, Alice Springs NT 0870'
+           → '70 Todd St, Alice Springs NT 0870'
+  ✗ Could not geocode
+139/248 📍 Geocoding: California Nails (Sydney)...
+  🔍 Extracted: 'Shop 15, Scotch Row, 200 Barangaroo Ave, Barangaroo NSW 2000'
+           → '200 Barangaroo Ave'
+  ✓ Success: -33.8639, 151.2015
+140/248 📍 Geocoding: California Nails (Sydney)...
+  🔍 Extracted: '180 George Street, Shop CB/02 Ah Toy La, NSW 2000'
+           → '180 George Street'
+  ✓ Success: -33.8624, 151.2087
+141/248 📍 Geocoding: Island Sea Nails & Beauty Stockland Piccadilly (Sydney)...
+  🔍 Extracted: '210 Pitt St (Ground Level, Sydney NSW 2000'
+           → '210 Pitt St'
+  ✓ Success: -33.8715, 151.2086
+142/248 📍 Geocoding: Tiara Nail Spa (Sydney)...
+  🔍 Extracted: '4/181 Hay St, Haymarket NSW 2000'
+           → '181 Hay St'
+  ✓ Success: -33.8798, 151.2055
+143/248 📍 Geocoding: Nails By Miho (Sydney)...
+  🔍 Extracted: '424/428 George St, Sydney NSW 2000'
+           → '428 George St'
+  ✓ Success: -33.8754, 151.2066
+144/248 📍 Geocoding: BROW AND MAKEUP STUDIO SYDNEY (Sydney)...
+  🔍 Extracted: '428 George St, Sydney NSW 2000'
+           → '428 George St'
+  ✓ Success: -33.8754, 151.2066
+145/248 📍 Geocoding: Stay Classy By Helen SYDNEY (Sydney)...
+  🔍 Extracted: 'At Vbeauty Clinic, Level 3/95 Bathurst St, Sydney NSW 2000'
+           → 'At Vbeauty Clinic, 95 Bathurst St, Sydney NSW 2000'
+  ✗ Could not geocode
+146/248 📍 Geocoding: PALAIS BEAUTY (Sydney)...
+  🔍 Extracted: '78/1 Dixon St, Sydney NSW 2000'
+           → '1 Dixon St'
+  ✓ Success: -33.8765, 151.2038
+147/248 📍 Geocoding: Secret Butterfly Nails & Beauty (Sydney)...
+  🔍 Extracted: 'Level 1/70-72 Druitt St, Sydney NSW 2000'
+           → '70-72 Druitt St, Sydney NSW 2000'
+  ✓ Success: -33.8729, 151.2067
+148/248 📍 Geocoding: blancblue nail & beauty (Sydney)...
+  🔍 Extracted: 'G11, 683/689 George St, Haymarket NSW 2000'
+           → '689 George St'
+  ✓ Success: -33.8801, 151.2051
+149/248 📍 Geocoding: W Nails (Sydney)...
+  🔍 Extracted: 'Harbour Arcade, Shop 105, Shop 107/29 Dixon St, Haymarket NSW 2000'
+           → 'Shop 105, 29 Dixon St, Haymarket NSW 2000'
+  ✗ Could not geocode
+150/248 📍 Geocoding: AYU NAIL & BEAUTY (Sydney)...
+  🔍 Extracted: 'Level 1 . Suit 101/379-383 Pitt St, Sydney NSW 2000'
+           → 'Level 1 . Suit 379-383 Pitt St, Sydney NSW 2000'
+  ✗ Could not geocode
+151/248 📍 Geocoding: Get nail and beauty (Sydney)...
+  🔍 Extracted: 'Level 2 Suite 211/250 Pitt St, Sydney NSW 2000'
+           → 'Level 2 250 Pitt St, Sydney NSW 2000'
+  ✗ Could not geocode
+152/248 📍 Geocoding: LaLa Beauty Sydney (Sydney)...
+  🔍 Extracted: 'Level 2/92 Liverpool St, Sydney NSW 2000'
+           → '92 Liverpool St, Sydney NSW 2000'
+  ✓ Success: -33.8763, 151.2067
+153/248 📍 Geocoding: Y Style (Sydney)...
+  🔍 Extracted: 'Level 7, Suite 712/185 Elizabeth St, Sydney NSW 2000'
+           → 'Level 7, 185 Elizabeth St, Sydney NSW 2000'
+  ✗ Could not geocode
+154/248 📍 Geocoding: Vivid Nail Salon (Sydney)...
+  🔍 Extracted: 'Martin Place, level 4/90 Pitt St, Sydney NSW 2000'
+           → 'Martin Place, 90 Pitt St, Sydney NSW 2000'
+  ✗ Could not geocode
+155/248 📍 Geocoding: Ardor Nail (Sydney)...
+  🔍 Extracted: 'pacific trade center building, Unit715/368 Sussex St, Sydney NSW 2000'
+           → '368 Sussex St'
+  ✓ Success: -33.8763, 151.2047
+156/248 📍 Geocoding: BP Deluxe Nails & Beauty - Martin Place (Sydney)...
+  🔍 Extracted: 'Royal Theater Sydney, Shop 604, level 6/108 King St, Sydney NSW 2000'
+           → 'Royal Theater Sydney, Shop 604, 108 King St, Sydney NSW 2000'
+  ✗ Could not geocode
+157/248 📍 Geocoding: Nails Avenue Westfield Sydney (Myer foodcourt) (Sydney)...
+  🔍 Extracted: 'SH, G17 Sydney Central Plaza, Shop/G17 Pitt St, Sydney NSW 2000'
+           → 'SH, G17 Sydney Central Plaza, G17 Pitt St, Sydney NSW 2000'
+  ✗ Could not geocode
+158/248 📍 Geocoding: Nails Boulevard World Square (Sydney)...
+  🔍 Extracted: 'Shop 10.49B, World Square shopping center, Goulburn lane, 644 George St, Sydney NSW 2000'
+           → '644 George St'
+  ✓ Success: -33.8776, 151.2070
+159/248 📍 Geocoding: suminails (Sydney)...
+  🔍 Extracted: 'Shop 15, Lower Ground Floor/227 Elizabeth St, Sydney NSW 2000'
+           → 'Shop 15, Lower Ground 227 Elizabeth St, Sydney NSW 2000'
+  ✗ Could not geocode
+160/248 📍 Geocoding: Five - Nails Lashes Makeup (Sydney)...
+  🔍 Extracted: 'Shop 2/2 Little Hay St, Haymarket NSW 2000'
+           → '2 Little Hay St, Haymarket NSW 2000'
+  ✓ Success: -33.8786, 151.2021
+161/248 📍 Geocoding: W Skin Clinic (Sydney)...
+  🔍 Extracted: 'shop 7/126 Phillip St, Sydney NSW 2000'
+           → '126 Phillip St, Sydney NSW 2000'
+  ✓ Success: -33.8623, 151.2120
+162/248 📍 Geocoding: Nails Avenue World Square (Sydney)...
+  🔍 Extracted: 'Shop 9.26 LG, World Square Shopping Center, 644 George St, Sydney NSW 2000'
+           → '644 George St'
+  ✓ Success: -33.8776, 151.2070
+163/248 📍 Geocoding: INSTYLE NAILS & BEAUTY - METCENTRE Wynyard station ( Previously BP Deluxe Nails) (Sydney)...
+  ✗ Could not geocode
+164/248 📍 Geocoding: Nails Bar Wynyard (Sydney)...
+  🔍 Extracted: 'Shop T04 Metcentre, 273 George St, Sydney NSW 2000'
+           → '273 George St'
+  ✓ Success: -33.8648, 151.2072
+165/248 📍 Geocoding: Beauty On Park Street (Sydney)...
+  🔍 Extracted: 'Suite 17, Level 2/428 George St, Sydney NSW 2000'
+           → 'Suite 17, 428 George St, Sydney NSW 2000'
+  ✗ Could not geocode
+166/248 📍 Geocoding: Beauty Story Hair,Nail, Beauty (Sydney)...
+  🔍 Extracted: 'shop5/123 Liverpool St, Sydney NSW 2000'
+           → '123 Liverpool St'
+  ✓ Success: -33.8767, 151.2077
+167/248 📍 Geocoding: R&S Nails Salon (Sydney)...
+  🔍 Extracted: '310 Harris St, Pyrmont NSW 2009'
+           → '310 Harris St'
+  ✓ Success: -33.8731, 151.1960
+168/248 📍 Geocoding: The Rich Brow - Eyelash Extensions & Beauty Sydney CBD (Sydney)...
+  🔍 Extracted: 'Summit Arcade, Shop 184/569-581 George St, Sydney NSW 2000'
+           → '569-581 George St, Sydney NSW 2000'
+  ✓ Success: -33.8768, 151.2054
+169/248 📍 Geocoding: AOUO Press-On Nails & Manicure Salon (Sydney)...
+  🔍 Extracted: 'Sussex Centre Food Court, LG Shop 2/401 Sussex St, Haymarket NSW 2000'
+           → 'Sussex Centre Food Court, LG 401 Sussex St, Haymarket NSW 2000'
+  ✗ Could not geocode
+170/248 📍 Geocoding: MD nails and beauty (Sydney)...
+  🔍 Extracted: 'Top Floor, Shop 75, Level 5/1 Dixon St, Sydney NSW 2000'
+           → 'Top Floor, Shop 75, 1 Dixon St, Sydney NSW 2000'
+  ✗ Could not geocode
+171/248 📍 Geocoding: The Depot Nail Bar (Sydney)...
+  🔍 Extracted: 'Shop 324A, Level 3/1 Bay St, Glebe NSW 2007'
+           → 'Shop 324A, 1 Bay St, Glebe NSW 2007'
+  ✗ Could not geocode
+172/248 📍 Geocoding: Cila Beauty (Sydney)...
+  🔍 Extracted: '117 Abercrombie St, Chippendale NSW 2008'
+           → '117 Abercrombie St'
+  ✓ Success: -33.8881, 151.1987
+173/248 📍 Geocoding: Fresh Nails Westfield Sydney CBD (Sydney)...
+  🔍 Extracted: 'Westfield Sydney, 188 Market St, Fresh Nails, Shop 1011, Sydney NSW 2000'
+           → '188 Market St'
+  ✓ Success: -33.8518, 150.9320
+174/248 📍 Geocoding: SJ Nails Studio (Where Nails Become Art) (Sydney)...
+  🔍 Extracted: 'Shop A, 80 Bay St ( Opposite Broadway Shopping Center, Ultimo NSW 2007'
+           → '80 Bay St'
+  ✓ Success: -33.8836, 151.1952
+175/248 📍 Geocoding: Rach's Beauty & Nails (Sydney)...
+  🔍 Extracted: '84 Harris St, Pyrmont NSW 2009'
+           → '84 Harris St'
+  ✓ Success: -33.8213, 151.0107
+176/248 📍 Geocoding: PEACOCK by Grain De Beaute (Sydney)...
+  🔍 Extracted: '34 Kensington St, Chippendale NSW 2008'
+           → '34 Kensington St'
+  ✓ Success: -33.9363, 151.0512
+177/248 📍 Geocoding: Island Sea Nails & Beauty - Pyrmont (Sydney)...
+  🔍 Extracted: '108 Miller St, Pyrmont NSW 2009'
+           → '108 Miller St'
+  ✓ Success: -33.8705, 151.1918
+178/248 📍 Geocoding: ProfessioNail Central Park (Sydney)...
+  🔍 Extracted: 'Central Park Mall, Shop K101/28 Broadway, Chippendale NSW 2008'
+           → '28 Broadway, Chippendale NSW 2008'
+  ✓ Success: -33.8845, 151.2005
+179/248 📍 Geocoding: Luxy Nails & Beauty (Sydney)...
+  🔍 Extracted: '147 William St, Darlinghurst NSW 2010'
+           → '147 William St'
+  ✓ Success: -33.9265, 151.1155
+180/248 📍 Geocoding: Bio Sculpture Gel NSW & ACT (Sydney)...
+  🔍 Extracted: '37 Belmore St, Surry Hills NSW 2010'
+           → '37 Belmore St'
+  ✓ Success: -33.8010, 151.0145
+181/248 📍 Geocoding: Beauty Galaxy on Bourke (Sydney)...
+  🔍 Extracted: 'shop 2/642/644 Bourke St, Surry Hills NSW 2010'
+           → '644 Bourke St, Surry Hills NSW 2010'
+  ✓ Success: -33.8884, 151.2154
+182/248 📍 Geocoding: Just Spa & Nails (Sydney)...
+  🔍 Extracted: '318 Bourke St, Surry Hills NSW 2010'
+           → '318 Bourke St'
+  ✓ Success: -33.6050, 150.7565
+183/248 📍 Geocoding: Mii Nails & Lashes (Sydney)...
+  🔍 Extracted: 'Shop 4/6-14 Oxford St, Darlinghurst NSW 2010'
+           → '6-14 Oxford St, Darlinghurst NSW 2010'
+  ✓ Success: -33.8811, 151.2178
+184/248 📍 Geocoding: Beauty Shura Surryhills (Sydney)...
+  🔍 Extracted: '316-318 Crown St, Darlinghurst NSW 2010'
+           → '316-318 Crown St'
+  ✓ Success: -33.8752, 151.2161
+185/248 📍 Geocoding: Sexy Nails (Sydney)...
+  🔍 Extracted: '395 Bourke St, Surry Hills NSW 2010'
+           → '395 Bourke St'
+  ✓ Success: -33.6050, 150.7565
+186/248 📍 Geocoding: Lilly's Nails (Sydney)...
+  🔍 Extracted: '450 Cleveland St, Surry Hills NSW 2010'
+           → '450 Cleveland St'
+  ✓ Success: -33.8881, 151.1948
+187/248 📍 Geocoding: Nail & Beauty Garden (Sydney)...
+  🔍 Extracted: '483 Crown St, Surry Hills NSW 2010'
+           → '483 Crown St'
+  ✓ Success: -33.8752, 151.2161
+188/248 📍 Geocoding: T's Nail & Beauty (Sydney)...
+  🔍 Extracted: '420 Cleveland St, Surry Hills NSW 2010'
+           → '420 Cleveland St'
+  ✓ Success: -33.8881, 151.1948
+189/248 📍 Geocoding: M.I.A Nails & Beauties (Sydney)...
+  🔍 Extracted: '5/150 Liverpool St, Darlinghurst NSW 2010'
+           → '150 Liverpool St'
+  ✓ Success: -33.8783, 151.2213
+190/248 📍 Geocoding: Saigon Nail Studio (Sydney)...
+  🔍 Extracted: '50-52 Foveaux St, Surry Hills NSW 2010'
+           → '50-52 Foveaux St'
+  ✓ Success: -33.8835, 151.2086
+191/248 📍 Geocoding: Painted (Sydney)...
+  🔍 Extracted: 'Shop 2/230-232 Palmer St, Darlinghurst NSW 2010'
+           → '230-232 Palmer St, Darlinghurst NSW 2010'
+  ✓ Success: -33.8786, 151.2163
+192/248 📍 Geocoding: Pink Beauty & Nails (Sydney)...
+  🔍 Extracted: 'Shop 17/24-30 Springfield Ave, Potts Point NSW 2011'
+           → '24-30 Springfield Ave, Potts Point NSW 2011'
+  ✓ Success: -33.8729, 151.2240
+193/248 📍 Geocoding: Daffodil Nails & Beauty (Sydney)...
+  🔍 Extracted: '40 Bayswater Rd, Potts Point NSW 2011'
+           → '40 Bayswater Rd'
+  ✓ Success: -33.7857, 151.1685
+194/248 📍 Geocoding: Os Nails and Beauty (Sydney)...
+  🔍 Extracted: '40 Macleay Street Pott point, 26/28 Macleay St, Elizabeth Bay NSW 2011'
+           → '40 Macleay Street'
+  ✓ Success: -33.8703, 151.2257
+195/248 📍 Geocoding: M&T Nails and Beauty (Sydney)...
+  🔍 Extracted: 'Kings Cross centre, Shop Tg07, 82/94 Darlinghurst Rd, Potts Point NSW 2011'
+           → '94 Darlinghurst Rd'
+  ✓ Success: -33.8753, 151.2224
+196/248 📍 Geocoding: Lara Nails (Sydney)...
+  🔍 Extracted: '3/1135 Botany Rd, Mascot NSW 2020'
+           → '1135 Botany Rd'
+  ✓ Success: -33.9055, 151.2028
+197/248 📍 Geocoding: Nail & Beauty Garden (Sydney)...
+  🔍 Extracted: 'Shop 5/91-93 Macleay St, Potts Point NSW 2011'
+           → '91-93 Macleay St, Potts Point NSW 2011'
+  ✓ Success: -33.8713, 151.2249
+198/248 📍 Geocoding: Beauty Avenue (Sydney)...
+  🔍 Extracted: '9/9-11 Henderson Rd, Alexandria NSW 2015'
+           → '9-11 Henderson Rd'
+  ✓ Success: -33.9946, 150.8749
+199/248 📍 Geocoding: DEPOT NAIL BAR (Sydney)...
+  ✗ Could not geocode
+200/248 📍 Geocoding: QBee Nails Salon (Sydney)...
+  🔍 Extracted: '178 Redfern St, Redfern NSW 2016'
+           → '178 Redfern St'
+  ✓ Success: -33.8427, 150.9108
+201/248 📍 Geocoding: Breeze Nail Lash & Brow Studio (Sydney)...
+  🔍 Extracted: 'Shop 4/5 Hudson St, Redfern NSW 2016'
+           → '5 Hudson St, Redfern NSW 2016'
+  ✓ Success: -33.8893, 151.1990
+202/248 📍 Geocoding: Jiafang Studio (Sydney)...
+  🔍 Extracted: 'shop 202/17 Lachlan St, Waterloo NSW 2017'
+           → '17 Lachlan St, Waterloo NSW 2017'
+  ✓ Success: -33.9008, 151.2125
+203/248 📍 Geocoding: Venus Nails Green Square (Sydney)...
+  🔍 Extracted: 'Shop 5/305 Botany Rd, Waterloo NSW 2017'
+           → '305 Botany Rd, Waterloo NSW 2017'
+  ✓ Success: -33.8957, 151.1990
+204/248 📍 Geocoding: LA COEUR - Rosebery (Sydney)...
+  🔍 Extracted: '414 Gardeners Rd, Rosebery NSW 2018'
+           → '414 Gardeners Rd'
+  ✓ Success: -33.9215, 151.1991
+205/248 📍 Geocoding: Global Nails & Beauty (Sydney)...
+  ✓ Success: -33.9246, 151.2123
+206/248 📍 Geocoding: USA Nails Paddington (Sydney)...
+  🔍 Extracted: '346 Oxford St, Paddington NSW 2021'
+           → '346 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+207/248 📍 Geocoding: Karat Nails and Beauty (Sydney)...
+  🔍 Extracted: 'Shop 4/19/33 Kent Rd, Mascot NSW 2020'
+           → '33 Kent Rd, Mascot NSW 2020'
+  ✓ Success: -33.9229, 151.1857
+208/248 📍 Geocoding: Safir Beauty (Sydney)...
+  🔍 Extracted: '62 Oxford St, Paddington NSW 2021'
+           → '62 Oxford St'
+  ✓ Success: -33.7685, 151.0846
+209/248 📍 Geocoding: SINDOBA (Sydney)...
+  🔍 Extracted: '34 Bronte Rd, Bondi Junction NSW 2022'
+           → '34 Bronte Rd'
+  ✓ Success: -33.8995, 151.2527
+210/248 📍 Geocoding: Studio Peace Beauty (Sydney)...
+  🔍 Extracted: '1a Bronte Rd, Bondi Junction NSW 2022'
+           → '1a Bronte Rd'
+  ✓ Success: -33.8995, 151.2527
+211/248 📍 Geocoding: Smooth Styling (Sydney)...
+  🔍 Extracted: '1/79-85 Oxford St, Bondi Junction NSW 2022'
+           → '79-85 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+212/248 📍 Geocoding: She Loves Pink - Bondi Nail Salon (Sydney)...
+  🔍 Extracted: '406 Oxford St, Bondi Junction NSW 2022'
+           → '406 Oxford St'
+  ✓ Success: -33.8906, 151.2359
+213/248 📍 Geocoding: Sea nail & Beauty (Sydney)...
+  🔍 Extracted: '500 Oxford St, Bondi Junction NSW 2022'
+           → '500 Oxford St'
+  ✓ Success: -33.8929, 151.2500
+214/248 📍 Geocoding: Pearl Nails - Eastgate shopping Bondi (Sydney)...
+  🔍 Extracted: 'Shop 26/71-91 Spring St, Bondi NSW 2022'
+           → '71-91 Spring St, Bondi NSW 2022'
+  ✓ Success: -33.8922, 151.2461
+215/248 📍 Geocoding: Delux Nails & Spa (Sydney)...
+  🔍 Extracted: 'Shop 6/80 Ebley St, Bondi Junction NSW 2022'
+           → '80 Ebley St, Bondi Junction NSW 2022'
+  ✓ Success: -33.8935, 151.2481
+216/248 📍 Geocoding: ProfessioNAIL (Sydney)...
+  🔍 Extracted: 'Westfield Bondi Junction Shopping Centre Shop 2055, Shop 2055/500 Oxford St, Bondi Junction NSW 2022'
+           → 'Westfield Bondi JunctionShop 2055, 500 Oxford St, Bondi Junction NSW 2022'
+  ✗ Could not geocode
+217/248 📍 Geocoding: USA Nails Bellevue Hill (Sydney)...
+  🔍 Extracted: 'Shop 3/8 Bellevue Rd, Bellevue Hill NSW 2023'
+           → '8 Bellevue Rd, Bellevue Hill NSW 2023'
+  ✓ Success: -33.8836, 151.2537
+218/248 📍 Geocoding: Elan Nail Atelier (Sydney)...
+  🔍 Extracted: 'Based in Molly Jordan Beauty, Unit 3/277 Bronte Rd, Waverley NSW 2024'
+           → 'Based in Molly Jordan Beauty, 277 Bronte Rd, Waverley NSW 2024'
+  ✗ Could not geocode
+219/248 📍 Geocoding: Laura Nails (Sydney)...
+  🔍 Extracted: '40 Grosvenor St, Woollahra NSW 2025'
+           → '40 Grosvenor St'
+  ✓ Success: -33.7095, 151.1218
+220/248 📍 Geocoding: Lena's Sydney Nails (Sydney)...
+  🔍 Extracted: '103 Bondi Rd, Bondi NSW 2026'
+           → '103 Bondi Rd'
+  ✓ Success: -33.8937, 151.2617
+221/248 📍 Geocoding: Nails By Jaeda (Sydney)...
+  🔍 Extracted: '158 Bondi Rd, Bondi NSW 2026'
+           → '158 Bondi Rd'
+  ✓ Success: -33.8934, 151.2608
+222/248 📍 Geocoding: Bondi Nails (Sydney)...
+  🔍 Extracted: '231 Bondi Rd, Bondi NSW 2026'
+           → '231 Bondi Rd'
+  ✓ Success: -33.8946, 151.2684
+223/248 📍 Geocoding: Flourishing nails and waxing (Sydney)...
+  🔍 Extracted: '78 Gould St, Bondi Beach NSW 2026'
+           → '78 Gould St'
+  ✓ Success: -33.9118, 151.0159
+224/248 📍 Geocoding: Mano Mona Nails (Sydney)...
+  🔍 Extracted: '86 Curlewis St, Bondi Beach NSW 2026'
+           → '86 Curlewis St'
+  ✓ Success: -33.8874, 151.2725
+225/248 📍 Geocoding: V Hair Salon Bondi (Sydney)...
+  🔍 Extracted: '87 Bondi Rd, Bondi NSW 2026'
+           → '87 Bondi Rd'
+  ✓ Success: -33.8937, 151.2613
+226/248 📍 Geocoding: Bondi Beach Nails and Beauty (Sydney)...
+  🔍 Extracted: 'Shop 1/57/59 Hall St, Bondi Beach NSW 2026'
+           → '59 Hall St, Bondi Beach NSW 2026'
+  ✓ Success: -33.8898, 151.2723
+227/248 📍 Geocoding: Aan Nails (Sydney)...
+  🔍 Extracted: '122 Avoca St, Randwick NSW 2031'
+           → '122 Avoca St'
+  ✓ Success: -33.9232, 151.2399
+228/248 📍 Geocoding: Laque Bar (Sydney)...
+  🔍 Extracted: 'Shop 4/53 Cross St, Double Bay NSW 2028'
+           → '53 Cross St, Double Bay NSW 2028'
+  ✓ Success: -33.8758, 151.2423
+229/248 📍 Geocoding: Velvet Nails (Sydney)...
+  🔍 Extracted: 'Exit Edgecliff train station, go to the back towards New Mclean st, Shop 32/235 New South Head Rd, Edgecliff NSW 2027'
+           → 'Exit Edgecliff train station, go to the back towards New Mclean st, 235 New South Head Rd, Edgecliff NSW 2027'
+  ✗ Could not geocode
+230/248 📍 Geocoding: First Nails & Beauty (Sydney)...
+  🔍 Extracted: '70 Belmore Rd, Randwick NSW 2031'
+           → '70 Belmore Rd'
+  ✓ Success: -33.9544, 151.0515
+231/248 📍 Geocoding: Professionail Randwick (Sydney)...
+  🔍 Extracted: 'Royal Randwick Shopping Centre, Shop 1035/73 Belmore Rd, Randwick NSW 2031'
+           → 'Royal Randwick 73 Belmore Rd, Randwick NSW 2031'
+  ✗ Could not geocode
+232/248 📍 Geocoding: Coogee Nails (Sydney)...
+  🔍 Extracted: '1/173 Arden St, Coogee NSW 2034'
+           → '173 Arden St'
+  ✓ Success: -33.9187, 151.2574
+233/248 📍 Geocoding: Oasis skin body + hair (Sydney)...
+  🔍 Extracted: 'Shop 6/155 Avoca St, Randwick NSW 2031'
+           → '155 Avoca St, Randwick NSW 2031'
+  ✓ Success: -33.9232, 151.2399
+234/248 📍 Geocoding: Linh's nails and beauty (Sydney)...
+  🔍 Extracted: '190 Coogee Bay Rd, Coogee NSW 2034'
+           → '190 Coogee Bay Rd'
+  ✓ Success: -33.9184, 151.2438
+235/248 📍 Geocoding: Florida Nails (Sydney)...
+  🔍 Extracted: '233 Coogee Bay Rd, Coogee NSW 2034'
+           → '233 Coogee Bay Rd'
+  ✓ Success: -33.9203, 151.2533
+236/248 📍 Geocoding: Colourful Nails (Sydney)...
+  🔍 Extracted: '791 Anzac Parade, Maroubra NSW 2035'
+           → '791 Anzac Parade'
+  ✓ Success: -33.9760, 151.2428
+237/248 📍 Geocoding: Mk & Co nail (Sydney)...
+  🔍 Extracted: 'J/307 Malabar Rd, Maroubra NSW 2035'
+           → '307 Malabar Rd'
+  ✓ Success: -33.9411, 151.2531
+238/248 📍 Geocoding: Sunshine Nail & Beauty (Sydney)...
+  🔍 Extracted: '12/238 Bunnerong Rd, Hillsdale NSW 2036'
+           → '238 Bunnerong Rd'
+  ✓ Success: -33.9515, 151.2309
+239/248 📍 Geocoding: Obsession Nails and Beauty (Sydney)...
+  🔍 Extracted: 'Shop 3/822-824 Anzac Parade, Maroubra NSW 2035'
+           → '822-824 Anzac Parade, Maroubra NSW 2035'
+  ✓ Success: -33.9364, 151.2384
+240/248 📍 Geocoding: Nails Avenue (Sydney)...
+  🔍 Extracted: 'Level 1, Shop 132/152 Bunnerong Rd, Pagewood NSW 2036'
+           → 'Level 1, 152 Bunnerong Rd, Pagewood NSW 2036'
+  ✗ Could not geocode
+241/248 📍 Geocoding: Nails Boulevard, Westfield Eastgardens (Sydney)...
+  🔍 Extracted: 'Level 3/152 Bunnerong Rd, Eastgardens NSW 2036'
+           → '152 Bunnerong Rd, Eastgardens NSW 2036'
+  ✓ Success: -33.9448, 151.2243
+242/248 📍 Geocoding: Pearl Nails Eastgardens (Sydney)...
+  ✗ Could not geocode
+243/248 📍 Geocoding: Stars Nails and Beauty (Sydney)...
+  🔍 Extracted: 'Shop 49/518-520 Bunnerong Rd, Matraville NSW 2036'
+           → '518-520 Bunnerong Rd, Matraville NSW 2036'
+  ✓ Success: -33.9581, 151.2310
+244/248 📍 Geocoding: Leah's Wax Works Eastgardens (Sydney)...
+  🔍 Extracted: 'Westfield Eastgardens, Shop 329/152 Bunnerong Rd, Eastgardens NSW 2036'
+           → 'Westfield Eastgardens, 152 Bunnerong Rd, Eastgardens NSW 2036'
+  ✓ Success: -33.9448, 151.2243
+245/248 📍 Geocoding: Tip Top Nails - ACRYLIC NAILS- NAILS DESIGN - ART NAILS ) (Sydney)...
+  🔍 Extracted: '241 Glebe Point Rd, Glebe NSW 2037'
+           → '241 Glebe Point Rd'
+  ✓ Success: -33.8817, 151.1891
+246/248 📍 Geocoding: GLEBE BEAUTY SHURA (Sydney)...
+  🔍 Extracted: '32 Glebe Point Rd, Glebe NSW 2037'
+           → '32 Glebe Point Rd'
+  ✓ Success: -33.8817, 151.1891
+247/248 📍 Geocoding: Nails Xpress - Ultimo (Sydney)...
+  ✓ Success: -33.8835, 151.1950
+248/248 📍 Geocoding: European Nails Studio (Sydney)...
+  🔍 Extracted: '3/632 Darling St, Rozelle NSW 2039'
+           → '632 Darling St'
+  ✓ Success: -33.7879, 151.1870
+
+============================================================
+✅ Successfully geocoded: 202
+❌ Failed: 46
+⊘ Skipped (no address): 0
+📊 Total with coordinates: 202
+📊 Success rate: 81%
+============================================================
