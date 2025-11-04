@@ -17,6 +17,7 @@ interface Salon {
   is_verified?: boolean
   logo_url?: string
   accepts_walk_ins?: boolean
+  appointment_only?: boolean
   price_range?: string
 }
 
@@ -53,8 +54,13 @@ export const SalonCard = ({
 
   const formatPriceRange = (priceRange?: string): string => {
     if (!priceRange) return ''
-    // Price range comes as $, $$, or $$$
-    return priceRange
+    // Map database values to $ symbols
+    const priceMap: Record<string, string> = {
+      'budget': '$',
+      'mid-range': '$$',
+      'luxury': '$$$'
+    }
+    return priceMap[priceRange] || priceRange
   }
 
   const renderStars = (rating: number, count: number) => {
@@ -269,12 +275,15 @@ export const SalonCard = ({
           )}
 
           {/* Operating Status */}
-          <div className="flex items-center text-xs text-gray-500 mb-3">
-            <Clock className="w-3 h-3 mr-1" />
-            <span>
-              {salon.accepts_walk_ins ? 'Walk-ins welcome' : 'By appointment'}
-            </span>
-          </div>
+          {(salon.accepts_walk_ins || salon.appointment_only) && (
+            <div className="flex items-center text-xs text-gray-500 mb-3">
+              <Clock className="w-3 h-3 mr-1" />
+              <span>
+                {salon.accepts_walk_ins && 'Walk-ins welcome'}
+                {salon.appointment_only && 'By appointment'}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
