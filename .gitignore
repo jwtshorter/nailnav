@@ -78,3 +78,10 @@ pids
 # Temporary folders
 tmp/
 temp/
+# Geocoding scripts with exposed keys (use .env.local instead)
+geocode_salons.py
+geocode_salons_retry.py
+geocode_salons_final.py
+update_35_salons.py
+test_supabase.js
+verify-email-token.js

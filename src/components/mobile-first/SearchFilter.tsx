@@ -66,13 +66,6 @@ const specialties = [
   'Bridal Nails'
 ]
 
-const languages = [
-  'Spanish',
-  'Vietnamese',
-  'Chinese',
-  'Korean'
-]
-
 const amenities = [
   'Kid Friendly',
   'Pet Friendly',
@@ -100,6 +93,15 @@ const languages = [
   { code: 'zh', name: 'Chinese' },
   { code: 'ko', name: 'Korean' }
 ]
+
+// Combined services for the UI
+const popularServices = [...nailServices, ...otherServices]
+const popularSpecialties = specialties
+
+// Additional filter categories
+const expertiseFilters = specialties
+const hoursFilters = ['Open Now', 'Open Weekends', 'Open Late']
+const bookingFilters = ['Online Booking', 'Walk-ins Welcome', 'Same Day Appointments']
 
 export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterProps) => {
   const { t } = useTranslation()
