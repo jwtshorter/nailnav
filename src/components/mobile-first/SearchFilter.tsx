@@ -31,21 +31,18 @@ const priceRanges = [
   { value: 'premium', label: 'Premium ($$$)', color: 'purple' }
 ]
 
-// Real database service columns only
+// Real database service columns only - MUST match Excel column names exactly
 const nailServices = [
-  'Manicure',
+  'Manicure',  // Excel column AV (c)
   'Gel Manicure',
   'Pedicure',
   'Gel Pedicure',
-  'Gel Nails',
   'Gel X',
   'Gel Extensions',
   'Acrylic Nails',
   'Nail Art',
-  'Nail Extensions',
   'Dip Powder',
-  'Builders Gel',
-  'Nail Repair'
+  'Builders Gel'
 ]
 
 const otherServices = [
@@ -54,15 +51,15 @@ const otherServices = [
   'Eyelashes',
   'Brows',
   'Waxing',
-  'Hair Cuts'
+  'Hair cuts'  // Excel has lowercase 'c'
 ]
 
 const specialties = [
-  'Master Artist',
-  'Certified Technicians',
-  'Experienced Staff',
+  'Master Nail Artist',  // Excel column BX
+  'Qualified technicians',  // Excel column BT
+  'Experienced Team',  // Excel column BU
   'Quick Service',
-  'Award Winning Staff',
+  'Award winning staff',  // Excel has lowercase 'w'
   'Bridal Nails'
 ]
 

@@ -152,21 +152,18 @@ export async function GET(request: NextRequest) {
         'Gel Manicure': 'gel_manicure',
         'Pedicure': 'pedicure',
         'Gel Pedicure': 'gel_pedicure',
-        'Gel Nails': 'gel_nails',
         'Gel X': 'gel_x',
         'Gel Extensions': 'gel_extensions',
         'Acrylic Nails': 'acrylic_nails',
         'Nail Art': 'nail_art',
-        'Nail Extensions': 'nail_extensions',
         'Dip Powder': 'dip_powder',
         'Builders Gel': 'builders_gel',
-        'Nail Repair': 'nail_repair',
         'Massage': 'massage',
         'Facials': 'facials',
         'Eyelashes': 'eyelashes',
         'Brows': 'brows',
         'Waxing': 'waxing',
-        'Hair Cuts': 'hair_cuts'
+        'Hair cuts': 'hair_cuts'
       }
       
       // For multiple services, we want salons that have ANY of them (OR logic)
@@ -271,21 +268,18 @@ export async function GET(request: NextRequest) {
         'Gel Manicure': 'gel_manicure',
         'Pedicure': 'pedicure',
         'Gel Pedicure': 'gel_pedicure',
-        'Gel Nails': 'gel_nails',
         'Gel X': 'gel_x',
         'Gel Extensions': 'gel_extensions',
         'Acrylic Nails': 'acrylic_nails',
         'Nail Art': 'nail_art',
-        'Nail Extensions': 'nail_extensions',
         'Dip Powder': 'dip_powder',
         'Builders Gel': 'builders_gel',
-        'Nail Repair': 'nail_repair',
         'Massage': 'massage',
         'Facials': 'facials',
         'Eyelashes': 'eyelashes',
         'Brows': 'brows',
         'Waxing': 'waxing',
-        'Hair Cuts': 'hair_cuts'
+        'Hair cuts': 'hair_cuts'
       }
       
       filteredSalons = filteredSalons.filter((salon: any) => {
@@ -299,11 +293,11 @@ export async function GET(request: NextRequest) {
     if (specialties) {
       const specialtyList = specialties.split(',')
       const specialtyMap: Record<string, string> = {
-        'Master Artist': 'master_artist',
-        'Certified Technicians': 'certified_technicians',
-        'Experienced Staff': 'experienced_staff',
+        'Master Nail Artist': 'master_artist',
+        'Qualified technicians': 'certified_technicians',
+        'Experienced Team': 'experienced_staff',
         'Quick Service': 'quick_service',
-        'Award Winning Staff': 'award_winning_staff',
+        'Award winning staff': 'award_winning_staff',
         'Bridal Nails': 'bridal_nails'
       }
       
