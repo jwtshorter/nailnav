@@ -1,5 +1,6 @@
 import os
 import time
+import re
 from dotenv import load_dotenv
 load_dotenv('.env.local')
 from supabase import create_client
@@ -12,8 +13,6 @@ supabase = create_client(url, service_key)
 
 def clean_address(address):
     """Clean address by removing shop numbers, unit numbers, and complex prefixes"""
-    import re
-    
     if not address:
         return address
     
@@ -61,21 +60,24 @@ def geocode_address(address, city, state, country='Australia'):
             if results and len(results) > 0:
                 lat = float(results[0]['lat'])
                 lng = float(results[0]['lon'])
-                return lat, lng
+                return lat, lng, cleaned_address
         
-        return None, None
+        return None, None, cleaned_address
     except Exception as e:
         print(f"  ✗ Geocoding error: {str(e)[:50]}")
-        return None, None
+        return None, None, cleaned_address
 
-# Get all salons
-print("Fetching salons from database...")
+# Get salons WITHOUT coordinates
+print("Fetching salons without coordinates from database...")
 result = supabase.table('salons').select('id, name, address, cities(name), state').eq('is_published', True).execute()
-salons = result.data
+all_salons = result.data
 
-print(f"\n🗺️  Starting geocoding for {len(salons)} salons...")
-print("⏱️  Rate limit: 1 request per second (Nominatim free tier)")
-print("⏱️  Estimated time: ~{} minutes\n".format(int(len(salons) / 60) + 1))
+# Filter for salons without coordinates
+salons = [s for s in all_salons if not s.get('latitude') or not s.get('longitude') or s['latitude'] == 0 or s['longitude'] == 0]
+
+print(f"\n🗺️  Found {len(salons)} salons without coordinates")
+print(f"⏱️  Rate limit: 1 request per second (Nominatim free tier)")
+print(f"⏱️  Estimated time: ~{int(len(salons) / 60) + 1} minutes\n")
 
 geocoded = 0
 failed = 0
@@ -98,7 +100,7 @@ for idx, salon in enumerate(salons, 1):
     if cleaned != address:
         print(f"  🧹 Cleaned: '{address}' → '{cleaned}'")
     
-    lat, lng = geocode_address(address, city, state or '')
+    lat, lng, cleaned_addr = geocode_address(address, city, state or '')
     
     if lat and lng:
         # Update database
@@ -125,5 +127,5 @@ print(f"\n{'='*60}")
 print(f"✅ Successfully geocoded: {geocoded}")
 print(f"❌ Failed: {failed}")
 print(f"⊘ Skipped (no address): {skipped}")
+print(f"📊 Total now with coordinates: {102 + geocoded}")
 print(f"{'='*60}")
-
