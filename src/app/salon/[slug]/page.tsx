@@ -42,6 +42,8 @@ interface SalonDetails {
   specialties: string[]
   services_offered: string[]
   languages_spoken: string[]
+  amenities: string[]
+  appointment_types: string[]
   is_verified: boolean
   parking: boolean
   accepts_walk_ins: boolean
@@ -54,6 +56,10 @@ interface SalonDetails {
   review_count: number
   reviews: Review[]
   cover_image_url?: string
+  about?: string
+  review_summary?: string
+  customers_saying?: string
+  health_wellbeing_care?: string
 }
 
 const DEFAULT_HEADER_IMAGE = "https://page.gensparksite.com/v1/base64_upload/20b6324e96a00728ec9a21f203dd1de5"
@@ -138,14 +144,61 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
           {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-8">
             
-            {/* FAQ-Style Description */}
-            {faqSections && <FAQSection salonName={salon.name} faqSections={faqSections} />}
+            {/* About Section */}
+            {salon.about && (
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-lg shadow-card p-6"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  About {salon.name} in {salon.city}, {salon.state}
+                </h2>
+                <div className="text-gray-700 whitespace-pre-line">
+                  {salon.about}
+                </div>
+              </motion.section>
+            )}
+
+            {/* What are customers saying? */}
+            {(salon.customers_saying || salon.review_summary) && (
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
+                className="bg-white rounded-lg shadow-card p-6"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  What are customers saying?
+                </h2>
+                <div className="text-gray-700 whitespace-pre-line">
+                  {salon.customers_saying || salon.review_summary}
+                </div>
+              </motion.section>
+            )}
+
+            {/* Health and Wellbeing Care */}
+            {salon.health_wellbeing_care && (
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-white rounded-lg shadow-card p-6"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  How do they care for your health and wellbeing?
+                </h2>
+                <div className="text-gray-700 whitespace-pre-line">
+                  {salon.health_wellbeing_care}
+                </div>
+              </motion.section>
+            )}
 
             {/* Services Section */}
             <motion.section
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.15 }}
               className="bg-white rounded-lg shadow-card p-6"
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-4">What services do they offer?</h2>
@@ -165,12 +218,34 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
               </div>
             </motion.section>
 
+            {/* Space/Amenities Section */}
+            {salon.amenities && salon.amenities.length > 0 && (
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="bg-white rounded-lg shadow-card p-6"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">What sort of space is the salon?</h2>
+                <div className="flex flex-wrap gap-2">
+                  {salon.amenities.map((amenity, index) => (
+                    <span 
+                      key={index}
+                      className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
+                    >
+                      {amenity}
+                    </span>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+
             {/* Staff Qualifications */}
             {salon.specialties && salon.specialties.length > 0 && (
               <motion.section
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.25 }}
                 className="bg-white rounded-lg shadow-card p-6"
               >
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">How qualified are the staff?</h2>
@@ -188,11 +263,34 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
               </motion.section>
             )}
 
+            {/* Appointment Types */}
+            {salon.appointment_types && salon.appointment_types.length > 0 && (
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white rounded-lg shadow-card p-6"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">What appointment types do they accept?</h2>
+                <div className="flex flex-wrap gap-2">
+                  {salon.appointment_types.map((type, index) => (
+                    <span 
+                      key={index}
+                      className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium"
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+
             {/* OpenStreetMap Section */}
             {salon.latitude && salon.longitude && (
               <OpenStreetMapEmbed 
                 latitude={salon.latitude} 
-                longitude={salon.longitude} 
+                longitude={salon.longitude}
+                delay={0.35}
               />
             )}
 
@@ -312,6 +410,20 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
                   Visit Website
                 </a>
               )}
+            </motion.div>
+
+            {/* Claim This Listing Button */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.25 }}
+              className="bg-yellow-500 text-gray-900 rounded-lg shadow-card p-6 text-center"
+            >
+              <h3 className="text-xl font-bold mb-2">Own this salon?</h3>
+              <p className="text-gray-900 text-opacity-90 mb-4">Claim your listing to manage your profile</p>
+              <button className="w-full bg-gray-900 text-yellow-500 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                ⭐ Claim This Listing
+              </button>
             </motion.div>
           </div>
         </div>

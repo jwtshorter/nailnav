@@ -15,7 +15,7 @@ export default function OpenStreetMapEmbed({ latitude, longitude, delay = 0.3 }:
       className="bg-white rounded-lg shadow-card p-6"
     >
       <h2 className="text-2xl font-bold text-gray-900 mb-4">Where are they located?</h2>
-      <div className="aspect-video rounded-lg overflow-hidden">
+      <div className="aspect-[16/9] h-64 rounded-lg overflow-hidden">
         <iframe
           width="100%"
           height="100%"

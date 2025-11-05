@@ -24,7 +24,7 @@ interface SalonHeroProps {
 export default function SalonHero({ salon, defaultHeaderImage, onWebsiteClick, onPhoneClick, onBack }: SalonHeroProps) {
   return (
     <div 
-      className="relative bg-cover bg-center text-white py-32"
+      className="relative bg-cover bg-center text-white py-16"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${salon.cover_image_url || defaultHeaderImage}')`,
         backgroundSize: 'cover',
@@ -63,7 +63,7 @@ export default function SalonHero({ salon, defaultHeaderImage, onWebsiteClick, o
             <span>{salon.address}, {salon.city}, {salon.state}</span>
           </div>
 
-          {/* Trackable CTA Buttons */}
+          {/* Trackable CTA Buttons (without Claim button - moved to sidebar) */}
           <div className="flex flex-wrap gap-3">
             {salon.website && (
               <a
@@ -88,11 +88,6 @@ export default function SalonHero({ salon, defaultHeaderImage, onWebsiteClick, o
                 Call Now
               </a>
             )}
-            <button
-              className="inline-flex items-center px-6 py-3 bg-yellow-500 text-gray-900 rounded-lg font-semibold hover:bg-yellow-400 transition-colors shadow-lg"
-            >
-              ⭐ Claim This Listing
-            </button>
           </div>
         </div>
       </div>

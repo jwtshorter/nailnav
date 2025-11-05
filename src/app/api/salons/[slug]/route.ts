@@ -15,7 +15,7 @@ export async function GET(
       )
     }
 
-    // Fetch salon by slug with city join
+    // Fetch salon by slug with city join - UPDATED with all Excel columns
     const { data: salon, error } = await supabase
       .from('salons')
       .select(`
@@ -27,47 +27,76 @@ export async function GET(
         cities (
           name
         ),
+        state,
         phone,
         website,
         email,
         description,
-        detailed_description,
         rating,
+        review_count,
         is_verified,
         is_featured,
         is_published,
         parking,
         accepts_walk_ins,
         wheelchair_accessible,
-        kid_friendly,
-        appointment_only,
-        online_booking,
-        credit_cards_accepted,
         opening_hours,
         latitude,
         longitude,
         manicure,
-        pedicure,
-        gel_nails,
+        gel_manicure,
+        gel_extensions,
         acrylic_nails,
+        pedicure,
+        gel_pedicure,
+        sns_dip_powder,
+        builders_gel_biab,
         nail_art,
-        dip_powder,
-        shellac,
-        nail_extensions,
-        nail_repair,
-        cuticle_care,
-        master_artist,
-        certified_technicians,
-        experienced_staff,
-        luxury_experience,
-        relaxing_atmosphere,
-        modern_facilities,
-        clean_hygienic,
-        friendly_service,
+        massage,
+        facials,
+        lash_extensions,
+        lash_lift_tint,
+        brows,
+        waxing,
+        injectables,
+        tanning,
+        cosmetic_tattoo,
+        haircuts,
+        spa_hand_foot_treatment,
+        english,
+        spanish,
+        vietnamese,
+        chinese,
+        korean,
+        qualified_technicians,
+        experienced_team,
         quick_service,
-        premium_products,
+        award_winning_staff,
+        master_nail_artist,
+        bridal_nails,
+        appointment_required,
+        walk_ins_welcome,
+        group_bookings,
+        mobile_nails,
+        child_friendly,
+        adult_only,
+        pet_friendly,
+        lgbtqi_friendly,
+        complimentary_drink,
+        heated_massage_chairs,
+        foot_spas,
+        free_wifi,
+        autoclave_sterilisation,
+        led_curing,
+        clean_ethical_products,
+        vegan_polish,
+        price_range,
         cover_image_url,
         gallery_images,
+        about,
+        review_summary,
+        customers_saying,
+        health_wellbeing_care,
         created_at
       `)
       .eq('slug', slug)
@@ -95,22 +124,32 @@ export async function GET(
       )
     }
 
-    // Transform salon data
+    // Transform salon data with EXACT Excel mappings
     const transformedSalon = {
       ...salon,
       city: (salon as any).cities?.name || 'Unknown',
       // Build services array from boolean flags
       services: [
         { name: 'Manicure', available: salon.manicure, category: 'Manicures' },
-        { name: 'Pedicure', available: salon.pedicure, category: 'Pedicures' },
-        { name: 'Gel Nails', available: salon.gel_nails, category: 'Manicures' },
+        { name: 'Gel Manicure', available: salon.gel_manicure, category: 'Manicures' },
+        { name: 'Gel Extensions', available: salon.gel_extensions, category: 'Extensions' },
         { name: 'Acrylic Nails', available: salon.acrylic_nails, category: 'Extensions' },
+        { name: 'Pedicure', available: salon.pedicure, category: 'Pedicures' },
+        { name: 'Gel Pedicure', available: salon.gel_pedicure, category: 'Pedicures' },
+        { name: 'SNS Dip Powder', available: salon.sns_dip_powder, category: 'Manicures' },
+        { name: 'Builders Gel / BIAB', available: salon.builders_gel_biab, category: 'Manicures' },
         { name: 'Nail Art', available: salon.nail_art, category: 'Nail Art' },
-        { name: 'Dip Powder', available: salon.dip_powder, category: 'Manicures' },
-        { name: 'Shellac', available: salon.shellac, category: 'Manicures' },
-        { name: 'Nail Extensions', available: salon.nail_extensions, category: 'Extensions' },
-        { name: 'Nail Repair', available: salon.nail_repair, category: 'Treatments' },
-        { name: 'Cuticle Care', available: salon.cuticle_care, category: 'Treatments' }
+        { name: 'Massage', available: salon.massage, category: 'Other Services' },
+        { name: 'Facials', available: salon.facials, category: 'Other Services' },
+        { name: 'Lash Extensions', available: salon.lash_extensions, category: 'Other Services' },
+        { name: 'Lash Lift and Tint', available: salon.lash_lift_tint, category: 'Other Services' },
+        { name: 'Brows', available: salon.brows, category: 'Other Services' },
+        { name: 'Waxing', available: salon.waxing, category: 'Other Services' },
+        { name: 'Injectables', available: salon.injectables, category: 'Other Services' },
+        { name: 'Tanning', available: salon.tanning, category: 'Other Services' },
+        { name: 'Cosmetic Tattoo', available: salon.cosmetic_tattoo, category: 'Other Services' },
+        { name: 'Haircuts', available: salon.haircuts, category: 'Other Services' },
+        { name: 'Spa Hand and Foot Treatment', available: salon.spa_hand_foot_treatment, category: 'Treatments' }
       ].filter(service => service.available).map(service => ({
         id: service.name.toLowerCase().replace(/\s+/g, '-'),
         name: service.name,
@@ -123,28 +162,72 @@ export async function GET(
       // Build services_offered array
       services_offered: [
         salon.manicure && 'Manicure',
-        salon.pedicure && 'Pedicure',
-        salon.gel_nails && 'Gel Nails',
+        salon.gel_manicure && 'Gel Manicure',
+        salon.gel_extensions && 'Gel Extensions',
         salon.acrylic_nails && 'Acrylic Nails',
+        salon.pedicure && 'Pedicure',
+        salon.gel_pedicure && 'Gel Pedicure',
+        salon.sns_dip_powder && 'SNS Dip Powder',
+        salon.builders_gel_biab && 'Builders Gel / BIAB',
         salon.nail_art && 'Nail Art',
-        salon.dip_powder && 'Dip Powder',
-        salon.shellac && 'Shellac',
-        salon.nail_extensions && 'Nail Extensions',
-        salon.nail_repair && 'Nail Repair',
-        salon.cuticle_care && 'Cuticle Care'
+        salon.massage && 'Massage',
+        salon.facials && 'Facials',
+        salon.lash_extensions && 'Lash Extensions',
+        salon.lash_lift_tint && 'Lash Lift and Tint',
+        salon.brows && 'Brows',
+        salon.waxing && 'Waxing',
+        salon.injectables && 'Injectables',
+        salon.tanning && 'Tanning',
+        salon.cosmetic_tattoo && 'Cosmetic Tattoo',
+        salon.haircuts && 'Haircuts',
+        salon.spa_hand_foot_treatment && 'Spa Hand and Foot Treatment'
       ].filter(Boolean),
       // Build specialties array
       specialties: [
-        salon.master_artist && 'Master Nail Artist',
-        salon.certified_technicians && 'Certified Technicians',
-        salon.experienced_staff && 'Experienced Team',
-        salon.luxury_experience && 'Luxury Experience',
-        salon.relaxing_atmosphere && 'Relaxing Atmosphere',
-        salon.modern_facilities && 'Modern Facilities',
-        salon.clean_hygienic && 'Clean & Hygienic',
+        salon.qualified_technicians && 'Qualified technicians',
+        salon.experienced_team && 'Experienced Team',
         salon.quick_service && 'Quick Service',
-        salon.premium_products && 'Premium Products'
+        salon.award_winning_staff && 'Award winning staff',
+        salon.master_nail_artist && 'Master Nail Artist',
+        salon.bridal_nails && 'Bridal Nails'
       ].filter(Boolean),
+      // Build amenities array
+      amenities: [
+        salon.child_friendly && 'Child Friendly',
+        salon.adult_only && 'Adult Only',
+        salon.pet_friendly && 'Pet Friendly',
+        salon.lgbtqi_friendly && 'LGBTQI+ Friendly',
+        salon.wheelchair_accessible && 'Wheelchair Accessible',
+        salon.complimentary_drink && 'Complimentary drink',
+        salon.heated_massage_chairs && 'Heated Massage Chairs',
+        salon.foot_spas && 'Foot Spas',
+        salon.free_wifi && 'Free Wi-fi',
+        salon.parking && 'Parking',
+        salon.autoclave_sterilisation && 'Autoclave Sterilisation',
+        salon.led_curing && 'LED Curing',
+        salon.clean_ethical_products && 'Clean & Ethical Products',
+        salon.vegan_polish && 'Vegan Polish'
+      ].filter(Boolean),
+      // Build appointment types array
+      appointment_types: [
+        salon.appointment_required && 'Appointment Required',
+        salon.walk_ins_welcome && 'Walk-ins Welcome',
+        salon.group_bookings && 'Group Bookings',
+        salon.mobile_nails && 'Mobile Nails'
+      ].filter(Boolean),
+      // Build languages array
+      languages_spoken: [
+        salon.english && 'English',
+        salon.spanish && 'Spanish',
+        salon.vietnamese && 'Vietnamese',
+        salon.chinese && 'Chinese',
+        salon.korean && 'Korean'
+      ].filter(Boolean),
+      // FAQ fields
+      about: salon.about,
+      review_summary: salon.review_summary,
+      customers_saying: salon.customers_saying,
+      health_wellbeing_care: salon.health_wellbeing_care,
       // NO FAKE DATA - only return what's in database
       average_rating: salon.rating,
       reviews: []

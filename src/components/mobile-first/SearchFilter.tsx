@@ -10,8 +10,9 @@ interface SalonSearchFilters {
   services?: string[]
   priceRange?: string[]
   specialties?: string[]
-  acceptsWalkIns?: boolean
-  hasParking?: boolean
+  languages?: string[]
+  amenities?: string[]
+  appointmentTypes?: string[]
   location?: {
     lat: number
     lng: number
@@ -31,56 +32,64 @@ const priceRanges = [
   { value: 'premium', label: 'Premium ($$$)', color: 'purple' }
 ]
 
-// Real database service columns only - MUST match Excel column names exactly
+// Real database service columns - MUST match Excel column names EXACTLY
 const nailServices = [
-  'Manicure',  // Excel column AV (c)
-  'Gel Manicure',
-  'Pedicure',
-  'Gel Pedicure',
-  'Gel X',
-  'Gel Extensions',
-  'Acrylic Nails',
-  'Nail Art',
-  'Dip Powder',
-  'Builders Gel'
+  'Manicure',  // Excel AV
+  'Gel Manicure',  // Excel AW
+  'Gel Extensions',  // Excel AX
+  'Acrylic Nails',  // Excel AY
+  'Pedicure',  // Excel AZ
+  'Gel Pedicure',  // Excel BA
+  'SNS Dip Powder',  // Excel BB
+  'Builders Gel / BIAB',  // Excel BC
+  'Nail Art'  // Excel BD
 ]
 
 const otherServices = [
-  'Massage',
-  'Facials',
-  'Eyelashes',
-  'Brows',
-  'Waxing',
-  'Hair cuts'  // Excel has lowercase 'c'
+  'Massage',  // Excel BE
+  'Facials',  // Excel BF
+  'Lash Exensions',  // Excel BG (typo in Excel)
+  'Lash Lift and Tint',  // Excel BH
+  'Brows',  // Excel BI
+  'Waxing',  // Excel BJ
+  'Injectables',  // Excel BK
+  'Tanning',  // Excel BL
+  'Cosmetic Tatoo',  // Excel BM (typo in Excel)
+  'Haircuts',  // Excel BN
+  'Spa Hand and Foot Treatment'  // Excel BO
 ]
 
 const specialties = [
-  'Master Nail Artist',  // Excel column BX
-  'Qualified technicians',  // Excel column BT
-  'Experienced Team',  // Excel column BU
-  'Quick Service',
-  'Award winning staff',  // Excel has lowercase 'w'
-  'Bridal Nails'
+  'Qualified technicians',  // Excel BV
+  'Experienced Team',  // Excel BW
+  'Quick Service',  // Excel BX
+  'Award winning staff',  // Excel BY
+  'Master Nail Artist',  // Excel BZ
+  'Bridal Nails'  // Excel CA
+]
+
+const appointmentTypes = [
+  'Appointment Required',  // Excel CB
+  'Walk-ins Welcome',  // Excel CC
+  'Group Bookings',  // Excel CD
+  'Mobile Nails'  // Excel CE
 ]
 
 const amenities = [
-  'Kid Friendly',
-  'Pet Friendly',
-  'LGBTQI+ Friendly',
-  'Wheelchair Accessible',
-  'Female Owned',
-  'Minority Owned',
-  'Vegan Polish',
-  'Eco-Friendly Products',
-  'Cruelty-Free Products',
-  'Non-Toxic Treatments',
-  'Free WiFi',
-  'Heated Massage Chairs',
-  'Foot Spas',
-  'Group Bookings',
-  'Mobile Nails',
-  'Walk-ins Welcome',
-  'Parking'
+  'Child Friendly',  // Excel CF
+  'Adult Only',  // Excel CG
+  'Pet Friendly',  // Excel CH
+  'LGBTQI+ Friendly',  // Excel CI
+  'Wheel Chair Accessable',  // Excel CJ (typo in Excel)
+  'Complimentary drink',  // Excel CK
+  'Heated Massage Chairs',  // Excel CL
+  'Foot Spas',  // Excel CM
+  'Free Wi-fi',  // Excel CN
+  'Parking',  // Excel CO
+  'Autoclave sterlisation',  // Excel CP (typo in Excel)
+  'LED Curing',  // Excel CQ
+  'Clean & Ethical Products',  // Excel CR
+  'Vegan Polish'  // Excel CS
 ]
 
 const languages = [
@@ -153,12 +162,12 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
 
   const quickFilters = [
     { label: 'Manicure', type: 'service', value: 'Manicure' },
+    { label: 'Gel Manicure', type: 'service', value: 'Gel Manicure' },
     { label: 'Pedicure', type: 'service', value: 'Pedicure' },
     { label: 'Acrylic Nails', type: 'service', value: 'Acrylic Nails' },
     { label: 'Gel Extensions', type: 'service', value: 'Gel Extensions' },
-    { label: 'Gel X', type: 'service', value: 'Gel X' },
-    { label: 'Dip Powder', type: 'service', value: 'Dip Powder' },
-    { label: 'Builders Gel', type: 'service', value: 'Builders Gel' },
+    { label: 'SNS Dip Powder', type: 'service', value: 'SNS Dip Powder' },
+    { label: 'Builders Gel / BIAB', type: 'service', value: 'Builders Gel / BIAB' },
     { label: 'Nail Art', type: 'service', value: 'Nail Art' }
   ]
 
@@ -310,24 +319,11 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
                   +{(filters.services?.length || 0) - 2} more
                 </span>
               )}
-              {filters.expertise?.slice(0, 1).map((expertise) => (
-                <span key={expertise} className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
-                  {expertise}
+              {filters.specialties?.slice(0, 1).map((specialty) => (
+                <span key={specialty} className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
+                  {specialty}
                 </span>
               ))}
-              {filters.hours?.slice(0, 1).map((hours) => (
-                <span key={hours} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                  {hours}
-                </span>
-              ))}
-              {filters.booking?.slice(0, 1).map((booking) => (
-                <span key={booking} className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                  {booking}
-                </span>
-              ))}
-              {filters.acceptsWalkIns && (
-                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Walk-ins</span>
-              )}
               <button
                 onClick={clearFilters}
                 className="ml-2 text-xs text-gray-500 hover:text-red-600 underline"
@@ -456,23 +452,47 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
                 </div>
               </div>
 
-              {/* Expertise */}
+              {/* Amenities */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Expertise</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">Amenities</h3>
                 <div className="flex flex-wrap gap-2">
-                  {expertiseFilters.map((expertise) => (
+                  {amenities.map((amenity) => (
                     <button
-                      key={expertise}
-                      onClick={() => toggleFilter('expertise', expertise)}
+                      key={amenity}
+                      onClick={() => toggleFilter('amenities', amenity)}
                       className={`px-3 py-2 rounded-lg text-sm transition-colors ${
-                        filters.expertise?.includes(expertise)
-                          ? 'bg-purple-100 text-purple-800 border-purple-300'
+                        filters.amenities?.includes(amenity)
+                          ? 'bg-blue-100 text-blue-800 border-blue-300'
                           : 'bg-white text-gray-700 border-gray-300'
                       } border`}
                       style={{ minHeight: '36px' }}
                     >
-                      {expertise}
-                      {filters.expertise?.includes(expertise) && (
+                      {amenity}
+                      {filters.amenities?.includes(amenity) && (
+                        <Check className="w-4 h-4 inline ml-1" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Appointment Types */}
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Appointment Types</h3>
+                <div className="flex flex-wrap gap-2">
+                  {appointmentTypes.map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => toggleFilter('appointmentTypes', type)}
+                      className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                        filters.appointmentTypes?.includes(type)
+                          ? 'bg-green-100 text-green-800 border-green-300'
+                          : 'bg-white text-gray-700 border-gray-300'
+                      } border`}
+                      style={{ minHeight: '36px' }}
+                    >
+                      {type}
+                      {filters.appointmentTypes?.includes(type) && (
                         <Check className="w-4 h-4 inline ml-1" />
                       )}
                     </button>
