@@ -363,8 +363,23 @@ export async function GET(request: NextRequest) {
       ].filter(Boolean),
       specialties: [
         salon.master_artist && 'Master Nail Artist',
-        salon.certified_technicians && 'Certified Technicians',
-        salon.experienced_staff && 'Experienced Team'
+        salon.award_winning_staff && 'Award winning staff',
+        salon.experienced_staff && 'Experienced Team',
+        salon.certified_technicians && 'Qualified technicians',
+        salon.quick_service && 'Quick Service',
+        salon.bridal_nails && 'Bridal Nails'
+      ].filter(Boolean),
+      amenities: [
+        salon.complimentary_drink && 'Complimentary drink',
+        salon.pet_friendly && 'Pet friendly',
+        salon.kid_friendly && 'Kid friendly',
+        salon.heated_massage_chairs && 'Heated Massage Chairs',
+        salon.eco_friendly_products && 'Eco-friendly products',
+        salon.foot_spas && 'Foot Spas',
+        salon.free_wifi && 'Free Wi-fi',
+        salon.vegan_polish && 'Vegan polish',
+        salon.cruelty_free_products && 'Cruelty free products',
+        salon.non_toxic_treatments && 'Non-toxic treatments'
       ].filter(Boolean)
     }))
 

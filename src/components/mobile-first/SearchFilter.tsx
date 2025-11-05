@@ -95,17 +95,15 @@ const languages = [
 const popularServices = [...nailServices, ...otherServices]
 const popularSpecialties = specialties
 
-// Additional filter categories
+// Additional filter categories - REMOVED fake filters that don't exist in database
 const expertiseFilters = specialties
-const hoursFilters = ['Open Now', 'Open Weekends', 'Open Late']
-const bookingFilters = ['Online Booking', 'Walk-ins Welcome', 'Same Day Appointments']
 
 export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterProps) => {
   const { t } = useTranslation()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [serviceQuery, setServiceQuery] = useState('')
+  const [locationQuery, setLocationQuery] = useState('')
   const [filters, setFilters] = useState<SalonSearchFilters>({})
-  // REMOVED GEOLOCATION - NOT NEEDED
 
   const handleSearch = () => {
     // Call the onSearch prop with filters
@@ -113,10 +111,12 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
       ...filters
     }
     
-    // Parse search query - treat as city search for now
-    if (searchQuery.trim()) {
-      searchFilters.city = searchQuery.trim()
+    // Add location query as city
+    if (locationQuery.trim()) {
+      searchFilters.city = locationQuery.trim()
     }
+    
+    // Note: serviceQuery is for display only, actual filtering is done by filter buttons
     
     // Call parent's search handler
     onSearch(searchFilters)
@@ -145,7 +145,8 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
 
   const clearFilters = () => {
     setFilters({})
-    setSearchQuery('')
+    setServiceQuery('')
+    setLocationQuery('')
   }
 
   const activeFilterCount = Object.values(filters).filter(Boolean).length
@@ -180,18 +181,33 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
 
   return (
     <div>
-      {/* Search Bar */}
+      {/* Search Bar - TWO INPUTS SIDE BY SIDE */}
       <div>
         <div className="relative">
-          {/* Single Search Input */}
-          <div className="mb-4">
-            <div className="relative">
+          {/* Two Search Inputs - Service and Location */}
+          <div className="mb-4 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3">
+            {/* Service/Business Name Input */}
+            <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search service, business or location"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search services or business name..."
+                value={serviceQuery}
+                onChange={(e) => setServiceQuery(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg text-gray-900 placeholder-gray-500"
+                style={{ minHeight: '48px' }}
+              />
+            </div>
+            
+            {/* Location Input */}
+            <div className="flex-1 relative">
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Location (city, suburb, postcode)"
+                value={locationQuery}
+                onChange={(e) => setLocationQuery(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-lg text-gray-900 placeholder-gray-500"
                 style={{ minHeight: '48px' }}
@@ -464,74 +480,7 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
                 </div>
               </div>
 
-              {/* Hours */}
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Hours</h3>
-                <div className="flex flex-wrap gap-2">
-                  {hoursFilters.map((hours) => (
-                    <button
-                      key={hours}
-                      onClick={() => toggleFilter('hours', hours)}
-                      className={`px-3 py-2 rounded-lg text-sm transition-colors ${
-                        filters.hours?.includes(hours)
-                          ? 'bg-blue-100 text-blue-800 border-blue-300'
-                          : 'bg-white text-gray-700 border-gray-300'
-                      } border`}
-                      style={{ minHeight: '36px' }}
-                    >
-                      {hours}
-                      {filters.hours?.includes(hours) && (
-                        <Check className="w-4 h-4 inline ml-1" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
-              {/* Booking */}
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Booking</h3>
-                <div className="flex flex-wrap gap-2">
-                  {bookingFilters.map((booking) => (
-                    <button
-                      key={booking}
-                      onClick={() => toggleFilter('booking', booking)}
-                      className={`px-3 py-2 rounded-lg text-sm transition-colors ${
-                        filters.booking?.includes(booking)
-                          ? 'bg-green-100 text-green-800 border-green-300'
-                          : 'bg-white text-gray-700 border-gray-300'
-                      } border`}
-                      style={{ minHeight: '36px' }}
-                    >
-                      {booking}
-                      {filters.booking?.includes(booking) && (
-                        <Check className="w-4 h-4 inline ml-1" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Additional Filters */}
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Additional Options</h3>
-                <div className="space-y-2">
-                  {[
-                    { key: 'acceptsWalkIns', label: 'Accepts walk-ins' },
-                    { key: 'hasParking', label: 'Parking available' }
-                  ].map((option) => (
-                    <label key={option.key} className="flex items-center space-x-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={!!filters[option.key as keyof SalonSearchFilters]}
-                        onChange={() => toggleBooleanFilter(option.key as keyof SalonSearchFilters)}
-                        className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                      />
-                      <span className="text-sm text-gray-700">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
 
               {/* Filter Actions */}
               <div className="flex space-x-3 pt-4 border-t border-gray-200">
