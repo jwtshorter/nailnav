@@ -666,7 +666,7 @@ export default function SearchPage() {
               <div className="mb-4">
                 <h3 className="font-semibold text-gray-900 mb-2">Nail Services</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Manicure', 'Gel Manicure', 'Pedicure', 'Gel Pedicure', 'Gel Nails', 'Gel X', 'Gel Extensions', 'Acrylic Nails', 'Nail Art', 'Nail Extensions', 'Dip Powder', 'Builders Gel', 'Nail Repair'].map(service => (
+                  {['Manicure', 'Gel Manicure', 'Pedicure', 'Gel Pedicure', 'Gel X', 'Gel Extensions', 'Acrylic Nails', 'Nail Art', 'Dip Powder', 'Builders Gel'].map(service => (
                     <button
                       key={service}
                       onClick={() => {
@@ -724,7 +724,7 @@ export default function SearchPage() {
               <div className="mb-4">
                 <h3 className="font-semibold text-gray-900 mb-2">Other Services</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Massage', 'Facials', 'Eyelashes', 'Brows', 'Waxing', 'Hair Cuts'].map(service => (
+                  {['Massage', 'Facials', 'Eyelashes', 'Brows', 'Waxing', 'Hair cuts'].map(service => (
                     <button
                       key={service}
                       onClick={() => {
@@ -751,7 +751,7 @@ export default function SearchPage() {
               <div className="mb-4">
                 <h3 className="font-semibold text-gray-900 mb-2">Specialties</h3>
                 <div className="flex flex-wrap gap-2">
-                  {['Master Artist', 'Certified Technicians', 'Experienced Staff', 'Quick Service', 'Award Winning Staff', 'Bridal Nails'].map(specialty => (
+                  {['Master Nail Artist', 'Qualified technicians', 'Experienced Team', 'Quick Service', 'Award winning staff', 'Bridal Nails'].map(specialty => (
                     <button
                       key={specialty}
                       onClick={() => {
