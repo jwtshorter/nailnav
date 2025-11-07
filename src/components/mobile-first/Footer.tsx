@@ -24,10 +24,10 @@ const Footer = () => {
           {/* Right side - Links */}
           <div className="flex items-center space-x-6">
             <a 
-              href="/help" 
-              className="hover:text-primary-600 transition-colors"
+              href="/badge-generator" 
+              className="hover:text-primary-600 transition-colors font-medium"
             >
-              Help Centre
+              Claim 1 Month Free
             </a>
             <a 
               href="/privacy" 

@@ -382,43 +382,96 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.5 }}
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Explore Cities
+              Explore Popular Cities
             </h2>
             <p className="text-gray-600 text-center mb-8">
               Find the best nail salons in these popular locations
             </p>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-              {[
-                // USA Cities
-                { name: 'Los Angeles', country: 'USA', slug: 'los-angeles-ca' },
-                { name: 'New York', country: 'USA', slug: 'new-york-ny' },
-                { name: 'Miami', country: 'USA', slug: 'miami-fl' },
-                { name: 'Chicago', country: 'USA', slug: 'chicago-il' },
-                { name: 'Las Vegas', country: 'USA', slug: 'las-vegas-nv' },
-                { name: 'San Francisco', country: 'USA', slug: 'san-francisco-ca' },
-                // Australia Cities  
-                { name: 'Sydney', country: 'Australia', slug: 'sydney-nsw' },
-                { name: 'Melbourne', country: 'Australia', slug: 'melbourne-vic' }
-              ].map((city, index) => (
-                <motion.a
-                  key={city.slug}
-                  href={`/search?location=${encodeURIComponent(city.name)}`}
-                  className="bg-white p-4 rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer group text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 * index }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
-                    {city.name}
-                  </h3>
-                  <p className="text-xs text-gray-600">
-                    {city.country}
-                  </p>
-                </motion.a>
-              ))}
+            {/* Popular US Cities */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Popular US Cities</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                {[
+                  { name: 'Los Angeles', state: 'CA' },
+                  { name: 'New York', state: 'NY' },
+                  { name: 'Miami', state: 'FL' },
+                  { name: 'Chicago', state: 'IL' },
+                  { name: 'Houston', state: 'TX' },
+                  { name: 'Phoenix', state: 'AZ' },
+                  { name: 'Philadelphia', state: 'PA' },
+                  { name: 'San Antonio', state: 'TX' },
+                  { name: 'San Diego', state: 'CA' },
+                  { name: 'Dallas', state: 'TX' },
+                  { name: 'San Jose', state: 'CA' },
+                  { name: 'Austin', state: 'TX' },
+                  { name: 'Jacksonville', state: 'FL' },
+                  { name: 'Fort Worth', state: 'TX' },
+                  { name: 'Columbus', state: 'OH' },
+                  { name: 'Charlotte', state: 'NC' }
+                ].map((city, index) => (
+                  <motion.a
+                    key={`${city.name}-${city.state}`}
+                    href={`/search?location=${encodeURIComponent(city.name + ', ' + city.state)}`}
+                    className="bg-white p-4 rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer group text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.05 * index }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <h4 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                      {city.name}
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      {city.state}
+                    </p>
+                  </motion.a>
+                ))}
+              </div>
+            </div>
+
+            {/* Popular Australian Cities */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Popular Australian Cities</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                {[
+                  { name: 'Sydney', state: 'NSW', slug: 'sydney' },
+                  { name: 'Melbourne', state: 'VIC', slug: 'melbourne' },
+                  { name: 'Brisbane', state: 'QLD', slug: 'brisbane' },
+                  { name: 'Perth', state: 'WA', slug: 'perth' },
+                  { name: 'Adelaide', state: 'SA', slug: 'adelaide' },
+                  { name: 'Gold Coast', state: 'QLD', slug: 'gold-coast' },
+                  { name: 'Canberra', state: 'ACT', slug: 'canberra' },
+                  { name: 'Newcastle', state: 'NSW', slug: 'newcastle' },
+                  { name: 'Wollongong', state: 'NSW', slug: 'wollongong' },
+                  { name: 'Geelong', state: 'VIC', slug: 'geelong' },
+                  { name: 'Hobart', state: 'TAS', slug: 'hobart' },
+                  { name: 'Townsville', state: 'QLD', slug: 'townsville' },
+                  { name: 'Cairns', state: 'QLD', slug: 'cairns' },
+                  { name: 'Darwin', state: 'NT', slug: 'darwin' },
+                  { name: 'Toowoomba', state: 'QLD', slug: 'toowoomba' },
+                  { name: 'Ballarat', state: 'VIC', slug: 'ballarat' }
+                ].map((city, index) => (
+                  <motion.a
+                    key={`${city.name}-${city.state}`}
+                    href={`/nail-salons/${city.state.toLowerCase()}/${city.slug}`}
+                    className="bg-white p-4 rounded-lg shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer group text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.05 * index }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <h4 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                      {city.name}
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      {city.state}
+                    </p>
+                  </motion.a>
+                ))}
+              </div>
             </div>
           </motion.section>
         )}
