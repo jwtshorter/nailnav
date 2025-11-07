@@ -294,52 +294,7 @@ export default function SalonDetailPage({ params }: { params: { slug: string } }
               />
             )}
 
-            {/* Reviews Section */}
-            {salon.review_count > 0 && (
-              <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="bg-white rounded-lg shadow-card p-6"
-              >
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">What do the reviews say?</h2>
-                <div className="flex items-center mb-4">
-                  {renderStars(salon.average_rating || salon.rating)}
-                  <span className="ml-2 text-lg font-semibold text-gray-900">
-                    {(salon.average_rating || salon.rating).toFixed(1)} out of 5
-                  </span>
-                  <span className="ml-2 text-gray-600">
-                    ({salon.review_count} reviews)
-                  </span>
-                </div>
-                
-                {salon.reviews && salon.reviews.length > 0 ? (
-                  <div className="space-y-4 mt-6">
-                    {salon.reviews.slice(0, 5).map((review) => (
-                      <div key={review.id} className="border-l-4 border-primary-500 pl-4 py-2">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-2">
-                            <span className="font-medium text-gray-900">{review.reviewer_name}</span>
-                            {review.is_verified && (
-                              <CheckCircle className="w-4 h-4 text-green-500" />
-                            )}
-                          </div>
-                          <div className="flex items-center">
-                            {renderStars(review.rating)}
-                          </div>
-                        </div>
-                        <p className="text-gray-700">{review.content}</p>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {new Date(review.created_at).toLocaleDateString()}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-600">Reviews data from Google. Individual reviews coming soon!</p>
-                )}
-              </motion.section>
-            )}
+
           </div>
 
           {/* Sidebar */}
