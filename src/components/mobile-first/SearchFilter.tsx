@@ -37,11 +37,11 @@ const nailServices = [
   'Manicure',  // Excel AV
   'Gel Manicure',  // Excel AW
   'Gel Extensions',  // Excel AX
-  'Acrylic Nails',  // Excel AY
+  'Shellac / Acrylic Nails',  // Excel AY - RENAMED
   'Pedicure',  // Excel AZ
   'Gel Pedicure',  // Excel BA
-  'SNS Dip Powder',  // Excel BB
-  'Builders Gel / BIAB',  // Excel BC
+  'SNS / Dip Powder',  // Excel BB - RENAMED
+  'BIAB / Builders Gel',  // Excel BC - RENAMED
   'Nail Art'  // Excel BD
 ]
 
@@ -52,9 +52,6 @@ const otherServices = [
   'Lash Lift and Tint',  // Excel BH
   'Brows',  // Excel BI
   'Waxing',  // Excel BJ
-  'Injectables',  // Excel BK
-  'Tanning',  // Excel BL
-  'Cosmetic Tatoo',  // Excel BM (typo in Excel)
   'Haircuts',  // Excel BN
   'Spa Hand and Foot Treatment'  // Excel BO
 ]
@@ -77,7 +74,6 @@ const appointmentTypes = [
 
 const amenities = [
   'Child Friendly',  // Excel CF
-  'Adult Only',  // Excel CG
   'Pet Friendly',  // Excel CH
   'LGBTQI+ Friendly',  // Excel CI
   'Wheel Chair Accessable',  // Excel CJ (typo in Excel)
@@ -164,10 +160,10 @@ export const SearchFilter = ({ onSearch, loading, resultsCount }: SearchFilterPr
     { label: 'Manicure', type: 'service', value: 'Manicure' },
     { label: 'Gel Manicure', type: 'service', value: 'Gel Manicure' },
     { label: 'Pedicure', type: 'service', value: 'Pedicure' },
-    { label: 'Acrylic Nails', type: 'service', value: 'Acrylic Nails' },
+    { label: 'Shellac / Acrylic Nails', type: 'service', value: 'Shellac / Acrylic Nails' },
     { label: 'Gel Extensions', type: 'service', value: 'Gel Extensions' },
-    { label: 'SNS Dip Powder', type: 'service', value: 'SNS Dip Powder' },
-    { label: 'Builders Gel / BIAB', type: 'service', value: 'Builders Gel / BIAB' },
+    { label: 'SNS / Dip Powder', type: 'service', value: 'SNS / Dip Powder' },
+    { label: 'BIAB / Builders Gel', type: 'service', value: 'BIAB / Builders Gel' },
     { label: 'Nail Art', type: 'service', value: 'Nail Art' }
   ]
 

@@ -133,11 +133,11 @@ export async function GET(
         { name: 'Manicure', available: salon.manicure, category: 'Manicures' },
         { name: 'Gel Manicure', available: salon.gel_manicure, category: 'Manicures' },
         { name: 'Gel Extensions', available: salon.gel_extensions, category: 'Extensions' },
-        { name: 'Acrylic Nails', available: salon.acrylic_nails, category: 'Extensions' },
+        { name: 'Shellac / Acrylic Nails', available: salon.acrylic_nails, category: 'Extensions' },  // RENAMED
         { name: 'Pedicure', available: salon.pedicure, category: 'Pedicures' },
         { name: 'Gel Pedicure', available: salon.gel_pedicure, category: 'Pedicures' },
-        { name: 'SNS Dip Powder', available: salon.sns_dip_powder, category: 'Manicures' },
-        { name: 'Builders Gel / BIAB', available: salon.builders_gel_biab, category: 'Manicures' },
+        { name: 'SNS / Dip Powder', available: salon.sns_dip_powder, category: 'Manicures' },  // RENAMED
+        { name: 'BIAB / Builders Gel', available: salon.builders_gel_biab, category: 'Manicures' },  // RENAMED
         { name: 'Nail Art', available: salon.nail_art, category: 'Nail Art' },
         { name: 'Massage', available: salon.massage, category: 'Other Services' },
         { name: 'Facials', available: salon.facials, category: 'Other Services' },
@@ -145,9 +145,6 @@ export async function GET(
         { name: 'Lash Lift and Tint', available: salon.lash_lift_tint, category: 'Other Services' },
         { name: 'Brows', available: salon.brows, category: 'Other Services' },
         { name: 'Waxing', available: salon.waxing, category: 'Other Services' },
-        { name: 'Injectables', available: salon.injectables, category: 'Other Services' },
-        { name: 'Tanning', available: salon.tanning, category: 'Other Services' },
-        { name: 'Cosmetic Tattoo', available: salon.cosmetic_tattoo, category: 'Other Services' },
         { name: 'Haircuts', available: salon.haircuts, category: 'Other Services' },
         { name: 'Spa Hand and Foot Treatment', available: salon.spa_hand_foot_treatment, category: 'Treatments' }
       ].filter(service => service.available).map(service => ({
@@ -164,11 +161,11 @@ export async function GET(
         salon.manicure && 'Manicure',
         salon.gel_manicure && 'Gel Manicure',
         salon.gel_extensions && 'Gel Extensions',
-        salon.acrylic_nails && 'Acrylic Nails',
+        salon.acrylic_nails && 'Shellac / Acrylic Nails',  // RENAMED
         salon.pedicure && 'Pedicure',
         salon.gel_pedicure && 'Gel Pedicure',
-        salon.sns_dip_powder && 'SNS Dip Powder',
-        salon.builders_gel_biab && 'Builders Gel / BIAB',
+        salon.sns_dip_powder && 'SNS / Dip Powder',  // RENAMED
+        salon.builders_gel_biab && 'BIAB / Builders Gel',  // RENAMED
         salon.nail_art && 'Nail Art',
         salon.massage && 'Massage',
         salon.facials && 'Facials',
@@ -176,9 +173,6 @@ export async function GET(
         salon.lash_lift_tint && 'Lash Lift and Tint',
         salon.brows && 'Brows',
         salon.waxing && 'Waxing',
-        salon.injectables && 'Injectables',
-        salon.tanning && 'Tanning',
-        salon.cosmetic_tattoo && 'Cosmetic Tattoo',
         salon.haircuts && 'Haircuts',
         salon.spa_hand_foot_treatment && 'Spa Hand and Foot Treatment'
       ].filter(Boolean),
@@ -194,7 +188,6 @@ export async function GET(
       // Build amenities array
       amenities: [
         salon.child_friendly && 'Child Friendly',
-        salon.adult_only && 'Adult Only',
         salon.pet_friendly && 'Pet Friendly',
         salon.lgbtqi_friendly && 'LGBTQI+ Friendly',
         salon.wheelchair_accessible && 'Wheelchair Accessible',

@@ -149,11 +149,11 @@ export async function GET(request: NextRequest) {
         'Manicure': 'manicure',
         'Gel Manicure': 'gel_manicure',
         'Gel Extensions': 'gel_extensions',
-        'Acrylic Nails': 'acrylic_nails',
+        'Shellac / Acrylic Nails': 'acrylic_nails',  // RENAMED
         'Pedicure': 'pedicure',
         'Gel Pedicure': 'gel_pedicure',
-        'SNS Dip Powder': 'sns_dip_powder',
-        'Builders Gel / BIAB': 'builders_gel_biab',
+        'SNS / Dip Powder': 'sns_dip_powder',  // RENAMED
+        'BIAB / Builders Gel': 'builders_gel_biab',  // RENAMED
         'Nail Art': 'nail_art',
         'Massage': 'massage',
         'Facials': 'facials',
@@ -161,9 +161,6 @@ export async function GET(request: NextRequest) {
         'Lash Lift and Tint': 'lash_lift_tint',
         'Brows': 'brows',
         'Waxing': 'waxing',
-        'Injectables': 'injectables',
-        'Tanning': 'tanning',
-        'Cosmetic Tatoo': 'cosmetic_tattoo',  // typo in Excel
         'Haircuts': 'haircuts',
         'Spa Hand and Foot Treatment': 'spa_hand_foot_treatment'
       }
@@ -198,7 +195,6 @@ export async function GET(request: NextRequest) {
       const amenityList = amenities.split(',')
       const amenityMap: Record<string, string> = {
         'Child Friendly': 'child_friendly',
-        'Adult Only': 'adult_only',
         'Pet Friendly': 'pet_friendly',
         'LGBTQI+ Friendly': 'lgbtqi_friendly',
         'Wheel Chair Accessable': 'wheelchair_accessible',  // typo in Excel
@@ -263,11 +259,11 @@ export async function GET(request: NextRequest) {
         'Manicure': 'manicure',
         'Gel Manicure': 'gel_manicure',
         'Gel Extensions': 'gel_extensions',
-        'Acrylic Nails': 'acrylic_nails',
+        'Shellac / Acrylic Nails': 'acrylic_nails',  // RENAMED
         'Pedicure': 'pedicure',
         'Gel Pedicure': 'gel_pedicure',
-        'SNS Dip Powder': 'sns_dip_powder',
-        'Builders Gel / BIAB': 'builders_gel_biab',
+        'SNS / Dip Powder': 'sns_dip_powder',  // RENAMED
+        'BIAB / Builders Gel': 'builders_gel_biab',  // RENAMED
         'Nail Art': 'nail_art',
         'Massage': 'massage',
         'Facials': 'facials',
@@ -275,9 +271,6 @@ export async function GET(request: NextRequest) {
         'Lash Lift and Tint': 'lash_lift_tint',
         'Brows': 'brows',
         'Waxing': 'waxing',
-        'Injectables': 'injectables',
-        'Tanning': 'tanning',
-        'Cosmetic Tatoo': 'cosmetic_tattoo',
         'Haircuts': 'haircuts',
         'Spa Hand and Foot Treatment': 'spa_hand_foot_treatment'
       }
@@ -356,11 +349,11 @@ export async function GET(request: NextRequest) {
         salon.manicure && 'Manicure',
         salon.gel_manicure && 'Gel Manicure',
         salon.gel_extensions && 'Gel Extensions',
-        salon.acrylic_nails && 'Acrylic Nails',
+        salon.acrylic_nails && 'Shellac / Acrylic Nails',  // RENAMED
         salon.pedicure && 'Pedicure',
         salon.gel_pedicure && 'Gel Pedicure',
-        salon.sns_dip_powder && 'SNS Dip Powder',
-        salon.builders_gel_biab && 'Builders Gel / BIAB',
+        salon.sns_dip_powder && 'SNS / Dip Powder',  // RENAMED
+        salon.builders_gel_biab && 'BIAB / Builders Gel',  // RENAMED
         salon.nail_art && 'Nail Art',
         salon.massage && 'Massage',
         salon.facials && 'Facials',
@@ -368,9 +361,6 @@ export async function GET(request: NextRequest) {
         salon.lash_lift_tint && 'Lash Lift and Tint',
         salon.brows && 'Brows',
         salon.waxing && 'Waxing',
-        salon.injectables && 'Injectables',
-        salon.tanning && 'Tanning',
-        salon.cosmetic_tattoo && 'Cosmetic Tattoo',
         salon.haircuts && 'Haircuts',
         salon.spa_hand_foot_treatment && 'Spa Hand and Foot Treatment'
       ].filter(Boolean),
@@ -384,7 +374,6 @@ export async function GET(request: NextRequest) {
       ].filter(Boolean),
       amenities: [
         salon.child_friendly && 'Child Friendly',
-        salon.adult_only && 'Adult Only',
         salon.pet_friendly && 'Pet Friendly',
         salon.lgbtqi_friendly && 'LGBTQI+ Friendly',
         salon.wheelchair_accessible && 'Wheelchair Accessible',
