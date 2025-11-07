@@ -22,6 +22,14 @@ UPDATE salons SET city_id = 30 WHERE city_id = 31;
 DELETE FROM cities WHERE id = 31;
 
 -- ============================================================================
+-- NT (Northern Territory)
+-- ============================================================================
+
+-- Casuarina (29) → Darwin (28)
+UPDATE salons SET city_id = 28 WHERE city_id = 29;
+DELETE FROM cities WHERE id = 29;
+
+-- ============================================================================
 -- NSW (New South Wales)
 -- ============================================================================
 
@@ -125,13 +133,13 @@ COMMIT;
 
 -- Check that suburb cities have been deleted (should return 0 rows)
 SELECT * FROM cities 
-WHERE id IN (31, 3, 6, 5, 4, 14, 13, 23, 25, 24, 27, 11, 10, 9, 8, 20, 60, 19, 21);
+WHERE id IN (31, 29, 3, 6, 5, 4, 14, 13, 23, 25, 24, 27, 11, 10, 9, 8, 20, 60, 19, 21);
 
 -- Check salon counts for parent cities (should show combined counts)
 SELECT c.name, c.id, COUNT(s.id) as salon_count
 FROM cities c
 LEFT JOIN salons s ON c.id = s.city_id
-WHERE c.id IN (30, 2, 12, 36, 22, 26, 7, 17)
+WHERE c.id IN (30, 28, 2, 12, 36, 22, 26, 7, 17)
 GROUP BY c.id, c.name
 ORDER BY c.name;
 
