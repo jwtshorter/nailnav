@@ -1,0 +1,298 @@
+[
+  {
+    "id": 1,
+    "name": "Albury",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "albury",
+    "country": "Australia"
+  },
+  {
+    "id": 2,
+    "name": "Bathurst",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "bathurst",
+    "country": "Australia"
+  },
+  {
+    "id": 3,
+    "name": "Canberra",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "canberra",
+    "country": "Australia"
+  },
+  {
+    "id": 4,
+    "name": "Coffs Harbour",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "coffs-harbour",
+    "country": "Australia"
+  },
+  {
+    "id": 5,
+    "name": "Newcastle",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "newcastle",
+    "country": "Australia"
+  },
+  {
+    "id": 6,
+    "name": "Port Macquarie",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "port-macquarie",
+    "country": "Australia"
+  },
+  {
+    "id": 7,
+    "name": "Sydney",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "sydney",
+    "country": "Australia"
+  },
+  {
+    "id": 8,
+    "name": "Tamworth",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "tamworth",
+    "country": "Australia"
+  },
+  {
+    "id": 9,
+    "name": "Tweed Heads",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "tweed-heads",
+    "country": "Australia"
+  },
+  {
+    "id": 10,
+    "name": "Wollongong",
+    "state": "NSW",
+    "state_full": "New South Wales",
+    "slug": "wollongong",
+    "country": "Australia"
+  },
+  {
+    "id": 11,
+    "name": "Ballarat",
+    "state": "VIC",
+    "state_full": "Victoria",
+    "slug": "ballarat",
+    "country": "Australia"
+  },
+  {
+    "id": 12,
+    "name": "Bendigo",
+    "state": "VIC",
+    "state_full": "Victoria",
+    "slug": "bendigo",
+    "country": "Australia"
+  },
+  {
+    "id": 13,
+    "name": "Geelong",
+    "state": "VIC",
+    "state_full": "Victoria",
+    "slug": "geelong",
+    "country": "Australia"
+  },
+  {
+    "id": 14,
+    "name": "Melbourne",
+    "state": "VIC",
+    "state_full": "Victoria",
+    "slug": "melbourne",
+    "country": "Australia"
+  },
+  {
+    "id": 15,
+    "name": "Mildura",
+    "state": "VIC",
+    "state_full": "Victoria",
+    "slug": "mildura",
+    "country": "Australia"
+  },
+  {
+    "id": 16,
+    "name": "Shpparton",
+    "state": "VIC",
+    "state_full": "Victoria",
+    "slug": "shpparton",
+    "country": "Australia"
+  },
+  {
+    "id": 17,
+    "name": "Traralgon",
+    "state": "VIC",
+    "state_full": "Victoria",
+    "slug": "traralgon",
+    "country": "Australia"
+  },
+  {
+    "id": 18,
+    "name": "Wodonga",
+    "state": "VIC",
+    "state_full": "Victoria",
+    "slug": "wodonga",
+    "country": "Australia"
+  },
+  {
+    "id": 19,
+    "name": "Brisbane",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "brisbane",
+    "country": "Australia"
+  },
+  {
+    "id": 20,
+    "name": "Bundaberg",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "bundaberg",
+    "country": "Australia"
+  },
+  {
+    "id": 21,
+    "name": "Cairns",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "cairns",
+    "country": "Australia"
+  },
+  {
+    "id": 22,
+    "name": "Gladstone",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "gladstone",
+    "country": "Australia"
+  },
+  {
+    "id": 23,
+    "name": "Gold Coast",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "gold-coast",
+    "country": "Australia"
+  },
+  {
+    "id": 24,
+    "name": "Hervey Bay",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "hervey-bay",
+    "country": "Australia"
+  },
+  {
+    "id": 25,
+    "name": "Mackay",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "mackay",
+    "country": "Australia"
+  },
+  {
+    "id": 26,
+    "name": "Rockhampton",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "rockhampton",
+    "country": "Australia"
+  },
+  {
+    "id": 27,
+    "name": "Sunshine Coast",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "sunshine-coast",
+    "country": "Australia"
+  },
+  {
+    "id": 28,
+    "name": "Toowoomba",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "toowoomba",
+    "country": "Australia"
+  },
+  {
+    "id": 29,
+    "name": "Townsville",
+    "state": "QLD",
+    "state_full": "Queensland",
+    "slug": "townsville",
+    "country": "Australia"
+  },
+  {
+    "id": 30,
+    "name": "Bunbury",
+    "state": "WA",
+    "state_full": "Western Australia",
+    "slug": "bunbury",
+    "country": "Australia"
+  },
+  {
+    "id": 31,
+    "name": "Mandurah",
+    "state": "WA",
+    "state_full": "Western Australia",
+    "slug": "mandurah",
+    "country": "Australia"
+  },
+  {
+    "id": 32,
+    "name": "Perth",
+    "state": "WA",
+    "state_full": "Western Australia",
+    "slug": "perth",
+    "country": "Australia"
+  },
+  {
+    "id": 33,
+    "name": "Adelaide",
+    "state": "SA",
+    "state_full": "South Australia",
+    "slug": "adelaide",
+    "country": "Australia"
+  },
+  {
+    "id": 34,
+    "name": "Hobart",
+    "state": "TAS",
+    "state_full": "Tasmania",
+    "slug": "hobart",
+    "country": "Australia"
+  },
+  {
+    "id": 35,
+    "name": "Launceston",
+    "state": "TAS",
+    "state_full": "Tasmania",
+    "slug": "launceston",
+    "country": "Australia"
+  },
+  {
+    "id": 36,
+    "name": "Canberra",
+    "state": "ACT",
+    "state_full": "Australian Capital Territory",
+    "slug": "canberra",
+    "country": "Australia"
+  },
+  {
+    "id": 37,
+    "name": "Darwin",
+    "state": "NT",
+    "state_full": "Northern Territory",
+    "slug": "darwin",
+    "country": "Australia"
+  }
+]

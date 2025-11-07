@@ -1,0 +1,60 @@
+city_name,state_code,city_id
+Canberra,ACT,30
+Civic,ACT,31
+Albury,NSW,44
+Bathurst,NSW,45
+Bondi,NSW,3
+Chatswood,NSW,6
+Coffs Harbour,NSW,46
+Manly,NSW,5
+Newcastle,NSW,32
+Parramatta,NSW,4
+Port Macquarie,NSW,47
+Sydney,NSW,2
+Tamworth,NSW,48
+Tweed Heads,NSW,49
+Wollongong,NSW,33
+Alice Springs,NT,43
+Casuarina,NT,29
+Darwin,NT,28
+Brisbane,QLD,12
+Bundaberg,QLD,55
+Cairns,QLD,15
+Fortitude Valley,QLD,14
+Gladstone,QLD,56
+Gold Coast,QLD,36
+Hervey Bay,QLD,57
+Mackay,QLD,58
+Rockhampton,QLD,59
+Sunshine Coast,QLD,38
+Surfers Paradise,QLD,13
+Toowoomba,QLD,16
+Townsville,QLD,37
+Adelaide,SA,22
+Glenelg,SA,23
+Hindmarsh,SA,25
+Mount Gambier,SA,40
+Norwood,SA,24
+Devonport,TAS,42
+Hobart,TAS,26
+Launceston,TAS,41
+Sandy Bay,TAS,27
+Ballarat,VIC,35
+Bendigo,VIC,50
+Fitzroy,VIC,11
+Geelong,VIC,34
+Melbourne,VIC,7
+Mildura,VIC,51
+Prahran,VIC,10
+Richmond,VIC,9
+Shepparton,VIC,52
+St Kilda,VIC,8
+Traralgon,VIC,53
+Wodonga,VIC,54
+Bunbury,WA,39
+Fremantle,WA,18
+Joondalup,WA,20
+Mandurah,WA,60
+Perth,WA,17
+Scarborough,WA,19
+Subiaco,WA,21
