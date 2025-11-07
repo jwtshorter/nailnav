@@ -130,7 +130,7 @@ WHERE id IN (31, 3, 6, 5, 4, 14, 13, 23, 25, 24, 27, 11, 10, 9, 8, 20, 60, 19, 2
 -- Check salon counts for parent cities (should show combined counts)
 SELECT c.name, c.id, COUNT(s.id) as salon_count
 FROM cities c
-LEFT JOIN salons s ON c.city_id = s.city_id
+LEFT JOIN salons s ON c.id = s.city_id
 WHERE c.id IN (30, 2, 12, 36, 22, 26, 7, 17)
 GROUP BY c.id, c.name
 ORDER BY c.name;
