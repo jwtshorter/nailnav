@@ -64,7 +64,19 @@ export default function CityPage({ params }: CityPageProps) {
       
       if (response.ok) {
         const data = await response.json()
-        setSalons(data.salons || [])
+        // Sort salons: Featured first, then by rating (5 stars first)
+        const sortedSalons = (data.salons || [])
+          .sort((a: Salon, b: Salon) => {
+            // First priority: Featured status
+            if (a.is_featured && !b.is_featured) return -1
+            if (!a.is_featured && b.is_featured) return 1
+            
+            // Second priority: Rating (higher first)
+            return (b.rating || 0) - (a.rating || 0)
+          })
+          .slice(0, 20) // Limit to 20 salons
+        
+        setSalons(sortedSalons)
       }
 
       // Fetch related cities in the same state

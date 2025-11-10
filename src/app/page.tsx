@@ -433,7 +433,7 @@ export default function HomePage() {
 
             {/* Popular Australian Cities */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Popular Australian Cities</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">Popular Australian Cities</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
                 {[
                   { name: 'Sydney', state: 'NSW', slug: 'sydney' },
@@ -441,17 +441,9 @@ export default function HomePage() {
                   { name: 'Brisbane', state: 'QLD', slug: 'brisbane' },
                   { name: 'Perth', state: 'WA', slug: 'perth' },
                   { name: 'Adelaide', state: 'SA', slug: 'adelaide' },
-                  { name: 'Gold Coast', state: 'QLD', slug: 'gold-coast' },
                   { name: 'Canberra', state: 'ACT', slug: 'canberra' },
-                  { name: 'Newcastle', state: 'NSW', slug: 'newcastle' },
-                  { name: 'Wollongong', state: 'NSW', slug: 'wollongong' },
-                  { name: 'Geelong', state: 'VIC', slug: 'geelong' },
-                  { name: 'Hobart', state: 'TAS', slug: 'hobart' },
-                  { name: 'Townsville', state: 'QLD', slug: 'townsville' },
-                  { name: 'Cairns', state: 'QLD', slug: 'cairns' },
                   { name: 'Darwin', state: 'NT', slug: 'darwin' },
-                  { name: 'Toowoomba', state: 'QLD', slug: 'toowoomba' },
-                  { name: 'Ballarat', state: 'VIC', slug: 'ballarat' }
+                  { name: 'Hobart', state: 'TAS', slug: 'hobart' }
                 ].map((city, index) => (
                   <motion.a
                     key={`${city.name}-${city.state}`}
