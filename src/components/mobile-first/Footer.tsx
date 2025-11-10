@@ -20,24 +20,58 @@ const Footer = () => {
     { name: 'Northern Territory', code: 'nt' }
   ]
 
-  // Major US states (add more as needed)
+  // All US states
   const usStates = [
+    { name: 'Alabama', code: 'al' },
+    { name: 'Alaska', code: 'ak' },
+    { name: 'Arizona', code: 'az' },
+    { name: 'Arkansas', code: 'ar' },
     { name: 'California', code: 'ca' },
-    { name: 'New York', code: 'ny' },
-    { name: 'Texas', code: 'tx' },
+    { name: 'Colorado', code: 'co' },
+    { name: 'Connecticut', code: 'ct' },
+    { name: 'Delaware', code: 'de' },
     { name: 'Florida', code: 'fl' },
-    { name: 'Illinois', code: 'il' },
-    { name: 'Pennsylvania', code: 'pa' },
-    { name: 'Ohio', code: 'oh' },
     { name: 'Georgia', code: 'ga' },
-    { name: 'North Carolina', code: 'nc' },
+    { name: 'Hawaii', code: 'hi' },
+    { name: 'Idaho', code: 'id' },
+    { name: 'Illinois', code: 'il' },
+    { name: 'Indiana', code: 'in' },
+    { name: 'Iowa', code: 'ia' },
+    { name: 'Kansas', code: 'ks' },
+    { name: 'Kentucky', code: 'ky' },
+    { name: 'Louisiana', code: 'la' },
+    { name: 'Maine', code: 'me' },
+    { name: 'Maryland', code: 'md' },
+    { name: 'Massachusetts', code: 'ma' },
     { name: 'Michigan', code: 'mi' },
+    { name: 'Minnesota', code: 'mn' },
+    { name: 'Mississippi', code: 'ms' },
+    { name: 'Missouri', code: 'mo' },
+    { name: 'Montana', code: 'mt' },
+    { name: 'Nebraska', code: 'ne' },
+    { name: 'Nevada', code: 'nv' },
+    { name: 'New Hampshire', code: 'nh' },
     { name: 'New Jersey', code: 'nj' },
+    { name: 'New Mexico', code: 'nm' },
+    { name: 'New York', code: 'ny' },
+    { name: 'North Carolina', code: 'nc' },
+    { name: 'North Dakota', code: 'nd' },
+    { name: 'Ohio', code: 'oh' },
+    { name: 'Oklahoma', code: 'ok' },
+    { name: 'Oregon', code: 'or' },
+    { name: 'Pennsylvania', code: 'pa' },
+    { name: 'Rhode Island', code: 'ri' },
+    { name: 'South Carolina', code: 'sc' },
+    { name: 'South Dakota', code: 'sd' },
+    { name: 'Tennessee', code: 'tn' },
+    { name: 'Texas', code: 'tx' },
+    { name: 'Utah', code: 'ut' },
+    { name: 'Vermont', code: 'vt' },
     { name: 'Virginia', code: 'va' },
     { name: 'Washington', code: 'wa' },
-    { name: 'Arizona', code: 'az' },
-    { name: 'Massachusetts', code: 'ma' },
-    { name: 'Tennessee', code: 'tn' }
+    { name: 'West Virginia', code: 'wv' },
+    { name: 'Wisconsin', code: 'wi' },
+    { name: 'Wyoming', code: 'wy' }
   ]
 
   return (
@@ -45,7 +79,7 @@ const Footer = () => {
       {/* Browse by State Section */}
       <div className="bg-gray-50 border-b border-gray-200">
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Australian States */}
             <div>
               <h3 className="text-lg font-bold text-gray-900 mb-4">
@@ -65,18 +99,18 @@ const Footer = () => {
             </div>
 
             {/* US States */}
-            <div>
+            <div className="md:col-span-2 lg:col-span-1">
               <h3 className="text-lg font-bold text-gray-900 mb-4">
                 Browse US Nail Salons by State
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                 {usStates.map((state) => (
                   <Link
                     key={state.code}
                     href={`/nail-salons/${state.code}`}
                     className="text-primary-600 hover:text-primary-700 hover:underline text-sm"
                   >
-                    {state.name} Nail Salons
+                    {state.name}
                   </Link>
                 ))}
               </div>
