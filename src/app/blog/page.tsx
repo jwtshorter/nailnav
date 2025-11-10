@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, User, Tag, ArrowRight, Search, TrendingUp } from 'lucide-react'
 import Navigation from '@/components/mobile-first/Navigation'
 import Footer from '@/components/mobile-first/Footer'
 import { useTranslation } from '../../contexts/TranslationContext'
+import { createClient } from '@/lib/supabase/client'
 
 interface BlogPost {
   id: string
@@ -19,14 +20,58 @@ interface BlogPost {
   image: string
   readTime: number
   featured: boolean
+  slug: string
 }
 
 export default function BlogPage() {
   const { t } = useTranslation()
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const blogPosts: BlogPost[] = [
+  useEffect(() => {
+    loadPosts()
+  }, [])
+
+  const loadPosts = async () => {
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('is_published', true)
+        .order('published_at', { ascending: false })
+
+      if (error) throw error
+
+      // Transform database posts to match component interface
+      const transformedPosts = (data || []).map(post => ({
+        id: post.id.toString(),
+        title: post.title,
+        excerpt: post.excerpt || '',
+        content: post.content,
+        author: post.author_name || 'Nail Nav Team',
+        date: post.published_at || post.created_at,
+        category: post.category || 'uncategorized',
+        tags: post.tags || [],
+        image: post.featured_image_url || 'https://cdn1.genspark.ai/user-upload-image/5_generated/5de0f390-7a30-4ecd-821b-9cf041783001',
+        readTime: post.read_time || 5,
+        featured: post.views_count > 100,
+        slug: post.slug
+      }))
+
+      setBlogPosts(transformedPosts)
+    } catch (error) {
+      console.error('Error loading blog posts:', error)
+      setBlogPosts(fallbackPosts)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Fallback posts if database fails
+  const fallbackPosts: BlogPost[] = [
     {
       id: '1',
       title: 'The Ultimate Guide to Nail Care: Tips for Healthy, Beautiful Nails',
@@ -136,6 +181,18 @@ export default function BlogPage() {
       month: 'long', 
       day: 'numeric' 
     })
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="flex items-center justify-center h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        </div>
+        <Footer />
+      </div>
+    )
   }
 
   return (

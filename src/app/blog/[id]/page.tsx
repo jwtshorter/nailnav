@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, User, Tag, Clock, Share2 } from 'lucide-react'
 import Navigation from '@/components/mobile-first/Navigation'
 import Footer from '@/components/mobile-first/Footer'
 import { useTranslation } from '../../../contexts/TranslationContext'
+import { createClient } from '@/lib/supabase/client'
 
 interface BlogPost {
   id: string
@@ -26,7 +27,85 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
   const [post, setPost] = useState<BlogPost | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const blogPosts: Record<string, BlogPost> = {
+  useEffect(() => {
+    loadPost()
+  }, [params.id])
+
+  const loadPost = async () => {
+    try {
+      const supabase = createClient()
+      
+      // Try to fetch by slug first (assuming id parameter is actually the slug)
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('slug', params.id)
+        .eq('is_published', true)
+        .single()
+
+      if (error) {
+        // If not found by slug, try by ID
+        const { data: dataById, error: errorById } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('id', parseInt(params.id))
+          .eq('is_published', true)
+          .single()
+
+        if (errorById) throw errorById
+
+        // Transform database post
+        setPost({
+          id: dataById.id.toString(),
+          title: dataById.title,
+          excerpt: dataById.excerpt || '',
+          content: dataById.content,
+          author: dataById.author_name || 'Nail Nav Team',
+          date: dataById.published_at || dataById.created_at,
+          category: dataById.category || 'uncategorized',
+          tags: dataById.tags || [],
+          image: dataById.featured_image_url || 'https://cdn1.genspark.ai/user-upload-image/5_generated/5de0f390-7a30-4ecd-821b-9cf041783001',
+          readTime: dataById.read_time || 5,
+          featured: false
+        })
+
+        // Increment view count
+        await supabase
+          .from('blog_posts')
+          .update({ views_count: (dataById.views_count || 0) + 1 })
+          .eq('id', dataById.id)
+      } else {
+        // Transform database post
+        setPost({
+          id: data.id.toString(),
+          title: data.title,
+          excerpt: data.excerpt || '',
+          content: data.content,
+          author: data.author_name || 'Nail Nav Team',
+          date: data.published_at || data.created_at,
+          category: data.category || 'uncategorized',
+          tags: data.tags || [],
+          image: data.featured_image_url || 'https://cdn1.genspark.ai/user-upload-image/5_generated/5de0f390-7a30-4ecd-821b-9cf041783001',
+          readTime: data.read_time || 5,
+          featured: false
+        })
+
+        // Increment view count
+        await supabase
+          .from('blog_posts')
+          .update({ views_count: (data.views_count || 0) + 1 })
+          .eq('id', data.id)
+      }
+    } catch (error) {
+      console.error('Error loading blog post:', error)
+      setPost(fallbackPosts[params.id] || null)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Fallback hardcoded posts if database fails
+  const fallbackPosts: Record<string, BlogPost> = {
     '1': {
       id: '1',
       title: 'The Ultimate Guide to Nail Care: Tips for Healthy, Beautiful Nails',
@@ -695,12 +774,6 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
       featured: false
     }
   }
-
-  useEffect(() => {
-    const currentPost = blogPosts[params.id]
-    setPost(currentPost || null)
-    setLoading(false)
-  }, [params.id])
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
