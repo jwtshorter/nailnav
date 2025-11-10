@@ -1,12 +1,33 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from '../../contexts/TranslationContext'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 
 const Footer = () => {
   const { t } = useTranslation()
+  const pathname = usePathname()
+  const [region, setRegion] = useState<'australia' | 'usa' | 'both'>('both')
+
+  useEffect(() => {
+    // Detect if we're on an Australian or USA page
+    const australianStates = ['nsw', 'vic', 'qld', 'wa', 'sa', 'tas', 'act', 'nt']
+    
+    if (pathname?.includes('/nail-salons/')) {
+      const pathParts = pathname.split('/')
+      const stateCode = pathParts[2]?.toLowerCase()
+      
+      if (australianStates.includes(stateCode)) {
+        setRegion('australia')
+      } else {
+        setRegion('usa')
+      }
+    } else {
+      setRegion('both')
+    }
+  }, [pathname])
 
   // Australian states
   const australianStates = [
@@ -76,46 +97,89 @@ const Footer = () => {
 
   return (
     <footer className="bg-white border-t border-gray-200">
-      {/* Browse by State Section */}
+      {/* Browse by State Section - Region-Aware */}
       <div className="bg-gray-50 border-b border-gray-200">
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Australian States */}
-            <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+          {/* Show only Australian states on Australian pages */}
+          {region === 'australia' && (
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">
                 Browse Australian Nail Salons by State
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 justify-items-center">
                 {australianStates.map((state) => (
                   <Link
                     key={state.code}
                     href={`/nail-salons/${state.code}`}
-                    className="text-primary-600 hover:text-primary-700 hover:underline text-sm"
-                  >
-                    {state.name} Nail Salons
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* US States */}
-            <div className="md:col-span-2 lg:col-span-1">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Browse US Nail Salons by State
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-                {usStates.map((state) => (
-                  <Link
-                    key={state.code}
-                    href={`/nail-salons/${state.code}`}
-                    className="text-primary-600 hover:text-primary-700 hover:underline text-sm"
+                    className="text-primary-600 hover:text-primary-700 hover:underline text-sm text-center"
                   >
                     {state.name}
                   </Link>
                 ))}
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Show only US states on US pages */}
+          {region === 'usa' && (
+            <div className="max-w-7xl mx-auto">
+              <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">
+                Browse US Nail Salons by State
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 justify-items-center">
+                {usStates.map((state) => (
+                  <Link
+                    key={state.code}
+                    href={`/nail-salons/${state.code}`}
+                    className="text-primary-600 hover:text-primary-700 hover:underline text-sm text-center"
+                  >
+                    {state.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Show both on homepage and other pages */}
+          {region === 'both' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+              {/* Australian States */}
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">
+                  Browse Australian Nail Salons by State
+                </h3>
+                <div className="grid grid-cols-2 gap-3 justify-items-center">
+                  {australianStates.map((state) => (
+                    <Link
+                      key={state.code}
+                      href={`/nail-salons/${state.code}`}
+                      className="text-primary-600 hover:text-primary-700 hover:underline text-sm text-center"
+                    >
+                      {state.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* US States */}
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">
+                  Browse US Nail Salons by State
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 justify-items-center">
+                  {usStates.map((state) => (
+                    <Link
+                      key={state.code}
+                      href={`/nail-salons/${state.code}`}
+                      className="text-primary-600 hover:text-primary-700 hover:underline text-sm text-center"
+                    >
+                      {state.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
